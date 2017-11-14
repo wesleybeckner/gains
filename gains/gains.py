@@ -3,209 +3,239 @@ import numpy as np
 import pandas as pd
 import scipy.optimize as opt
 from scipy.special import erf
-from .due import due, Doi
+#from .due import due, Doi
+import subprocess
+import rdkit
+from rdkit import RDConfig
+from rdkit.Chem import FragmentCatalog
+from rdkit import DataStructs
+from rdkit.Chem.Fingerprints import FingerprintMols
+from rdkit import Chem
+from rdkit.Chem import AllChem as Chem
+from rdkit.Chem.Draw import ShowMol
+import os
+import statistics
+import time
+import random
+import sys
+from contextlib import contextmanager
 
-__all__ = ["Model", "Fit", "opt_err_func", "transform_data", "cumgauss"]
-
+__all__ = ["suppress_stdout_stderr", "Benchmark", "GeneSet", "Chromosome",\
+        "generate_geneset", "_generate_parent", "_mutate", "get_best"]
 
 # Use duecredit (duecredit.org) to provide a citation to relevant work to
 # be cited. This does nothing, unless the user has duecredit installed,
 # And calls this with duecredit (as in `python -m duecredit script.py`):
-due.cite(Doi("10.1167/13.9.30"),
-         description="Template project for small scientific Python projects",
-         tags=["reference-implementation"],
-         path='shablona')
+#due.cite(Doi("10.1167/13.9.30"),
+#         description="Template project for small scientific Python projects",
+#         tags=["reference-implementation"],
+#         path='gains')
 
+"""
+This GA uses RDKit to make atomic mutations to a starting imidazole.
+The starting structure is not random.
+Fitness test uses RDKit FingerprintSimilarity.
+Number of atoms in parent/children are fixed.
+"""
 
-def transform_data(data):
-    """
-    Function that takes experimental data and gives us the
-    dependent/independent variables for analysis.
+# Define a context manager to suppress stdout and stderr.
+class suppress_stdout_stderr(object):
+    '''
+    A context manager for doing a "deep suppression" of stdout and stderr in 
+    Python, i.e. will suppress all print, even if the print originates in a 
+    compiled C/Fortran sub-function.
+       This will not suppress raised exceptions, since exceptions are printed
+    to stderr just before a script exits, and after the context manager has
+    exited (at least, I think that is why it lets exceptions through).      
 
-    Parameters
-    ----------
-    data : Pandas DataFrame or string.
-        If this is a DataFrame, it should have the columns `contrast1` and
-        `answer` from which the dependent and independent variables will be
-        extracted. If this is a string, it should be the full path to a csv
-        file that contains data that can be read into a DataFrame with this
-        specification.
+    '''
+    def __init__(self):
+        # Open a pair of null files
+        self.null_fds =  [os.open(os.devnull,os.O_RDWR) for x in range(2)]
+        # Save the actual stdout (1) and stderr (2) file descriptors.
+        self.save_fds = [os.dup(1), os.dup(2)]
 
-    Returns
-    -------
-    x : array
-        The unique contrast differences.
-    y : array
-        The proportion of '2' answers in each contrast difference
-    n : array
-        The number of trials in each x,y condition
-    """
-    if isinstance(data, str):
-        data = pd.read_csv(data)
+    def __enter__(self):
+        # Assign the null pointers to stdout and stderr.
+        os.dup2(self.null_fds[0],1)
+        os.dup2(self.null_fds[1],2)
 
-    contrast1 = data['contrast1']
-    answers = data['answer']
+    def __exit__(self, *_):
+        # Re-assign the real stdout/stderr back to (1) and (2)
+        os.dup2(self.save_fds[0],1)
+        os.dup2(self.save_fds[1],2)
+        # Close all file descriptors
+        for fd in self.null_fds + self.save_fds:
+            os.close(fd)
 
-    x = np.unique(contrast1)
-    y = []
-    n = []
+class Benchmark:
+    @staticmethod
+    def run(function):
+        timings = []
+        stdout = sys.stdout
+        for i in range(5):
+            sys.stdout = None
+            startTime = time.time()
+            function()
+            seconds = time.time() - startTime
+            sys.stdout = stdout
+            timings.append(seconds)
+            mean = statistics.mean(timings)
+            print("{} {:3.2f} {:3.2f}".format(
+                1 + i, mean,
+                statistics.stdev(timings, mean) if i > 1 else 0))
 
-    for c in x:
-        idx = np.where(contrast1 == c)
-        n.append(float(len(idx[0])))
-        answer1 = len(np.where(answers[idx[0]] == 1)[0])
-        y.append(answer1 / n[-1])
-    return x, y, n
+class GeneSet():
+    def __init__(self, atoms, rdkitFrags, customFrags):
+        self.Atoms = atoms
+        self.RdkitFrags = rdkitFrags
+        self.CustomFrags = customFrags
 
+class Chromosome(Chem.rdchem.Mol):
+    def __init__(self, genes, fitness):
+        Chem.rdchem.Mol.__init__(self)
+        self.Genes = genes
+        self.Fitness = fitness
+        self.Mol = Chem.MolFromSmiles(genes)
+        self.RWMol = Chem.MolFromSmiles(genes)
+        self.RWMol = Chem.RWMol(Chem.MolFromSmiles(genes))
 
-def cumgauss(x, mu, sigma):
-    """
-    The cumulative Gaussian at x, for the distribution with mean mu and
-    standard deviation sigma.
+def generate_geneset():
+    atoms = [6,7]
+    fName = os.path.join(RDConfig.RDDataDir,'FunctionalGroups.txt')
+    rdkitFrags = FragmentCatalog.FragCatParams(1,5,fName)
+    customFrags = FragmentCatalog.FragCatalog(rdkitFrags)
+    fcgen = FragmentCatalog.FragCatGenerator()
+    m = Chem.MolFromSmiles('CCCC')
+    fcgen.AddFragsFromMol(m,customFrags)
+    return GeneSet(atoms, rdkitFrags, customFrags)
 
-    Parameters
-    ----------
-    x : float or array
-       The values of x over which to evaluate the cumulative Gaussian function
+def _generate_parent(geneSet, get_fitness):
+    df = pd.read_csv("saltInfo.csv")
+    df = df.loc[df["cation_name"].str.contains("imid", case=False)]
+    df = df['cation_SMILES'].unique()
+    ohPickMe = random.sample(range(df.shape[0]),1)
+    genes = df[ohPickMe[0]]
+    fitness = get_fitness(genes)
+    print(fitness)
+    return Chromosome(genes, fitness)
 
-    mu : float
-       The mean parameter. Determines the x value at which the y value is 0.5
+def _mutate(parent, geneSet, get_fitness, target):
+    def replace_atom(childGenes, GeneSet, oldGene):
+        geneSet = GeneSet.Atoms
+        if childGenes.RWMol.GetAtomWithIdx(oldGene).IsInRing() == True:
+            genes = Chem.MolToSmiles(parent.Mol)
+            return Chromosome(genes, 0)
+        newGene = random.sample(geneSet, 1)[0]
+        childGenes.RWMol.GetAtomWithIdx(oldGene).SetAtomicNum(newGene) 
+        return childGenes  
+    def add_atom(childGenes, GeneSet, oldGene):
+        geneSet = GeneSet.Atoms
+        newGeneNumber = childGenes.RWMol.GetNumAtoms()  
+        newGene = random.sample(geneSet, 1)[0]
+        childGenes.RWMol.AddAtom(Chem.Atom(newGene))
+        childGenes.RWMol.AddBond(newGeneNumber,oldGene,Chem.BondType.SINGLE) 
+        return childGenes
+    def remove_atom(childGenes, GeneSet, oldGene):
+        if childGenes.RWMol.GetAtomWithIdx(oldGene).GetExplicitValence() != 1:
+            genes = Chem.MolToSmiles(parent.Mol)
+            return Chromosome(genes, 0)
+        childGenes.RWMol.RemoveAtom(oldGene)
+        return childGenes
+    def add_custom_fragment(childGenes, GeneSet, oldGene):
+        geneSet = GeneSet.CustomFrags
+        newGene = Chromosome(geneSet.GetEntryDescription(\
+            random.sample(range(geneSet.GetNumEntries()), 1)[0]),0)
+        oldGene = oldGene + newGene.Mol.GetNumAtoms()
+        combined = Chem.EditableMol(Chem.CombineMols(newGene.Mol,childGenes.Mol))
+        combined.AddBond(0,oldGene,order=Chem.rdchem.BondType.SINGLE)
+        childGenes = combined.GetMol()   
+        try:
+            childGenes = Chromosome(Chem.MolToSmiles(childGenes),0)  
+            return childGenes
+        except:
+            return 0
+    def add_rdkit_fragment(childGenes, GeneSet, oldGene):
+        geneSet = GeneSet.RdkitFrags
+        try:
+            newGene = Chromosome(Chem.MolToSmiles(geneSet.GetFuncGroup(\
+                random.sample(range(geneSet.GetNumFuncGroups()), 1)[0])),0)
+        except:
+            return 0
+        oldGene = oldGene + newGene.Mol.GetNumAtoms() 
+        combined = Chem.EditableMol(Chem.CombineMols(newGene.Mol,childGenes.Mol))
+        combined.AddBond(1,oldGene,order=Chem.rdchem.BondType.SINGLE)
+        combined.RemoveAtom(0)
+        try:
+            childGenes = Chromosome(Chem.MolToSmiles(combined.GetMol()),0)
+            return childGenes
+        except:
+            return 0
+    def remove_custom_fragment(childGenes, GeneSet, oldGene):
+        geneSet = GeneSet.CustomFrags
+        newGene = Chromosome(geneSet.GetEntryDescription(\
+            random.sample(range(geneSet.GetNumEntries()), 1)[0]),0)
+        try:
+            truncate = Chem.DeleteSubstructs(childGenes.Mol,newGene.Mol)
+            childGenes = truncate
+            childGenes = Chromosome(Chem.MolToSmiles(childGenes),0)  
+            return childGenes
+        except:
+            return 0
+    def remove_rdkit_fragment(childGenes, GeneSet, oldGene):
+        geneSet = GeneSet.RdkitFrags
+        try:
+            newGene = Chromosome(Chem.MolToSmiles(geneSet.GetFuncGroup(\
+                random.sample(range(geneSet.GetNumFuncGroups()), 1)[0])),0)
+        except:
+            return 0
+        try:
+            truncate = Chem.DeleteSubstructs(childGenes.Mol,newGene.Mol)
+            childGenes = truncate
+            childGenes = Chromosome(Chem.MolToSmiles(childGenes),0)  
+            return childGenes
+        except:
+            return 0
+    childGenes = Chromosome(parent.Genes,0)
+    oldGene = random.sample(range(childGenes.RWMol.GetNumAtoms()), 1)[0]
+    mutate_operations = [add_atom, remove_atom, remove_custom_fragment,\
+	replace_atom, add_rdkit_fragment, add_custom_fragment, remove_rdkit_fragment]
+    i = random.choice(range(len(mutate_operations)))
+    mutation = mutate_operations[i].__name__
+    childGenes = mutate_operations[i](childGenes, geneSet, oldGene)
+    try:
+        childGenes.RWMol.UpdatePropertyCache(strict=True)
+        Chem.SanitizeMol(childGenes.RWMol)
+        genes = Chem.MolToSmiles(childGenes.RWMol)
+        fitness = get_fitness(genes)
+        return Chromosome(genes, fitness), mutation
+    except:
+        return Chromosome(parent.Genes, 0), mutation
+        
 
-    sigma : float
-       The variance parameter. Determines the slope of the curve at the point
-       of Deflection
-
-    Returns
-    -------
-
-    g : float or array
-        The cumulative gaussian with mean $\\mu$ and variance $\\sigma$
-        evaluated at all points in `x`.
-
-    Notes
-    -----
-    Based on:
-    http://en.wikipedia.org/wiki/Normal_distribution#Cumulative_distribution_function
-
-    The cumulative Gaussian function is defined as:
-
-    .. math::
-
-        \\Phi(x) = \\frac{1}{2} [1 + erf(\\frac{x}{\\sqrt{2}})]
-
-    Where, $erf$, the error function is defined as:
-
-    .. math::
-
-        erf(x) = \\frac{1}{\\sqrt{\\pi}} \int_{-x}^{x} e^{t^2} dt
-
-    """
-    return 0.5 * (1 + erf((x - mu) / (np.sqrt(2) * sigma)))
-
-
-def opt_err_func(params, x, y, func):
-    """
-    Error function for fitting a function using non-linear optimization.
-
-    Parameters
-    ----------
-    params : tuple
-        A tuple with the parameters of `func` according to their order of
-        input
-
-    x : float array
-        An independent variable.
-
-    y : float array
-        The dependent variable.
-
-    func : function
-        A function with inputs: `(x, *params)`
-
-    Returns
-    -------
-    float array
-        The marginals of the fit to x/y given the params
-    """
-    return y - func(x, *params)
-
-
-class Model(object):
-    """Class for fitting cumulative Gaussian functions to data"""
-    def __init__(self, func=cumgauss):
-        """ Initialize a model object.
-
-        Parameters
-        ----------
-        data : Pandas DataFrame
-            Data from a subjective contrast judgement experiment
-
-        func : callable, optional
-            A function that relates x and y through a set of parameters.
-            Default: :func:`cumgauss`
-        """
-        self.func = func
-
-    def fit(self, x, y, initial=[0.5, 1]):
-        """
-        Fit a Model to data.
-
-        Parameters
-        ----------
-        x : float or array
-           The independent variable: contrast values presented in the
-           experiment
-        y : float or array
-           The dependent variable
-
-        Returns
-        -------
-        fit : :class:`Fit` instance
-            A :class:`Fit` object that contains the parameters of the model.
-
-        """
-        params, _ = opt.leastsq(opt_err_func, initial,
-                                args=(x, y, self.func))
-        return Fit(self, params)
-
-
-class Fit(object):
-    """
-    Class for representing a fit of a model to data
-    """
-    def __init__(self, model, params):
-        """
-        Initialize a :class:`Fit` object.
-
-        Parameters
-        ----------
-        model : a :class:`Model` instance
-            An object representing the model used
-
-        params : array or list
-            The parameters of the model evaluated for the data
-
-        """
-        self.model = model
-        self.params = params
-
-    def predict(self, x):
-        """
-        Predict values of the dependent variable based on values of the
-        indpendent variable.
-
-        Parameters
-        ----------
-        x : float or array
-            Values of the independent variable. Can be values presented in
-            the experiment. For out-of-sample prediction (e.g. in
-            cross-validation), these can be values
-            that were not presented in the experiment.
-
-        Returns
-        -------
-        y : float or array
-            Predicted values of the dependent variable, corresponding to
-            values of the independent variable.
-        """
-        return self.model.func(x, *self.params)
+def get_best(get_fitness, optimalFitness, geneSet, display,\
+        show_ion, target):
+    mutation_attempts = 0
+    attempts_since_last_adoption = 0
+    random.seed()
+    bestParent = _generate_parent(geneSet, get_fitness)
+    display(bestParent, "starting structure")
+    if bestParent.Fitness >= optimalFitness:
+        return bestParent
+    while True:
+        with suppress_stdout_stderr():
+            child, mutation = _mutate(bestParent, geneSet, get_fitness, target)
+        mutation_attempts += 1
+        attempts_since_last_adoption += 1
+        if attempts_since_last_adoption > 500:
+            bestParent = _generate_parent(geneSet, get_fitness)
+            attempts_since_last_adoption = 0
+            print("starting from new parent")
+        if bestParent.Fitness >= child.Fitness:
+            continue
+        display(child, mutation)
+        attempts_since_last_adoption = 0
+        if child.Fitness >= optimalFitness:
+            show_ion(mutation_attempts)
+            return child
+        bestParent = child
