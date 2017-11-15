@@ -32,16 +32,17 @@ long_description = """
 
 GAINS
 ========
-GAINS - Genetic Algorithm for Identifying Novel Solvents - is a project
-that enables molecular design and computational screening of ionic liquid
-solvents for energy storage applications.
+Shablona is a template project for small scientific Python projects.
 
-Built on the molecular functionality of RDKit, future versions of GAINS 
-should be employable across a spectrum of small-molecule design problems.
+It contains software implementations of an analysis of some simple data, but
+more importantly, it contains infrastructure for testing, documentation,
+continuous integration and deployment, which can be easily adapted
+to use in other projects.
 
-To get started using this software, please go to the repository README_.
+To get started using these components in your own software, please go to the
+repository README_.
 
-.. _README: https://github.com/wesleybeckner/gains/README.md
+.. _README: https://github.com/uwescience/gains/blob/master/README.md
 
 License
 =======
@@ -64,7 +65,7 @@ URL = "http://github.com/wesleybeckner/gains"
 DOWNLOAD_URL = ""
 LICENSE = "MIT"
 AUTHOR = "Wesley Beckner"
-AUTHOR_EMAIL = "wesleybeckner@gmail.com"
+AUTHOR_EMAIL = "arokem@gmail.com"
 PLATFORMS = "OS Independent"
 MAJOR = _version_major
 MINOR = _version_minor

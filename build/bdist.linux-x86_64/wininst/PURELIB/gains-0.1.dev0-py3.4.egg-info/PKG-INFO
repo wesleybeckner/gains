@@ -1,0 +1,44 @@
+Metadata-Version: 1.1
+Name: gains
+Version: 0.1.dev0
+Summary: Genetic Algorithm for Identifying Novel Solvents (GAINS)
+Home-page: http://github.com/wesleybeckner/gains
+Author: Wesley Beckner
+Author-email: wesleybeckner@gmail.com
+License: MIT
+Description: 
+        
+        GAINS
+        ========
+        Shablona is a template project for small scientific Python projects.
+        
+        It contains software implementations of an analysis of some simple data, but
+        more importantly, it contains infrastructure for testing, documentation,
+        continuous integration and deployment, which can be easily adapted
+        to use in other projects.
+        
+        To get started using these components in your own software, please go to the
+        repository README_.
+        
+        .. _README: https://github.com/uwescience/gains/blob/master/README.md
+        
+        License
+        =======
+        ``gains`` is licensed under the terms of the MIT license. See the file
+        "LICENSE" for information on the history of this software, terms & conditions
+        for usage, and a DISCLAIMER OF ALL WARRANTIES.
+        
+        All trademarks referenced herein are property of their respective holders.
+        
+        Copyright (c) 2015--, Wesley Beckner, The University of Washington
+        eScience Institute.
+        
+Platform: OS Independent
+Classifier: Development Status :: 3 - Alpha
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Topic :: Scientific/Engineering
+Requires: numpy
