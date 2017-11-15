@@ -1,5 +1,5 @@
 ## gains
-[![Build Status](https://travis-ci.org/uwescience/gains.svg?branch=master)](https://travis-ci.org/uwescience/gains)
+[![Build Status](https://travis-ci.org/wesleybeckner/gains.svg?branch=master)](https://travis-ci.org/uwescience/gains)
 
 Shablona is a template project for small scientific python projects. The
 recommendations we make here follow the standards and conventions of much of
