@@ -1,3 +1,4 @@
+rdkit
 numpy
 scipy
 matplotlib

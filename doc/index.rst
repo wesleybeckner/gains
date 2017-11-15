@@ -18,6 +18,7 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   theory
-   auto_examples/index
-   api
+   intro
+   strings
+   datatypes
+   numeric

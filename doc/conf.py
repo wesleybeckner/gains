@@ -18,7 +18,7 @@ import os
 
 # General information about the project.
 project = 'gains'
-copyright = '2015, Wesley Beckner'
+copyright = '2017, Wesley Beckner'
 
 currentdir = os.path.abspath(os.path.dirname(__file__))
 ver_file = os.path.join(currentdir, '..', project, 'version.py')
@@ -54,8 +54,7 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.mathjax',
               'math_dollar',  # has to go before numpydoc
               'numpydoc',
-              'github',
-              'sphinx_gallery.gen_gallery']
+              'github']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -69,17 +68,6 @@ source_suffix = '.rst'
 # The master toctree document.
 master_doc = 'index'
 
-# --- Sphinx Gallery ---
-sphinx_gallery_conf = {
-    # path to your examples scripts
-    'examples_dirs': '../examples',
-    # path where to save gallery generated examples
-    'gallery_dirs': 'auto_examples',
-    # To auto-generate example sections in the API
-    'doc_module': ('gains',),
-    # Auto-generated mini-galleries go here
-    'backreferences_dir': 'gen_api'
-}
 
 # Automatically generate stub pages for API
 autosummary_generate = True
@@ -137,7 +125,6 @@ pygments_style = 'sphinx'
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'alabaster'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the

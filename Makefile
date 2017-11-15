@@ -9,4 +9,4 @@ flake8:
 	@echo "flake8 passed"
 
 test:
-	py.test --pyargs gains --cov-report term-missing --cov=gains
+	py.test #--pyargs gains --cov-report term-missing --cov=gains
