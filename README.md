@@ -1,5 +1,5 @@
 ## gains
-[![Build Status](https://travis-ci.org/wesleybeckner/gains.svg?branch=master)](https://travis-ci.org/uwescience/gains)
+[![Build Status](https://travis-ci.org/wesleybeckner/gains.svg?branch=master)](https://travis-ci.org/wesleybeckner/gains)
 
 Shablona is a template project for small scientific python projects. The
 recommendations we make here follow the standards and conventions of much of
@@ -283,7 +283,7 @@ go to the "admin" panel of the project on RTD, and navigate into the
 "advanced settings" so that you can tell it that your Python
 configuration file is in `doc/conf.py`:
 
-![RTD conf](https://github.com/uwescience/gains/blob/master/doc/_static/RTD-advanced-conf.png)
+![RTD conf](https://github.com/wesleybeckner/gains/blob/master/doc/_static/RTD-advanced-conf.png)
 
  http://gains.readthedocs.org/en/latest/
 
@@ -426,7 +426,7 @@ with these elements.
 For example, this repository contains an [IPython notebook] that reads
 in some data, and creates a figure. Maybe this is *Figure 1* from some
 future article? You can see this notebook fully rendered
-[here](https://github.com/uwescience/gains/blob/master/scripts/Figure1.ipynb).
+[here](https://github.com/wesleybeckner/gains/blob/master/scripts/Figure1.ipynb).
 
 
 ### Git Configuration
@@ -453,7 +453,7 @@ the tests might look like.
 
 To use this repository as a template, you can use the Github import
 functionality. Go to [https://import.github.com](https://import.github.com).
-Under "old repository clone URL" enter: https://github.com/uwescience/gains
+Under "old repository clone URL" enter: https://github.com/wesleybeckner/gains
 
 Under "new repository details" enter in the name field the name of your
 project. For example, enter `smallish` here. After that, you can hit the "Begin

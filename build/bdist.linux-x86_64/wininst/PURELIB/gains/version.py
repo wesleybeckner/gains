@@ -42,7 +42,7 @@ to use in other projects.
 To get started using these components in your own software, please go to the
 repository README_.
 
-.. _README: https://github.com/uwescience/gains/blob/master/README.md
+.. _README: https://github.com/wesleybeckner/gains/blob/master/README.md
 
 License
 =======
