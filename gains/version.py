@@ -3,9 +3,9 @@ from os.path import join as pjoin
 
 # Format expected by setup.py and doc/source/conf.py: string of form "X.Y.Z"
 _version_major = 0
-_version_minor = 1
+_version_minor = 2
 _version_micro = ''  # use '' for first of series, number for 1 and above
-_version_extra = 'dev'
+_version_extra = 'dev10'
 # _version_extra = ''  # Uncomment this for full releases
 
 # Construct full version string from these.
@@ -41,7 +41,7 @@ should be employable across a spectrum of small-molecule design problems.
 
 To get started using this software, please go to the repository README_.
 
-.. _README: https://github.com/wesleybeckner/gains/README.md
+.. _README: https://github.com/wesleybeckner/gains/blob/master/README.md
 
 License
 =======

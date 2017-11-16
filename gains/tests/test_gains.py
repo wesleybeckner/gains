@@ -19,14 +19,11 @@ import random
 import unittest
 import datetime
 
-def saltDataFrame():
-    return pd.read_csv("saltInfo.csv")
-
 class GuessIonTests(unittest.TestCase):
     geneSet = genetic.generate_geneset()
     
     def test_1_butyl_2_3_dimethyl_1H_imidazolium(self):
-        df = saltDataFrame()
+        df = genetic.load_data("saltInfo.csv")
         df = df.loc[df["cation_name"].str.contains("imid", case=False)]
         df = df['cation_SMILES'].unique()
         ohPickMe = random.sample(range(df.shape[0]),1)

@@ -1,4 +1,5 @@
 from __future__ import absolute_import, division, print_function
+from os.path import dirname, join
 import numpy as np
 import pandas as pd
 import scipy.optimize as opt
@@ -21,7 +22,8 @@ import sys
 from contextlib import contextmanager
 
 __all__ = ["suppress_stdout_stderr", "Benchmark", "GeneSet", "Chromosome",\
-        "generate_geneset", "_generate_parent", "_mutate", "get_best"]
+        "generate_geneset", "_generate_parent", "_mutate", "get_best",\
+        "load_data"]
 
 # Use duecredit (duecredit.org) to provide a citation to relevant work to
 # be cited. This does nothing, unless the user has duecredit installed,
@@ -38,7 +40,24 @@ Fitness test uses RDKit FingerprintSimilarity.
 Number of atoms in parent/children are fixed.
 """
 
-# Define a context manager to suppress stdout and stderr.
+def load_data(data_file_name):
+    """Loads data from module_path/data/data_file_name.
+    Parameters
+    ----------
+    data_file_name : String. Name of csv file to be loaded from
+    module_path/data/data_file_name. For example 'salt_info.csv'.
+    Returns
+    -------
+    data : Pandas DataFrame
+        A data frame. For example with each row representing one 
+        salt and each column representing the features of a given 
+        salt.
+    """
+    module_path = dirname(__file__)
+    with open(join(module_path, 'data', data_file_name)) as csv_file:
+        data = pd.read_csv(csv_file)
+    return data
+
 class suppress_stdout_stderr(object):
     '''
     A context manager for doing a "deep suppression" of stdout and stderr in 
@@ -67,9 +86,6 @@ class suppress_stdout_stderr(object):
         # Close all file descriptors
         for fd in self.null_fds + self.save_fds:
             os.close(fd)
-
-def saltDataFrame():
-    return pd.read_csv("saltInfo.csv")
 
 class Benchmark:
     @staticmethod
@@ -114,7 +130,7 @@ def generate_geneset():
     return GeneSet(atoms, rdkitFrags, customFrags)
 
 def _generate_parent(geneSet, get_fitness):
-    df = saltDataFrame()
+    df = load_data("saltInfo.csv")
     df = df.loc[df["cation_name"].str.contains("imid", case=False)]
     df = df['cation_SMILES'].unique()
     ohPickMe = random.sample(range(df.shape[0]),1)

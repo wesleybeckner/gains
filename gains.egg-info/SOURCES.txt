@@ -8,5 +8,6 @@ gains.egg-info/SOURCES.txt
 gains.egg-info/dependency_links.txt
 gains.egg-info/requires.txt
 gains.egg-info/top_level.txt
+gains/data/saltInfo.csv
 gains/tests/__init__.py
 gains/tests/test_gains.py
