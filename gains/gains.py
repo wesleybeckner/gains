@@ -68,6 +68,9 @@ class suppress_stdout_stderr(object):
         for fd in self.null_fds + self.save_fds:
             os.close(fd)
 
+def saltDataFrame():
+    return pd.read_csv("saltInfo.csv")
+
 class Benchmark:
     @staticmethod
     def run(function):
@@ -111,7 +114,7 @@ def generate_geneset():
     return GeneSet(atoms, rdkitFrags, customFrags)
 
 def _generate_parent(geneSet, get_fitness):
-    df = pd.read_csv("saltInfo.csv")
+    df = saltDataFrame()
     df = df.loc[df["cation_name"].str.contains("imid", case=False)]
     df = df['cation_SMILES'].unique()
     ohPickMe = random.sample(range(df.shape[0]),1)
