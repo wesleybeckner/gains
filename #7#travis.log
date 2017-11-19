@@ -1,5 +1,5 @@
 Command line:
-"travis encrypt --add deploy.password"
+"travis encrypt MY_SECRET_ENV=super_secret --add env.matrix"
 
 
    ________                                 __
@@ -26,7 +26,7 @@ Command line:
 
      There is absolutely no warranty on any results obtained from TRAVIS.
 
-  #  Running on wesley-desktop at Sun Nov 19 10:30:51 2017 (PID 28411).
+  #  Running on wesley-desktop at Sun Nov 19 10:29:52 2017 (PID 28409).
   #  Running in /home/wesley/Dropbox/Python/py3/gains
   #  Source code version: Jan 17 2014.
   #  Compiled at Jan 19 2014 05:12:11.
