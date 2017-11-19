@@ -14,6 +14,7 @@ from rdkit.Chem.Fingerprints import FingerprintMols
 from rdkit import Chem
 from rdkit.Chem import AllChem as Chem
 from rdkit.Chem.Draw import ShowMol
+import pickle
 import os
 import statistics
 import time
@@ -40,7 +41,7 @@ Fitness test uses RDKit FingerprintSimilarity.
 Number of atoms in parent/children are fixed.
 """
 
-def load_data(data_file_name):
+def load_data(data_file_name, pickle=False):
     """Loads data from module_path/data/data_file_name.
     Parameters
     ----------
@@ -54,8 +55,12 @@ def load_data(data_file_name):
         salt.
     """
     module_path = dirname(__file__)
-    with open(join(module_path, 'data', data_file_name)) as csv_file:
-        data = pd.read_csv(csv_file)
+    if pickle:
+        with open(join(module_path, 'data', data_file_name), 'rb') as pickle_file:
+            data = pickle.load(pickle_file, enconding='latin1')
+    else:
+        with open(join(module_path, 'data', data_file_name)) as csv_file:
+            data = pd.read_csv(csv_file)
     return data
 
 class suppress_stdout_stderr(object):
