@@ -41,7 +41,7 @@ Fitness test uses RDKit FingerprintSimilarity.
 Number of atoms in parent/children are fixed.
 """
 
-def load_data(data_file_name, pickle=False):
+def load_data(data_file_name, pickleFile=False):
     """Loads data from module_path/data/data_file_name.
     Parameters
     ----------
@@ -55,9 +55,9 @@ def load_data(data_file_name, pickle=False):
         salt.
     """
     module_path = dirname(__file__)
-    if pickle:
+    if pickleFile:
         with open(join(module_path, 'data', data_file_name), 'rb') as pickle_file:
-            data = pickle.load(pickle_file, enconding='latin1')
+            data = pickle.load(pickle_file, encoding='latin1')
     else:
         with open(join(module_path, 'data', data_file_name)) as csv_file:
             data = pd.read_csv(csv_file)
