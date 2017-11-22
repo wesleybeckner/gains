@@ -1,11 +1,12 @@
 Metadata-Version: 1.1
 Name: gains
-Version: 0.2.dev10
+Version: 0.2.dev11
 Summary: Genetic Algorithm for Identifying Novel Solvents (GAINS)
 Home-page: http://github.com/wesleybeckner/gains
 Author: Wesley Beckner
 Author-email: wesleybeckner@gmail.com
 License: MIT
+Description-Content-Type: UNKNOWN
 Description: 
         
         GAINS

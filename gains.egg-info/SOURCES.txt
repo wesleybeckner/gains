@@ -1,3 +1,4 @@
+README.md
 setup.py
 gains/__init__.py
 gains/due.py
@@ -8,6 +9,12 @@ gains.egg-info/SOURCES.txt
 gains.egg-info/dependency_links.txt
 gains.egg-info/requires.txt
 gains.egg-info/top_level.txt
+gains/data/density_nn_model.sav
+gains/data/density_nn_model_descriptors
+gains/data/density_nn_model_descriptors.csv
+gains/data/pychem
 gains/data/saltInfo.csv
+gains/data/viscosity_nn_model.sav
+gains/data/viscosity_nn_model_descriptors
 gains/tests/__init__.py
 gains/tests/test_gains.py
