@@ -260,6 +260,6 @@ def get_best(get_fitness, optimalFitness, geneSet, display,\
         display(child, mutation)
         attempts_since_last_adoption = 0
         if child.Fitness >= optimalFitness:
-            show_ion(mutation_attempts)
+            show_ion(child.Genes, mutation_attempts)
             return child
         bestParent = child
