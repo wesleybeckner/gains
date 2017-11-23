@@ -71,4 +71,4 @@ MINOR = _version_minor
 MICRO = _version_micro
 VERSION = __version__
 PACKAGE_DATA = {'gains': [pjoin('data', '*')]}
-REQUIRES = ["numpy, RDKit, pandas, scikit-learn"]
+REQUIRES = ["numpy"]
