@@ -36,12 +36,9 @@ __all__ = ["suppress_stdout_stderr", "Benchmark", "GeneSet", "Chromosome",\
 
 """
 This GA uses RDKit to make atomic mutations to a starting imidazole.
-The starting structure is not random.
-Fitness test uses RDKit FingerprintSimilarity.
-Number of atoms in parent/children are fixed.
 """
 
-def load_data(data_file_name, pickleFile=False):
+def load_data(data_file_name, pickleFile=False, simpleList=False):
     """Loads data from module_path/data/data_file_name.
     Parameters
     ----------
@@ -58,6 +55,9 @@ def load_data(data_file_name, pickleFile=False):
     if pickleFile:
         with open(join(module_path, 'data', data_file_name), 'rb') as pickle_file:
             data = pickle.load(pickle_file, encoding='latin1')
+    elif simpleList:
+        with open(join(module_path, 'data', data_file_name)) as csv_file:
+            data = csv_file.read().splitlines()
     else:
         with open(join(module_path, 'data', data_file_name)) as csv_file:
             data = pd.read_csv(csv_file)
@@ -260,6 +260,6 @@ def get_best(get_fitness, optimalFitness, geneSet, display,\
         display(child, mutation)
         attempts_since_last_adoption = 0
         if child.Fitness >= optimalFitness:
-            show_ion(child.Genes, target,  mutation_attempts)
+            show_ion(child.Genes, target, mutation_attempts)
             return child
         bestParent = child

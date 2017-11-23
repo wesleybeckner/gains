@@ -17,4 +17,5 @@ gains/data/saltInfo.csv
 gains/data/viscosity_nn_model.sav
 gains/data/viscosity_nn_model_descriptors
 gains/tests/__init__.py
-gains/tests/test_gains.py
+gains/tests/test_density.py
+gains/tests/test_similarity_maps.py
