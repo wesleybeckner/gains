@@ -16,11 +16,12 @@ import datetime
 from math import exp
 import random
 
+
 class GuessIonTests(unittest.TestCase):
     geneSet = genetic.generate_geneset()
 
     def test_1_density(self):
-        target = random.sample(range(800,1500),1)[0]
+        target = random.sample(range(800, 1500), 1)[0]
         self.guess_password(target)
 
     def test_benchmark(self):
