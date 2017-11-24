@@ -19,6 +19,10 @@ import random
 
 class GuessIonTests(unittest.TestCase):
     geneSet = genetic.generate_geneset()
+    df = genetic.load_data("saltInfo.csv")
+    df = df['anion_SMILES'].unique()
+    ohPickMe = random.sample(range(df.shape[0]), 1)
+    anion = Chem.MolFromSmiles(df[ohPickMe[0]])
 
     def test_1_density(self):
         target = random.sample(range(800, 1500), 1)[0]
@@ -31,7 +35,7 @@ class GuessIonTests(unittest.TestCase):
         startTime = datetime.datetime.now()
 
         def fnGetFitness(genes):
-            return get_fitness(genes, target)
+            return get_fitness(self.anion, genes, target)
 
         def fnDisplay(candidate, mutation):
             display(candidate, mutation, startTime)
@@ -52,9 +56,8 @@ def display(candidate, mutation, startTime):
                                   mutation, timeDiff))
 
 
-def get_fitness(genes, target):
+def get_fitness(anion, genes, target):
     cation = Chem.MolFromSmiles(genes)
-    anion = Chem.MolFromSmiles("[B-](F)(F)(F)F")
     model = genetic.load_data("density_nn_model.sav", pickleFile=True)
     deslist = genetic.load_data("density_nn_model_descriptors.csv")
     feature_vector = []
