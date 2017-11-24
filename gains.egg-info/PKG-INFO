@@ -1,6 +1,6 @@
 Metadata-Version: 1.1
 Name: gains
-Version: 0.2.dev16
+Version: 0.2.dev17
 Summary: Genetic Algorithm for Identifying Novel Structures (GAINS)
 Home-page: http://github.com/wesleybeckner/gains
 Author: Wesley Beckner
@@ -12,10 +12,10 @@ Description:
         GAINS
         ========
         GAINS - Genetic Algorithm for Identifying Novel Structures - is a project
-        that enables molecular design and computational screening of 
+        that enables molecular design and computational screening of
         small molecules--in particular solvents--for energy storage applications.
         
-        Built on the molecular functionality of RDKit, future versions of GAINS 
+        Built on the molecular functionality of RDKit, future versions of GAINS
         should be employable across a spectrum of small-molecule design problems.
         
         To get started using this software, please go to the repository README_.

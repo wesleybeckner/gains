@@ -52,8 +52,8 @@ def load_data(data_file_name, pickleFile=False, simpleList=False):
         with open(join(module_path, 'data', data_file_name)) as csv_file:
             data = csv_file.read().splitlines()
     else:
-        with open(join(module_path, 'data', data_file_name)) as csv_file:
-            data = pd.read_csv(csv_file)
+        with open(join(module_path, 'data', data_file_name), 'rb') as csv_file:
+            data = pd.read_csv(csv_file, encoding='latin1')
     return data
 
 
