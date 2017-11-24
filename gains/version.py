@@ -5,7 +5,7 @@ from os.path import join as pjoin
 _version_major = 0
 _version_minor = 2
 _version_micro = ''  # use '' for first of series, number for 1 and above
-_version_extra = 'dev14'
+_version_extra = 'dev16'
 # _version_extra = ''  # Uncomment this for full releases
 
 # Construct full version string from these.
@@ -26,17 +26,17 @@ CLASSIFIERS = ["Development Status :: 3 - Alpha",
                "Topic :: Scientific/Engineering"]
 
 # Description should be a one-liner:
-description = "Genetic Algorithm for Identifying Novel Solvents (GAINS)"
+description = "Genetic Algorithm for Identifying Novel Structures (GAINS)"
 # Long description will go up on the pypi page
 long_description = """
 
 GAINS
 ========
 GAINS - Genetic Algorithm for Identifying Novel Structures - is a project
-that enables molecular design and computational screening of 
+that enables molecular design and computational screening of
 small molecules--in particular solvents--for energy storage applications.
 
-Built on the molecular functionality of RDKit, future versions of GAINS 
+Built on the molecular functionality of RDKit, future versions of GAINS
 should be employable across a spectrum of small-molecule design problems.
 
 To get started using this software, please go to the repository README_.
@@ -51,8 +51,7 @@ for usage, and a DISCLAIMER OF ALL WARRANTIES.
 
 All trademarks referenced herein are property of their respective holders.
 
-Copyright (c) 2017--, Wesley Beckner, The University of Washington
-eScience Institute.
+Copyright (c) 2017--, Wesley Beckner, The University of Washington.
 """
 
 NAME = "gains"
