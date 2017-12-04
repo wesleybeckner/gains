@@ -1,6 +1,1 @@
-{
-  "gains/tests/test_density.py::GuessIonTests::test_1_density": true,
-  "gains/tests/test_density.py::GuessIonTests::test_benchmark": true,
-  "gains/tests/test_similarity_maps.py::GuessIonTests::test_1_similarity_map": true,
-  "gains/tests/test_similarity_maps.py::GuessIonTests::test_benchmark": true
-}
+{}
