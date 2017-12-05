@@ -1,9 +1,4 @@
 from __future__ import absolute_import, division, print_function
-# uncomment for local tests
-# module_path = os.path.abspath(os.path.join('..'))
-# if module_path not in sys.path:
-#         sys.path.append(module_path)
-# import localGains as genetic
 import gains as genetic
 from rdkit import DataStructs
 from rdkit.Chem.Fingerprints import FingerprintMols
