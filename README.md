@@ -1,5 +1,6 @@
 ## GAINS
 [![Build Status](https://travis-ci.org/wesleybeckner/gains.svg?branch=master)](https://travis-ci.org/wesleybeckner/gains)
+[![PyPI version](https://badge.fury.io/py/gains.svg)](https://badge.fury.io/py/gains)
 ========
 GAINS - Genetic Algorithm for Identifying Novel Structures - is a project
 that enables molecular design and computational screening of
