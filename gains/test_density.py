@@ -59,6 +59,12 @@ def display(candidate, mutation, startTime):
     print("{}\t{}\t{}\t{}".format(candidate.Genes, candidate.Fitness,
                                   mutation, timeDiff))
 
+    
+class prod_model():
+    def __init__(self, coef_data, model):
+        self.Coef_data = coef_data
+        self.Model = model
+
 
 def get_fitness(anion, genes, target):
     cation = Chem.MolFromSmiles(genes)
