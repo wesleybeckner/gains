@@ -134,9 +134,9 @@ def generate_geneset():
 
 
 def _generate_parent(geneSet, get_fitness):
-    df = load_data("saltInfo.csv")
-    df = df.loc[df["cation_name"].str.contains("imid", case=False)]
-    df = df['cation_SMILES'].unique()
+    df = load_data("cationInfo.csv")
+    df = df.loc[df["name"].str.contains("imid", case=False)]
+    df = df['smiles'].unique()
     ohPickMe = random.sample(range(df.shape[0]), 1)
     genes = df[ohPickMe[0]]
     fitness = get_fitness(genes)
@@ -260,7 +260,7 @@ def get_best(get_fitness, optimalFitness, geneSet, display,
             child, mutation = _mutate(bestParent, geneSet, get_fitness, target)
         mutation_attempts += 1
         attempts_since_last_adoption += 1
-        if attempts_since_last_adoption > 500:
+        if attempts_since_last_adoption > 1000:
             bestParent = _generate_parent(geneSet, get_fitness)
             attempts_since_last_adoption = 0
             print("starting from new parent")
