@@ -43,7 +43,7 @@ def load_data(data_file_name, pickleFile=False, simpleList=False):
         salt and each column representing the features of a given
         salt.
     """
-    module_path = "/media/wesley/weshhd/Dropbox/Python/py3/gains/gains"
+    module_path = dirname(__file__)
     if pickleFile:
         with open(join(module_path, 'data', data_file_name), 'rb') as \
                 pickle_file:
@@ -62,7 +62,7 @@ class prod_model():
         self.Coef_data = coef_data
         self.Model = model
 
-    
+
 class suppress_stdout_stderr(object):
     '''
     A context manager for doing a "deep suppression" of stdout and stderr in
@@ -129,7 +129,7 @@ class Chromosome(Chem.rdchem.Mol):
 
 
 def generate_geneset():
-    atoms = [6, 7]
+    atoms = [6, 7, 8, 9, 5, 15, 16, 17]
     fName = os.path.join(RDConfig.RDDataDir, 'FunctionalGroups.txt')
     rdkitFrags = FragmentCatalog.FragCatParams(1, 5, fName)
     customFrags = FragmentCatalog.FragCatalog(rdkitFrags)
@@ -144,7 +144,6 @@ def _generate_parent(parent_candidates, get_fitness):
     ohPickMe = random.sample(range(df.shape[0]), 1)
     genes = df[ohPickMe[0]]
     fitness = get_fitness(genes)
-    
     return Chromosome(genes, fitness)
 
 
@@ -246,8 +245,7 @@ def _mutate(parent, geneSet, get_fitness, target):
         genes = Chem.MolToSmiles(childGenes.RWMol)
         if "." in genes:
             raise
-        with suppress_stdout_stderr():
-            fitness = get_fitness(genes)
+        fitness = get_fitness(genes)
         return Chromosome(genes, fitness), mutation
     except BaseException:
         return Chromosome(parent.Genes, 0), mutation
@@ -263,8 +261,8 @@ def get_best(get_fitness, optimalFitness, geneSet, display,
     if bestParent.Fitness >= optimalFitness:
         return bestParent
     while True:
-        
-        child, mutation = _mutate(bestParent, geneSet, get_fitness, target)
+        with suppress_stdout_stderr():
+            child, mutation = _mutate(bestParent, geneSet, get_fitness, target)
         mutation_attempts += 1
         attempts_since_last_adoption += 1
 

@@ -22,7 +22,7 @@ import sys
 
 __all__ = ["suppress_stdout_stderr", "Benchmark", "GeneSet", "Chromosome",
            "generate_geneset", "_generate_parent", "_mutate", "get_best",
-           "load_data"]
+           "load_data", "prod_model"]
 
 
 """
@@ -55,6 +55,12 @@ def load_data(data_file_name, pickleFile=False, simpleList=False):
         with open(join(module_path, 'data', data_file_name), 'rb') as csv_file:
             data = pd.read_csv(csv_file, encoding='latin1')
     return data
+
+
+class prod_model():
+    def __init__(self, coef_data, model):
+        self.Coef_data = coef_data
+        self.Model = model
 
 
 class suppress_stdout_stderr(object):
@@ -123,7 +129,7 @@ class Chromosome(Chem.rdchem.Mol):
 
 
 def generate_geneset():
-    atoms = [6, 7]
+    atoms = [6, 7, 8, 9, 5, 15, 16, 17]
     fName = os.path.join(RDConfig.RDDataDir, 'FunctionalGroups.txt')
     rdkitFrags = FragmentCatalog.FragCatParams(1, 5, fName)
     customFrags = FragmentCatalog.FragCatalog(rdkitFrags)
@@ -133,14 +139,11 @@ def generate_geneset():
     return GeneSet(atoms, rdkitFrags, customFrags)
 
 
-def _generate_parent(geneSet, get_fitness):
-    df = load_data("cationInfo.csv")
-    df = df.loc[df["name"].str.contains("imid", case=False)]
-    df = df['smiles'].unique()
+def _generate_parent(parent_candidates, get_fitness):
+    df = parent_candidates
     ohPickMe = random.sample(range(df.shape[0]), 1)
     genes = df[ohPickMe[0]]
     fitness = get_fitness(genes)
-    print(fitness)
     return Chromosome(genes, fitness)
 
 
@@ -240,6 +243,8 @@ def _mutate(parent, geneSet, get_fitness, target):
         childGenes.RWMol.UpdatePropertyCache(strict=True)
         Chem.SanitizeMol(childGenes.RWMol)
         genes = Chem.MolToSmiles(childGenes.RWMol)
+        if "." in genes:
+            raise
         fitness = get_fitness(genes)
         return Chromosome(genes, fitness), mutation
     except BaseException:
@@ -247,11 +252,11 @@ def _mutate(parent, geneSet, get_fitness, target):
 
 
 def get_best(get_fitness, optimalFitness, geneSet, display,
-             show_ion, target):
+             show_ion, target, parent_candidates):
     mutation_attempts = 0
     attempts_since_last_adoption = 0
     random.seed()
-    bestParent = _generate_parent(geneSet, get_fitness)
+    bestParent = _generate_parent(parent_candidates, get_fitness)
     display(bestParent, "starting structure")
     if bestParent.Fitness >= optimalFitness:
         return bestParent
@@ -260,11 +265,12 @@ def get_best(get_fitness, optimalFitness, geneSet, display,
             child, mutation = _mutate(bestParent, geneSet, get_fitness, target)
         mutation_attempts += 1
         attempts_since_last_adoption += 1
+
         if attempts_since_last_adoption > 1000:
-            bestParent = _generate_parent(geneSet, get_fitness)
+            child = _generate_parent(parent_candidates, get_fitness)
             attempts_since_last_adoption = 0
             print("starting from new parent")
-        if bestParent.Fitness >= child.Fitness:
+        elif bestParent.Fitness >= child.Fitness:
             continue
         display(child, mutation)
         attempts_since_last_adoption = 0

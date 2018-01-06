@@ -13,6 +13,7 @@ gains/data/anionInfo.csv
 gains/data/cationInfo.csv
 gains/data/density_nn_model.sav
 gains/data/density_nn_model_descriptors.csv
+gains/data/density_prodmodel.pkl
 gains/data/pychem
 gains/data/saltInfo.csv
 gains/data/viscosity_nn_model.sav

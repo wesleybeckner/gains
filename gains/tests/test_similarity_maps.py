@@ -10,11 +10,20 @@ import datetime
 
 class GuessIonTests(unittest.TestCase):
     geneSet = genetic.generate_geneset()
+    df = genetic.load_data("cationInfo.csv")
+    df = df.loc[df["name"].str.contains("imid", case=False)]
+    df = df.loc[~df["name"].str.contains("phenyl", case=False)]
+    df = df.loc[~df["name"].str.contains("benzyl", case=False)]
+    df = df.loc[~df["name"].str.contains("azido", case=False)]
+    df = df.loc[~df["name"].str.contains("cyan", case=False)]
+    df = df.loc[~df["name"].str.contains("benz", case=False)]
+    df = df.loc[~df["name"].str.contains("cyclo", case=False)]
+    df = df.loc[~df["name"].str.contains("sulf", case=False)]
+    df = df.loc[~df["name"].str.contains("azepinium", case=False)]
+    parent_candidates = df['smiles'].unique()
 
     def test_1_similarity_map(self):
-        df = genetic.load_data("saltInfo.csv")
-        df = df.loc[df["cation_name"].str.contains("imid", case=False)]
-        df = df['cation_SMILES'].unique()
+        df = self.parent_candidates
         ohPickMe = random.sample(range(df.shape[0]), 1)
         target = df[ohPickMe[0]]
         self.guess_password(target)
@@ -36,7 +45,8 @@ class GuessIonTests(unittest.TestCase):
 
         optimalFitness = get_fitness(target, target)
         best = genetic.get_best(fnGetFitness, optimalFitness, self.geneSet,
-                                fnDisplay, fnShowIon, target)
+                                fnDisplay, fnShowIon, target,
+                                self.parent_candidates)
         return best
 
 

@@ -25,7 +25,7 @@ class GuessIonTests(unittest.TestCase):
     parent_candidates = df['smiles'].unique()
     df = genetic.load_data("anionInfo.csv")
     df = df['smiles'].unique()
-    ohPickMe = random.sample(range(df.shape[0]),1)
+    ohPickMe = random.sample(range(df.shape[0]), 1)
     anion = Chem.MolFromSmiles(df[ohPickMe[0]])
 
     def test_1_density(self):
@@ -60,11 +60,16 @@ def display(candidate, mutation, startTime):
                                   mutation, timeDiff))
 
 
+class prod_model():
+    def __init__(self, coef_data, model):
+        self.Coef_data = coef_data
+        self.Model = model
+
+
 def get_fitness(anion, genes, target):
     cation = Chem.MolFromSmiles(genes)
-    prodmodel = genetic.load_data("density_prodmodel.pkl", pickleFile=True)
-    model = prodmodel.Model
-    deslist = prodmodel.Coef_data
+    model = genetic.load_data("density_nn_model.sav", pickleFile=True)
+    deslist = genetic.load_data("density_nn_model_descriptors.csv")
     feature_vector = []
     with genetic.suppress_stdout_stderr():
         for item in deslist:
