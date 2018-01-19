@@ -12,8 +12,10 @@ import random
 
 class GuessIonTests(unittest.TestCase):
     geneSet = genetic.generate_geneset()
-    df = genetic.load_data("saltInfo.csv")
-    df = df['anion_SMILES'].unique()
+    df = genetic.load_data("cationInfo.csv")
+    parent_candidates = df['smiles'].unique()
+    df = genetic.load_data("anionInfo.csv")
+    df = df['smiles'].unique()
     ohPickMe = random.sample(range(df.shape[0]), 1)
     anion = Chem.MolFromSmiles(df[ohPickMe[0]])
 
@@ -39,14 +41,28 @@ class GuessIonTests(unittest.TestCase):
         optimalFitness = 0.99
         best = genetic.get_best(fnGetFitness, optimalFitness,
                                 self.geneSet, fnDisplay,
-                                fnShowIon, target)
-        return best
+                                fnShowIon, target, self.parent_candidates)
+        cation = Chem.AddHs(best.Mol)
+        Chem.EmbedMolecule(cation, Chem.ETKDG())
+        Chem.UFFOptimizeMolecule(cation)
+        Chem.rdmolfiles.MolToPDBFile(cation, "../data/cation_test.pdb")
+        anion = Chem.AddHs(self.anion)
+        Chem.EmbedMolecule(anion, Chem.ETKDG())
+        Chem.UFFOptimizeMolecule(anion)
+        Chem.rdmolfiles.MolToPDBFile(anion, "../data/anion_test.pdb")
+        return cation, anion
 
 
 def display(candidate, mutation, startTime):
     timeDiff = datetime.datetime.now() - startTime
     print("{}\t{}\t{}\t{}".format(candidate.Genes, candidate.Fitness,
                                   mutation, timeDiff))
+
+
+class prod_model():
+    def __init__(self, coef_data, model):
+        self.Coef_data = coef_data
+        self.Model = model
 
 
 def get_fitness(anion, genes, target):
