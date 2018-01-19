@@ -45,11 +45,11 @@ class GuessIonTests(unittest.TestCase):
         cation = Chem.AddHs(best.Mol)
         Chem.EmbedMolecule(cation, Chem.ETKDG())
         Chem.UFFOptimizeMolecule(cation)
-        Chem.rdmolfiles.MolToPDBFile(cation, "../data/cation_test.pdb")
+        Chem.rdmolfiles.MolToPDBFile(cation, "cation_test.pdb")
         anion = Chem.AddHs(self.anion)
         Chem.EmbedMolecule(anion, Chem.ETKDG())
         Chem.UFFOptimizeMolecule(anion)
-        Chem.rdmolfiles.MolToPDBFile(anion, "../data/anion_test.pdb")
+        Chem.rdmolfiles.MolToPDBFile(anion, "anion_test.pdb")
         return cation, anion
 
 
