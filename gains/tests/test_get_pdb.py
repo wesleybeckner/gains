@@ -20,7 +20,7 @@ class GuessIonTests(unittest.TestCase):
     anion = Chem.MolFromSmiles(df[ohPickMe[0]])
 
     def test_1_density(self):
-        target = random.sample(range(800, 1500), 1)[0]
+        target = 800
         self.guess_password(target)
 
     def test_benchmark(self):
@@ -35,8 +35,10 @@ class GuessIonTests(unittest.TestCase):
         def fnDisplay(candidate, mutation):
             display(candidate, mutation, startTime)
 
-        def fnShowIon(genes, target, mutation_attempts):
-            show_ion(genes, target, mutation_attempts)
+        def fnShowIon(genes, target, mutation_attempts, sim_score,
+                      molecular_relative):
+            show_ion(genes, target, mutation_attempts, sim_score,
+                     molecular_relative)
 
         optimalFitness = 0.99
         best = genetic.get_best(fnGetFitness, optimalFitness,
@@ -92,11 +94,13 @@ def get_fitness(anion, genes, target):
     return 1 - error
 
 
-def show_ion(genes, target, mutation_attempts):
+def show_ion(genes, target, mutation_attempts, sim_score, molecular_relative):
     mol = Chem.MolFromSmiles(genes)
     print("{}\t{}".format("number of atoms: ", mol.GetNumAtoms()))
     print("{}\t{}".format("mutation attempts: ", mutation_attempts))
     print("within 1%% of target density: %s (kg/m) " % target)
+    print("{}\t{}".format("similarity score: ", sim_score))
+    print("{}\t{}".format("with molecular relative: ", molecular_relative))
 
 
 if __name__ == '__main__':

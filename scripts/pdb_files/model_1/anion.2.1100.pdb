@@ -1,0 +1,14 @@
+HETATM    1  C1  UNL     1      -1.269   0.229  -0.150  1.00  0.00           C  
+HETATM    2  O1  UNL     1      -0.178  -0.177  -0.938  1.00  0.00           O  
+HETATM    3  S1  UNL     1       1.198  -0.238   0.048  1.00  0.00           S  
+HETATM    4  O2  UNL     1       1.001  -1.230   1.161  1.00  0.00           O  
+HETATM    5  O3  UNL     1       1.489   1.120   0.625  1.00  0.00           O  
+HETATM    6  O4  UNL     1       2.508  -0.723  -0.884  1.00  0.00           O1-
+HETATM    7  H1  UNL     1      -1.107   1.248   0.266  1.00  0.00           H  
+HETATM    8  H2  UNL     1      -2.172   0.271  -0.792  1.00  0.00           H  
+HETATM    9  H3  UNL     1      -1.470  -0.500   0.665  1.00  0.00           H  
+CONECT    1    2    7    8    9
+CONECT    2    3
+CONECT    3    4    4    5    5
+CONECT    3    6
+END
