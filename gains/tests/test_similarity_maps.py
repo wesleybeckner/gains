@@ -40,8 +40,10 @@ class GuessIonTests(unittest.TestCase):
         def fnDisplay(candidate, mutation):
             display(candidate, mutation, startTime)
 
-        def fnShowIon(genes, target, mutation_attempts):
-            show_ion(genes, target, mutation_attempts)
+        def fnShowIon(genes, target, mutation_attempts, sim_score,
+                      molecular_relative):
+            show_ion(genes, target, mutation_attempts, sim_score,
+                     molecular_relative)
 
         optimalFitness = get_fitness(target, target)
         best = genetic.get_best(fnGetFitness, optimalFitness, self.geneSet,
@@ -62,10 +64,13 @@ def get_fitness(genes, target):
     return DataStructs.FingerprintSimilarity(fps[0], fps[1])
 
 
-def show_ion(genes, target, mutation_attempts):
+def show_ion(genes, target, mutation_attempts, sim_score, molecular_relative):
     mol = Chem.MolFromSmiles(genes)
     print("{}\t{}".format("number of atoms: ", mol.GetNumAtoms()))
     print("{}\t{}".format("mutation attempts: ", mutation_attempts))
+    print("within 1%% of target density: %s (kg/m) " % target)
+    print("{}\t{}".format("similarity score: ", sim_score))
+    print("{}\t{}".format("with molecular relative: ", molecular_relative))
 
 
 if __name__ == '__main__':
