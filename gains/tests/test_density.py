@@ -92,7 +92,7 @@ def get_fitness(anion, genes, target):
     prediction = exp(model.predict(np.array(features_normalized).
                      reshape(1, -1))[0])
     error = abs((prediction - target) / target)
-    return 1 - error
+    return 1 - error, prediction
 
 
 def show_ion(genes, target, mutation_attempts, sim_score, molecular_relative):

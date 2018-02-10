@@ -16,7 +16,10 @@ gains/data/cation_test.pdb
 gains/data/density_30k_model.sav
 gains/data/density_30k_model_descriptors.csv
 gains/data/density_model_3.pkl
+gains/data/density_model_3.sav
 gains/data/density_model_3_descriptors.csv
+gains/data/density_model_4.sav
+gains/data/density_model_4_descriptors.csv
 gains/data/density_nn_model.sav
 gains/data/density_nn_model_descriptors.csv
 gains/data/density_prodmodel.pkl

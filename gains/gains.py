@@ -15,7 +15,7 @@ import sys
 
 __all__ = ["suppress_stdout_stderr", "Benchmark", "GeneSet", "Chromosome",
            "generate_geneset", "_generate_parent", "_mutate", "get_best",
-           "load_data", "prod_model"]
+           "load_data", "prod_model", "molecular_similarity"]
 
 
 """
@@ -23,9 +23,10 @@ This GA uses RDKit to search molecular structure
 """
 
 
-def molecular_simularity(best, parent_candidates, all=False):
+def molecular_similarity(best, parent_candidates, all=False):
     """returns a similarity score (0-1) of best with the
     closest molecular relative in parent_candidates
+
     Parameters
     ----------
     best : object
@@ -39,6 +40,7 @@ def molecular_simularity(best, parent_candidates, all=False):
         similarity score is returned. If True
         tanimoto, dice, cosine, sokal, kulczynski,
         and mcconnaughey similarities are returned
+
     Returns
     ----------
     if all=False the best tanimoto similarity score
@@ -192,7 +194,7 @@ def _generate_parent(parent_candidates, get_fitness):
     df = parent_candidates
     ohPickMe = random.sample(range(df.shape[0]), 1)
     genes = df[ohPickMe[0]]
-    fitness = get_fitness(genes)
+    fitness, prediction = get_fitness(genes)
     return Chromosome(genes, fitness)
 
 
@@ -294,7 +296,7 @@ def _mutate(parent, geneSet, get_fitness, target):
         genes = Chem.MolToSmiles(childGenes.RWMol)
         if "." in genes:
             raise
-        fitness = get_fitness(genes)
+        fitness, prediction = get_fitness(genes)
         return Chromosome(genes, fitness), mutation
     except BaseException:
         return Chromosome(parent.Genes, 0), mutation
@@ -324,7 +326,7 @@ def get_best(get_fitness, optimalFitness, geneSet, display,
         display(child, mutation)
         attempts_since_last_adoption = 0
         if child.Fitness >= optimalFitness:
-            sim_score, sim_index = molecular_simularity(child,
+            sim_score, sim_index = molecular_similarity(child,
                                                         parent_candidates)
             molecular_relative = parent_candidates[sim_index]
             show_ion(child.Genes, target, mutation_attempts, sim_score,

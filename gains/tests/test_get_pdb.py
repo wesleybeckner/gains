@@ -38,7 +38,7 @@ class GuessIonTests(unittest.TestCase):
         def fnShowIon(genes, target, mutation_attempts, sim_score,
                       molecular_relative):
             show_ion(genes, target, mutation_attempts, sim_score,
-                     molecular_relative)
+                     molecular_relative, self.anion)
 
         optimalFitness = 0.99
         best = genetic.get_best(fnGetFitness, optimalFitness,
@@ -91,16 +91,18 @@ def get_fitness(anion, genes, target):
     prediction = exp(model.predict(np.array(features_normalized).
                      reshape(1, -1))[0])
     error = abs((prediction - target) / target)
-    return 1 - error
+    return 1 - error, prediction
 
 
-def show_ion(genes, target, mutation_attempts, sim_score, molecular_relative):
+def show_ion(genes, target, mutation_attempts, sim_score, molecular_relative,
+             anion):
     mol = Chem.MolFromSmiles(genes)
+    fitness, mol_property = get_fitness(anion, genes, target)
     print("{}\t{}".format("number of atoms: ", mol.GetNumAtoms()))
     print("{}\t{}".format("mutation attempts: ", mutation_attempts))
-    print("within 1%% of target density: %s (kg/m) " % target)
-    print("{}\t{}".format("similarity score: ", sim_score))
-    print("{}\t{}".format("with molecular relative: ", molecular_relative))
+    print("with density: \t\t{0:1.2f} (kg/m)".format(mol_property))
+    print("similarity score:  {0:10.3f}".format(sim_score))
+    print("{}\t{}\n".format("molecular relative: ", molecular_relative))
 
 
 if __name__ == '__main__':

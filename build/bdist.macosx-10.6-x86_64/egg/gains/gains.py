@@ -4,25 +4,18 @@ import pandas as pd
 from rdkit import RDConfig
 from rdkit.Chem import FragmentCatalog
 from rdkit.Chem import AllChem as Chem
+from rdkit.Chem.Fingerprints import FingerprintMols
+from rdkit import DataStructs
 import pickle
 import os
 import statistics
 import time
 import random
 import sys
-# uncomment once due is setup
-# from .due import due, Doi
-# Use duecredit (duecredit.org) to provide a citation to relevant work to
-# be cited. This does nothing, unless the user has duecredit installed,
-# And calls this with duecredit (as in `python -m duecredit script.py`):
-# due.cite(Doi("10.1167/13.9.30"),
-#         description="Template project for small scientific Python projects",
-#         tags=["reference-implementation"],
-#         path='gains')
 
 __all__ = ["suppress_stdout_stderr", "Benchmark", "GeneSet", "Chromosome",
            "generate_geneset", "_generate_parent", "_mutate", "get_best",
-           "load_data", "prod_model"]
+           "load_data", "prod_model", "molecular_similarity"]
 
 
 """
@@ -30,12 +23,71 @@ This GA uses RDKit to search molecular structure
 """
 
 
+def molecular_similarity(best, parent_candidates, all=False):
+    """returns a similarity score (0-1) of best with the
+    closest molecular relative in parent_candidates
+
+    Parameters
+    ----------
+    best : object
+        a genetic.Chromosome() object, this is the
+        molecular candidate under investigation
+    parent_candidates : array
+        an array of smiles strings to compare with
+        best
+    all : boolean, optional
+        default behavior is false and the tanimoto
+        similarity score is returned. If True
+        tanimoto, dice, cosine, sokal, kulczynski,
+        and mcconnaughey similarities are returned
+
+    Returns
+    ----------
+    if all=False the best tanimoto similarity score
+    as well as the index of the closest molecular
+    relative are returned
+    if all=True an array of best scores and indeces
+    of the closest molecular relative are returned
+    """
+    scores = []
+    if all:
+        indices = []
+        metrics = [DataStructs.TanimotoSimilarity,
+                   DataStructs.DiceSimilarity,
+                   DataStructs.CosineSimilarity,
+                   DataStructs.SokalSimilarity,
+                   DataStructs.KulczynskiSimilarity,
+                   DataStructs.McConnaugheySimilarity]
+
+        for j in range(len(metrics)):
+
+            scores_micro = []
+            for i in range(len(parent_candidates)):
+                ms = [best.Mol, Chem.MolFromSmiles(parent_candidates[i])]
+                fps = [FingerprintMols.FingerprintMol(x) for x in ms]
+                score = DataStructs.FingerprintSimilarity(fps[0], fps[1],
+                                                          metric=metrics[j])
+                scores_micro.append(score)
+            scores.append(max(scores_micro))
+            indices.append(scores_micro.index(max(scores_micro)))
+        return scores, indices
+    else:
+        for i in range(len(parent_candidates)):
+            ms = [best.Mol, Chem.MolFromSmiles(parent_candidates[i])]
+            fps = [FingerprintMols.FingerprintMol(x) for x in ms]
+            score = DataStructs.FingerprintSimilarity(fps[0], fps[1])
+            scores.append(score)
+        return max(scores), scores.index(max(scores))
+
+
 def load_data(data_file_name, pickleFile=False, simpleList=False):
     """Loads data from module_path/data/data_file_name.
+
     Parameters
     ----------
     data_file_name : String. Name of csv file to be loaded from
     module_path/data/data_file_name. For example 'salt_info.csv'.
+
     Returns
     -------
     data : Pandas DataFrame
@@ -64,15 +116,14 @@ class prod_model():
 
 
 class suppress_stdout_stderr(object):
-    '''
+    """
     A context manager for doing a "deep suppression" of stdout and stderr in
     Python, i.e. will suppress all print, even if the print originates in a
     compiled C/Fortran sub-function.
        This will not suppress raised exceptions, since exceptions are printed
     to stderr just before a script exits, and after the context manager has
     exited (at least, I think that is why it lets exceptions through).
-
-    '''
+    """
     def __init__(self):
         # Open a pair of null files
         self.null_fds = [os.open(os.devnull, os.O_RDWR) for x in range(2)]
@@ -275,6 +326,10 @@ def get_best(get_fitness, optimalFitness, geneSet, display,
         display(child, mutation)
         attempts_since_last_adoption = 0
         if child.Fitness >= optimalFitness:
-            show_ion(child.Genes, target, mutation_attempts)
+            sim_score, sim_index = molecular_similarity(child,
+                                                        parent_candidates)
+            molecular_relative = parent_candidates[sim_index]
+            show_ion(child.Genes, target, mutation_attempts, sim_score,
+                     molecular_relative)
             return child
         bestParent = child
