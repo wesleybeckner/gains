@@ -41,7 +41,7 @@ class GuessIonTests(unittest.TestCase):
             show_ion(genes, target, mutation_attempts, sim_score,
                      molecular_relative, self.anion)
 
-        optimalFitness = 0.99
+        optimalFitness = 0.9
         best = genetic.get_best(fnGetFitness, optimalFitness,
                                 self.geneSet, fnDisplay,
                                 fnShowIon, target, self.parent_candidates)
@@ -71,8 +71,8 @@ class prod_model():
 
 def get_fitness(anion, genes, target):
     cation = Chem.MolFromSmiles(genes)
-    model = genetic.load_data("density_nn_model.sav", pickleFile=True)
-    deslist = genetic.load_data("density_nn_model_descriptors.csv")
+    model = genetic.load_data("density_m3.sav", pickleFile=True)
+    deslist = genetic.load_data("density_m3_descriptors.csv")
     feature_vector = []
     with genetic.suppress_stdout_stderr():
         for item in deslist:
