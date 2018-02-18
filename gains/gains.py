@@ -320,7 +320,7 @@ def get_best(get_fitness, optimalFitness, geneSet, display,
         mutation_attempts += 1
         attempts_since_last_adoption += 1
 
-        if attempts_since_last_adoption > 1000:
+        if attempts_since_last_adoption > 1100:
             child = _generate_parent(parent_candidates, get_fitness)
             attempts_since_last_adoption = 0
             print("starting from new parent")
