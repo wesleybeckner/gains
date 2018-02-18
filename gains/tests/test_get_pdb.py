@@ -8,13 +8,14 @@ import unittest
 import datetime
 from math import exp
 import random
+import salty
 
 
 class GuessIonTests(unittest.TestCase):
     geneSet = genetic.generate_geneset()
-    df = genetic.load_data("cationInfo.csv")
+    df = salty.load_data("cationInfo.csv")
     parent_candidates = df['smiles'].unique()
-    df = genetic.load_data("anionInfo.csv")
+    df = salty.load_data("anionInfo.csv")
     df = df['smiles'].unique()
     ohPickMe = random.sample(range(df.shape[0]), 1)
     anion = Chem.MolFromSmiles(df[ohPickMe[0]])
@@ -47,11 +48,12 @@ class GuessIonTests(unittest.TestCase):
         cation = Chem.AddHs(best.Mol)
         Chem.EmbedMolecule(cation, Chem.ETKDG())
         Chem.UFFOptimizeMolecule(cation)
-        Chem.rdmolfiles.MolToPDBFile(cation, "cation_test.pdb")
+        # Uncomment PDB lines to wrote PDB file
+        # Chem.rdmolfiles.MolToPDBFile(cation, "cation_test.pdb")
         anion = Chem.AddHs(self.anion)
         Chem.EmbedMolecule(anion, Chem.ETKDG())
         Chem.UFFOptimizeMolecule(anion)
-        Chem.rdmolfiles.MolToPDBFile(anion, "anion_test.pdb")
+        # Chem.rdmolfiles.MolToPDBFile(anion, "anion_test.pdb")
         return cation, anion
 
 

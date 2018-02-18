@@ -283,12 +283,15 @@ def _mutate(parent, geneSet, get_fitness, target):
         except BaseException:
             return 0
     childGenes = Chromosome(parent.Genes, 0)
-    oldGene = random.sample(range(childGenes.RWMol.GetNumAtoms()), 1)[0]
     mutate_operations = [add_atom, remove_atom, remove_custom_fragment,
                          replace_atom, add_rdkit_fragment, add_custom_fragment,
                          remove_rdkit_fragment]
     i = random.choice(range(len(mutate_operations)))
     mutation = mutate_operations[i].__name__
+    try:
+        oldGene = random.sample(range(childGenes.RWMol.GetNumAtoms()), 1)[0]
+    except BaseException:
+        return Chromosome(parent.Genes, 0), mutation
     childGenes = mutate_operations[i](childGenes, geneSet, oldGene)
     try:
         childGenes.RWMol.UpdatePropertyCache(strict=True)

@@ -6,11 +6,12 @@ from rdkit.Chem import AllChem as Chem
 import random
 import unittest
 import datetime
+import salty
 
 
 class GuessIonTests(unittest.TestCase):
     geneSet = genetic.generate_geneset()
-    df = genetic.load_data("cationInfo.csv")
+    df = salty.load_data("cationInfo.csv")
     df = df.loc[df["name"].str.contains("imid", case=False)]
     df = df.loc[~df["name"].str.contains("phenyl", case=False)]
     df = df.loc[~df["name"].str.contains("benzyl", case=False)]

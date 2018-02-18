@@ -8,28 +8,20 @@ import unittest
 import datetime
 from math import exp
 import random
+import salty
 
 
 class GuessIonTests(unittest.TestCase):
     geneSet = genetic.generate_geneset()
-    df = genetic.load_data("cationInfo.csv")
-    df = df.loc[df["name"].str.contains("imid", case=False)]
-    df = df.loc[~df["name"].str.contains("phenyl", case=False)]
-    df = df.loc[~df["name"].str.contains("benzyl", case=False)]
-    df = df.loc[~df["name"].str.contains("azido", case=False)]
-    df = df.loc[~df["name"].str.contains("cyan", case=False)]
-    df = df.loc[~df["name"].str.contains("benz", case=False)]
-    df = df.loc[~df["name"].str.contains("cyclo", case=False)]
-    df = df.loc[~df["name"].str.contains("sulf", case=False)]
-    df = df.loc[~df["name"].str.contains("azepinium", case=False)]
+    df = salty.load_data("cationInfo.csv")
     parent_candidates = df['smiles'].unique()
-    df = genetic.load_data("anionInfo.csv")
+    df = salty.load_data("anionInfo.csv")
     df = df['smiles'].unique()
     ohPickMe = random.sample(range(df.shape[0]), 1)
     anion = Chem.MolFromSmiles(df[ohPickMe[0]])
 
     def test_1_density(self):
-        target = random.sample(range(800, 1500), 1)[0]
+        target = random.sample(range(900, 1500), 1)[0]
         self.guess_password(target)
 
     def test_benchmark(self):
@@ -70,8 +62,8 @@ class prod_model():
 
 def get_fitness(anion, genes, target):
     cation = Chem.MolFromSmiles(genes)
-    model = genetic.load_data("density_nn_model.sav", pickleFile=True)
-    deslist = genetic.load_data("density_nn_model_descriptors.csv")
+    model = genetic.load_data("density_m1.sav", pickleFile=True)
+    deslist = genetic.load_data("density_m1_descriptors.csv")
     feature_vector = []
     with genetic.suppress_stdout_stderr():
         for item in deslist:
