@@ -41,7 +41,7 @@ class GuessIonTests(unittest.TestCase):
             show_ion(genes, target, mutation_attempts, sim_score,
                      molecular_relative)
 
-        optimalFitness = 0.99
+        optimalFitness = 0.9
         best = genetic.get_best(fnGetFitness, optimalFitness,
                                 self.geneSet, fnDisplay,
                                 fnShowIon, target, self.parent_candidates)
@@ -91,7 +91,7 @@ def show_ion(genes, target, mutation_attempts, sim_score, molecular_relative):
     mol = Chem.MolFromSmiles(genes)
     print("{}\t{}".format("number of atoms: ", mol.GetNumAtoms()))
     print("{}\t{}".format("mutation attempts: ", mutation_attempts))
-    print("within 1%% of target density: %s (kg/m) " % target)
+    print("within 10%% of target density: %s (kg/m) " % target)
     print("{}\t{}".format("similarity score: ", sim_score))
     print("{}\t{}".format("with molecular relative: ", molecular_relative))
 
