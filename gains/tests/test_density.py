@@ -41,7 +41,7 @@ class GuessIonTests(unittest.TestCase):
             show_ion(genes, target, mutation_attempts, sim_score,
                      molecular_relative)
 
-        optimalFitness = 0.9
+        optimalFitness = 0.8
         best = genetic.get_best(fnGetFitness, optimalFitness,
                                 self.geneSet, fnDisplay,
                                 fnShowIon, target, self.parent_candidates)
