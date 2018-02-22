@@ -13,7 +13,7 @@ gains.egg-info/top_level.txt
 gains/data/density_m1.sav
 gains/data/density_m1_descriptors.csv
 gains/data/density_m2.sav
-gains/data/density_m2_descriptors.sav
+gains/data/density_m2_descriptors.csv
 gains/data/density_m3.sav
 gains/data/density_m3_descriptors.csv
 gains/data/density_m3_summary.csv
