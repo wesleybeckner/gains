@@ -4,5 +4,6 @@
 *-checkpoint.ipynb
 .ipynb_checkpoints
 _build/
+scripts/development/
 auto_examples/
 gen_api/
