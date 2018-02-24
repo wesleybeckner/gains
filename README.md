@@ -40,7 +40,7 @@ pip install gains
 
 ## Development
 
-GAINS is currently underdevelopment by researchers at the University of Washington. Our  research page can be found [here](prg.washington.edu).
+GAINS is currently underdevelopment by researchers at the University of Washington. Our  research page can be found [here](http://www.prg.washington.edu).
 
 ### Testing
 
