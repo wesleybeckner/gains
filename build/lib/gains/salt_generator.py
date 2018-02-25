@@ -65,9 +65,10 @@ def get_fitness(anion, genes, target, model_ID):
             print("unknown descriptor in list: %s" % item)
     features_normalized = (feature_vector - deslist.iloc[0].values) /\
         deslist.iloc[1].values
-    prediction = np.round(exp(model.predict(np.array(features_normalized).
+    prediction = np.round(np.exp(model.predict(np.array(features_normalized).
                           reshape(1, -1))[0]), decimals=2)
     error = abs((prediction - target) / target)
+    error = np.average(error)
 
     return 1 - error, prediction
 
@@ -78,7 +79,7 @@ def show_ion(genes, target, mutation_attempts, sim_score, molecular_relative,
     fitness, mol_property = get_fitness(anion, genes, target, model_ID)
     print("{}\t{}".format("number of atoms: ", mol.GetNumAtoms()))
     print("{}\t{}".format("mutation attempts: ", mutation_attempts))
-    print("with density: \t\t{0:1.2f} (kg/m)".format(mol_property))
+    print("with prediction: \t\t{}".format(mol_property))
     print("similarity score:  {0:10.3f}".format(sim_score))
     print("{}\t{}\n".format("molecular relative: ",
           salty.check_name(molecular_relative)))
@@ -93,7 +94,7 @@ def generate_solvent(target, model_ID, heavy_atom_limit=30,
                             format(model_ID)).loc[2][1])
     cols = ["Salt ID", "Salt Smiles", "Cation Heavy Atoms",
             "Tanimoto Similarity Score", "Molecular Relative", "Anion",
-            "Model Density", "MD Density", "Error"]
+            "Model Prediction", "MD Calculation", "Error"]
     salts = pd.DataFrame(columns=cols)
     for i in range(1, hits + 1):
         while True:

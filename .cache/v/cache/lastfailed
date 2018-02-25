@@ -1,1 +1,5 @@
-{}
+{
+  "gains/tests/test_get_pdb.py": true,
+  "gains/tests/test_model.py": true,
+  "gains/tests/test_similarity_maps.py": true
+}
