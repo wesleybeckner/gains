@@ -1,4 +1,5 @@
 numpy
 pandas
 salty-ilthermo
+dill
 
