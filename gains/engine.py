@@ -13,9 +13,9 @@ import time
 import random
 import sys
 
-__all__ = ["suppress_stdout_stderr", "Benchmark", "GeneSet", "Chromosome",
-           "generate_geneset", "_generate_parent", "_mutate", "get_best",
-           "load_data", "prod_model", "molecular_similarity"]
+__all__ = ["get_best", "molecular_similarity", "Benchmark",
+           "generate_geneset", "GeneSet", "Chromosome",
+           "load_data", "suppress_stdout_stderr"]
 
 
 """
@@ -23,8 +23,80 @@ This GA uses RDKit to search molecular structure
 """
 
 
+def get_best(get_fitness, optimalFitness, geneSet, display,
+             show_ion, target, parent_candidates):
+    """
+    the primary public function of the engine
+
+    Parameters
+    ----------
+    get_fitness : function
+        the fitness function. Usually based on a molecular property.
+        An example can be found in the salt_generator module
+    optimalFitness : float
+        0-1 the user specifies how close the engine should get to
+        the target (1 = exact)
+    geneSet : object
+        consists of atomtypes (by periodic number), rdkit molecular
+        fragments and custom fragments (that are currently hard
+        coded into the engine). These are the building blocks that
+        the engine can use to mutate the molecular candidate via the
+        _mutate() function
+    display : function
+        for printing results to the screen. Display is called for
+        every accepted mutation
+    show_ion : function
+        for printing results to the screen. show_ion is called when
+        a candidate has achieved the desired fitness score and is
+        returned by the engine
+    target : array, float, or int
+        the desired property value to be achieved by the engine.
+        If an array, a model containing multi-output targets must
+        be supplied to the engine
+    parent_candidates : array
+        an array of smiles strings that the engine uses to choose
+        a starting atomic configuration
+
+    Returns
+    ----------
+    child : Chromosome object
+        the accepted molecular configuration. See Chromosome class
+        for details
+    """
+    mutation_attempts = 0
+    attempts_since_last_adoption = 0
+    random.seed()
+    bestParent = _generate_parent(parent_candidates, get_fitness)
+    display(bestParent, "starting structure")
+    if bestParent.Fitness >= optimalFitness:
+        return bestParent
+    while True:
+        with suppress_stdout_stderr():
+            child, mutation = _mutate(bestParent, geneSet, get_fitness, target)
+        mutation_attempts += 1
+        attempts_since_last_adoption += 1
+
+        if attempts_since_last_adoption > 1100:
+            child = _generate_parent(parent_candidates, get_fitness)
+            attempts_since_last_adoption = 0
+            print("starting from new parent")
+        elif bestParent.Fitness >= child.Fitness:
+            continue
+        display(child, mutation)
+        attempts_since_last_adoption = 0
+        if child.Fitness >= optimalFitness:
+            sim_score, sim_index = molecular_similarity(child,
+                                                        parent_candidates)
+            molecular_relative = parent_candidates[sim_index]
+            show_ion(child.Genes, target, mutation_attempts, sim_score,
+                     molecular_relative)
+            return child
+        bestParent = child
+
+
 def molecular_similarity(best, parent_candidates, all=False):
-    """returns a similarity score (0-1) of best with the
+    """
+    returns a similarity score (0-1) of best with the
     closest molecular relative in parent_candidates
 
     Parameters
@@ -81,19 +153,26 @@ def molecular_similarity(best, parent_candidates, all=False):
 
 
 def load_data(data_file_name, pickleFile=False, simpleList=False):
-    """Loads data from module_path/data/data_file_name.
+    """
+    Loads data from module_path/data/data_file_name.
 
     Parameters
     ----------
-    data_file_name : String. Name of csv file to be loaded from
-    module_path/data/data_file_name. For example 'salt_info.csv'.
+    data_file_name : string
+        name of csv file to be loaded from module_path/data/
+        data_file_name. For example 'salt_info.csv'.
+    pickleFile : boolean, optional
+        default = False. if True opens pickled file
+    simpleList : boolean, optional
+        default = False. If true will open the saved list and
+        properly handle split lines
 
     Returns
     -------
     data : Pandas DataFrame
         A data frame. For example with each row representing one
         salt and each column representing the features of a given
-        salt.
+        salt
     """
     module_path = dirname(__file__)
     if pickleFile:
@@ -109,20 +188,15 @@ def load_data(data_file_name, pickleFile=False, simpleList=False):
     return data
 
 
-class prod_model():
-    def __init__(self, coef_data, model):
-        self.Coef_data = coef_data
-        self.Model = model
-
-
 class suppress_stdout_stderr(object):
     """
-    A context manager for doing a "deep suppression" of stdout and stderr in
+    Context manager for doing a "deep suppression" of stdout and stderr in
     Python, i.e. will suppress all print, even if the print originates in a
     compiled C/Fortran sub-function.
-       This will not suppress raised exceptions, since exceptions are printed
-    to stderr just before a script exits, and after the context manager has
-    exited (at least, I think that is why it lets exceptions through).
+
+    The purpose of this is to suppress error outputs from rdkit. The engine
+    uses rdkit as a final sanity check on molecular candidates. Subsequently,
+    error messages from rdkit are produced all the time
     """
     def __init__(self):
         # Open a pair of null files
@@ -145,6 +219,9 @@ class suppress_stdout_stderr(object):
 
 
 class Benchmark:
+    """
+    benchmark method used by the unittests
+    """
     @staticmethod
     def run(function):
         timings = []
@@ -163,6 +240,13 @@ class Benchmark:
 
 
 class GeneSet():
+    """
+    Consists of atomtypes (by periodic number), rdkit molecular
+    fragments and custom fragments (that are currently hard
+    coded into the engine). These are the building blocks that
+    the engine can use to mutate the molecular candidate via the
+    _mutate() function
+    """
     def __init__(self, atoms, rdkitFrags, customFrags):
         self.Atoms = atoms
         self.RdkitFrags = rdkitFrags
@@ -170,6 +254,13 @@ class GeneSet():
 
 
 class Chromosome(Chem.rdchem.Mol):
+    """
+    The main object handled by the engine. The Chromosome object
+    inherits the RWMol and Mol attributes from rdkit. Two additional
+    attributes are added: genes and fitness. Genes is the SMILES
+    encoding of the molecule, fitness is the score (0-1) returned
+    by the fitness function
+    """
     def __init__(self, genes, fitness):
         Chem.rdchem.Mol.__init__(self)
         self.Genes = genes
@@ -180,6 +271,21 @@ class Chromosome(Chem.rdchem.Mol):
 
 
 def generate_geneset():
+    """
+    Populates the GeneSet class with atoms and fragments to be used
+    by the engine. As it stands these are hardcoded into the engine
+    but will probably be adapted in future versions
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    ----------
+    GeneSet : object
+        returns an instance of the GeneSet class containing atoms,
+        rdkit fragments, and custom fragments
+    """
     atoms = [6, 7, 8, 9, 5, 15, 16, 17]
     fName = os.path.join(RDConfig.RDDataDir, 'FunctionalGroups.txt')
     rdkitFrags = FragmentCatalog.FragCatParams(1, 5, fName)
@@ -303,36 +409,3 @@ def _mutate(parent, geneSet, get_fitness, target):
         return Chromosome(genes, fitness), mutation
     except BaseException:
         return Chromosome(parent.Genes, 0), mutation
-
-
-def get_best(get_fitness, optimalFitness, geneSet, display,
-             show_ion, target, parent_candidates):
-    mutation_attempts = 0
-    attempts_since_last_adoption = 0
-    random.seed()
-    bestParent = _generate_parent(parent_candidates, get_fitness)
-    display(bestParent, "starting structure")
-    if bestParent.Fitness >= optimalFitness:
-        return bestParent
-    while True:
-        with suppress_stdout_stderr():
-            child, mutation = _mutate(bestParent, geneSet, get_fitness, target)
-        mutation_attempts += 1
-        attempts_since_last_adoption += 1
-
-        if attempts_since_last_adoption > 1100:
-            child = _generate_parent(parent_candidates, get_fitness)
-            attempts_since_last_adoption = 0
-            print("starting from new parent")
-        elif bestParent.Fitness >= child.Fitness:
-            continue
-        display(child, mutation)
-        attempts_since_last_adoption = 0
-        if child.Fitness >= optimalFitness:
-            sim_score, sim_index = molecular_similarity(child,
-                                                        parent_candidates)
-            molecular_relative = parent_candidates[sim_index]
-            show_ion(child.Genes, target, mutation_attempts, sim_score,
-                     molecular_relative)
-            return child
-        bestParent = child

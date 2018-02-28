@@ -11,7 +11,9 @@ Classes
    :template: class.rst
    :toctree: gen_api
 
-   Model
+   Benchmark
+   GeneSet
+   Chromosome
 
 
 Functions
@@ -21,6 +23,8 @@ Functions
    :template: function.rst
    :toctree: gen_api
 
-   transform_data
-   cumgauss
-   opt_err_func
+   suppress_stdout_stderr
+   generate_geneset
+   get_best
+   load_data
+   molecular_similarity
