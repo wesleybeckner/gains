@@ -21,7 +21,7 @@ To see how to use it, please refer to the `README file
    :maxdepth: 2
    :caption: Contents:
 
-   gen_api/gains
+   source/gains
 
 
 
