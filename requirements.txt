@@ -3,3 +3,4 @@ pandas
 salty-ilthermo
 dill
 sphinx_rtd_theme
+numpydoc

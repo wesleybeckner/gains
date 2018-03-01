@@ -71,3 +71,31 @@ Functions for Model Fitting
 ---------------------------
 At the heart of ImpedanceAnalyzer is the ability to fit models to data:
 
+Physics-based Models
+^^^^^^^^^^^^^^^^^^^^
+
+.. automodule:: gains.engine
+    :members:
+
+Equivalent Circuit Models
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. automodule:: gains.salt_generator
+    :members:
+
+.. automodule:: gains.salt_generator
+    :members:
+
+Circuit elements can be added to the circuit_elements.py
+
+.. automodule:: gains.salt_generator
+    :members:
+
+Documentation
+-------------
+
+This project is documented using Sphinx. To rebuild the documentation:
+::
+
+    > cd docs
+    > ./make.bat html
