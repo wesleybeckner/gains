@@ -1,32 +1,28 @@
-.. gains documentation master file, created by
-   sphinx-quickstart on Wed Feb 28 10:23:47 2018.
+.. Impedance Analyzer documentation master file, created by
+   sphinx-quickstart on Wed Dec 07 13:32:27 2016.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+==============================================
+Welcome to Impedance Analyzer's documentation!
+==============================================
 
-Welcome to GAINS's documentation
-====================================
+Impedance Analyzer is an open-source, web-based analysis platform aimed at making
+physics-based models as easy to use as equivalent circuits for quantitative analysis of EIS experimental data.
 
-`GAINS` - Genetic Algorithm for Identifying Novel Solvents - is a project
-that enables molecular design and computational screening of ionic liquid
-solvents for energy storage applications.
+The tool is currently hosted here: http://theimpedanceanalyzer.com
 
-Built on the molecular functionality of RDKit, future versions of GAINS 
-should be employable across a spectrum of small-molecule design problems.
-
-To see how to use it, please refer to the `README file 
-<https://github.com/wesleybeckner/gains/blob/master/README.md>`_ in the Github repository.
+It should be noted that the ImpedanceAnalyzer is currently a beta release.
+Improved documentation, tests, features, and an improved dataset are upcoming in the v1.0.0 release.
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+    :maxdepth: 1
+    :caption: Contents:
 
-   gains
-
-
+    contribute
 
 Indices and tables
-------------------
+===================
 
 * :ref:`genindex`
 * :ref:`modindex`

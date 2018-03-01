@@ -64,38 +64,10 @@ Flask API
 
 The views module contains the routing structure for the flask application
 
-.. automodule:: application.views
+.. automodule:: gains.engine
     :members:
 
 Functions for Model Fitting
 ---------------------------
 At the heart of ImpedanceAnalyzer is the ability to fit models to data:
 
-Physics-based Models
-^^^^^^^^^^^^^^^^^^^^
-
-.. automodule:: application.fitPhysics
-    :members:
-
-Equivalent Circuit Models
-^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. automodule:: application.ECfit.fitEC
-    :members:
-
-.. automodule:: application.ECfit.utilities
-    :members:
-
-Circuit elements can be added to the circuit_elements.py
-
-.. automodule:: application.ECfit.circuit_elements
-    :members:
-
-Documentation
--------------
-
-This project is documented using Sphinx. To rebuild the documentation:
-::
-
-    > cd docs
-    > ./make.bat html
