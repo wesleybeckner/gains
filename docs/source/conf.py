@@ -107,7 +107,7 @@ html_static_path = ['_static']
 # -- Options for HTMLHelp output ------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'ImpedanceAnalyzerdoc'
+htmlhelp_basename = 'gainsdoc'
 
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -134,7 +134,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'ImpedanceAnalyzer.tex', u'Impedance Analyzer Documentation',
+    (master_doc, 'gains.tex', u'Impedance Analyzer Documentation',
      u'Matt Murbach', 'manual'),
 ]
 
@@ -144,7 +144,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'impedanceanalyzer', u'Impedance Analyzer Documentation',
+    (master_doc, 'gains', u'Impedance Analyzer Documentation',
      [author], 1)
 ]
 
@@ -155,7 +155,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'ImpedanceAnalyzer', u'Impedance Analyzer Documentation',
-     author, 'ImpedanceAnalyzer', 'One line description of project.',
+    (master_doc, 'gains', u'Impedance Analyzer Documentation',
+     author, 'gains', 'One line description of project.',
      'Miscellaneous'),
 ]
