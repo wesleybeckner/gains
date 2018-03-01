@@ -40,6 +40,10 @@ extensions = ['sphinx.ext.autodoc',
     'sphinx.ext.githubpages',
     'numpydoc']
 
+# The name of an image file (relative to this directory) to place at the top
+# of the sidebar.
+html_logo = '_static/gains.png'
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 

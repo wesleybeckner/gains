@@ -2,4 +2,5 @@ numpy
 pandas
 salty-ilthermo
 dill
+numpydoc
 

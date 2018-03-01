@@ -13,8 +13,8 @@ from math import exp
 import random
 
 
-def generate_solvent(target, model_ID, heavy_atom_limit=30,
-                     sim_bounds=[0.6, 1.0], hits=1, write_file=False):
+def generate_solvent(target, model_ID, heavy_atom_limit=50,
+                     sim_bounds=[0.4, 1.0], hits=1, write_file=False):
     """
     the primary public function of the salt_generator module
 
@@ -126,7 +126,7 @@ def _guess_password(target, anion, parent_candidates, model_ID):
     def fnShowIon(genes, target, mutation_attempts, sim_score,
                   molecular_relative):
         _show_ion(genes, target, mutation_attempts, sim_score,
-                 molecular_relative, model_ID, anion)
+                  molecular_relative, model_ID, anion)
 
     optimalFitness = 0.99
     geneSet = genetic.generate_geneset()
@@ -185,7 +185,7 @@ def _get_fitness(anion, genes, target, model_ID):
 
 
 def _show_ion(genes, target, mutation_attempts, sim_score, molecular_relative,
-             model_ID, anion):
+              model_ID, anion):
     """
     for printing results to the screen. _show_ion is called when a candidate
     has achieved the desired fitness core and is returned by the engine
