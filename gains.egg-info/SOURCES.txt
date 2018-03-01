@@ -1,4 +1,5 @@
 README.md
+setup.cfg
 setup.py
 gains/__init__.py
 gains/engine.py
@@ -28,5 +29,4 @@ gains/data/density_m3_summary.csv
 gains/data/density_m4.sav
 gains/data/density_m4_descriptors.csv
 gains/data/pychem
-gains/tests/test_density.py
 gains/tests/test_similarity_maps.py
