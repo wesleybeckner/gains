@@ -2,5 +2,4 @@ numpy
 pandas
 salty-ilthermo
 dill
-numpydoc
-
+sphinx_rtd_theme
