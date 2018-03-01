@@ -40,7 +40,7 @@ extensions = ['sphinx.ext.autodoc',
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
     'sphinx.ext.autosummary',
-    'numpydoc']
+    'sphinx.ext.napoleon']
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
