@@ -1,5 +1,4 @@
 README.md
-setup.cfg
 setup.py
 gains/__init__.py
 gains/engine.py

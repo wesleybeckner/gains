@@ -162,7 +162,7 @@ def load_data(data_file_name, pickleFile=False, simpleList=False):
     ----------
     data_file_name : string
         name of csv file to be loaded from module_path/data/
-        data_file_name. For example 'salt_info.csv'.
+        data_file_name.
     pickleFile : boolean, optional, default = False
         if True opens pickled file
     simpleList : boolean, optional, default = False
@@ -172,9 +172,6 @@ def load_data(data_file_name, pickleFile=False, simpleList=False):
     Returns
     -------
     data : Pandas DataFrame
-        A data frame. For example with each row representing one
-        salt and each column representing the features of a given
-        salt
     """
     module_path = dirname(__file__)
     if pickleFile:
