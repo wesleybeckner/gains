@@ -322,11 +322,11 @@
     <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">deslist</span><span class="p">:</span>
 
         <span class="k">if</span> <span class="s2">&quot;anion&quot;</span> <span class="ow">in</span> <span class="n">item</span><span class="p">:</span>
-            <span class="k">with</span> <span class="n">genetic</span><span class="o">.</span><span class="n">suppress_stdout_stderr</span><span class="p">():</span>
+            <span class="k">with</span> <span class="n">genetic</span><span class="o">.</span><span class="n">suppress_rdkit_sanity</span><span class="p">():</span>
                 <span class="n">feature_vector</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">calculator</span><span class="p">([</span><span class="n">item</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
                                       <span class="p">[</span><span class="mi">0</span><span class="p">]])</span><span class="o">.</span><span class="n">CalcDescriptors</span><span class="p">(</span><span class="n">anion</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
         <span class="k">elif</span> <span class="s2">&quot;cation&quot;</span> <span class="ow">in</span> <span class="n">item</span><span class="p">:</span>
-            <span class="k">with</span> <span class="n">genetic</span><span class="o">.</span><span class="n">suppress_stdout_stderr</span><span class="p">():</span>
+            <span class="k">with</span> <span class="n">genetic</span><span class="o">.</span><span class="n">suppress_rdkit_sanity</span><span class="p">():</span>
                 <span class="n">feature_vector</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">calculator</span><span class="p">([</span><span class="n">item</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
                                       <span class="p">[</span><span class="mi">0</span><span class="p">]])</span><span class="o">.</span><span class="n">CalcDescriptors</span><span class="p">(</span><span class="n">cation</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
         <span class="k">elif</span> <span class="s2">&quot;Temperature, K&quot;</span> <span class="ow">in</span> <span class="n">item</span><span class="p">:</span>

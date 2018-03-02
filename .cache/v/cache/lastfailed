@@ -1,4 +1,1 @@
-{
-  "gains/tests/test_get_pdb.py::GuessIonTests::test_1_density": true,
-  "gains/tests/test_get_pdb.py::GuessIonTests::test_benchmark": true
-}
+{}
