@@ -74,7 +74,7 @@ def get_fitness(anion, genes, target):
     model = genetic.load_data("density_m1.sav", pickleFile=True)
     deslist = genetic.load_data("density_m1_descriptors.csv")
     feature_vector = []
-    with genetic.suppress_stdout_stderr():
+    with genetic.suppress_rdkit_sanity():
         for item in deslist:
             if "anion" in item:
                 feature_vector.append(calculator([item.partition('-')

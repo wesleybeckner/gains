@@ -161,11 +161,11 @@ def _get_fitness(anion, genes, target, model_ID):
     for item in deslist:
 
         if "anion" in item:
-            with genetic.suppress_stdout_stderr():
+            with genetic.suppress_rdkit_sanity():
                 feature_vector.append(calculator([item.partition('-')
                                       [0]]).CalcDescriptors(anion)[0])
         elif "cation" in item:
-            with genetic.suppress_stdout_stderr():
+            with genetic.suppress_rdkit_sanity():
                 feature_vector.append(calculator([item.partition('-')
                                       [0]]).CalcDescriptors(cation)[0])
         elif "Temperature, K" in item:

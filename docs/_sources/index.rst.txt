@@ -4,8 +4,8 @@
    contain the root `toctree` directive.
 
 
-Welcome to documentation for GAINS
-====================================
+Welcome to the documentation for GAINS
+======================================
 
 `GAINS` — Genetic Algorithm for Identifying Novel Structures — is a project
 that enables molecular design and computational screening of
@@ -17,7 +17,7 @@ For installation, please refer to the `README file
 Development
 ------------------
 
-GAINS is currently underdevelopment by researchers at the University of Washington. Our  research page can be found [here](http://www.prg.washington.edu).
+GAINS is currently under development by researchers at the `University of Washington <http://www.prg.washington.edu>`_
 
 .. toctree::
    :maxdepth: 2

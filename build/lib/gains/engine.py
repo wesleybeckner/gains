@@ -13,9 +13,9 @@ import time
 import random
 import sys
 
-__all__ = ["get_best", "molecular_similarity", "Benchmark",
-           "generate_geneset", "GeneSet", "Chromosome",
-           "load_data", "suppress_stdout_stderr"]
+__all__ = ["get_best", "molecular_similarity", "suppress_rdkit_sanity",
+           "generate_geneset", "load_data", "Chromosome",
+           "GeneSet", "Benchmark"]
 
 
 """
@@ -71,7 +71,7 @@ def get_best(get_fitness, optimalFitness, geneSet, display,
     if bestParent.Fitness >= optimalFitness:
         return bestParent
     while True:
-        with suppress_stdout_stderr():
+        with suppress_rdkit_sanity():
             child, mutation = _mutate(bestParent, geneSet, get_fitness, target)
         mutation_attempts += 1
         attempts_since_last_adoption += 1
@@ -102,12 +102,12 @@ def molecular_similarity(best, parent_candidates, all=False):
     Parameters
     ----------
     best : object
-        a genetic.Chromosome() object, this is the
-        molecular candidate under investigation
+        Chromosome object, the current
+        mutated candidate
     parent_candidates : array
-        an array of smiles strings to compare with
-        best
-    all : boolean, optional
+        parent pool of molecules to compare with best.
+        These are represented by SMILES
+    all : boolean, optional, default = False
         default behavior is false and the tanimoto
         similarity score is returned. If True
         tanimoto, dice, cosine, sokal, kulczynski,
@@ -115,11 +115,13 @@ def molecular_similarity(best, parent_candidates, all=False):
 
     Returns
     ----------
-    if all=False the best tanimoto similarity score
-    as well as the index of the closest molecular
-    relative are returned
-    if all=True an array of best scores and indeces
-    of the closest molecular relative are returned
+    similarity_score : float
+    similarity_index : int
+        if all=False the best tanimoto similarity score
+        as well as the index of the closest molecular
+        relative are returned
+        if all=True an array of best scores and indeces
+        of the closest molecular relative are returned
     """
     scores = []
     if all:
@@ -161,10 +163,10 @@ def load_data(data_file_name, pickleFile=False, simpleList=False):
     data_file_name : string
         name of csv file to be loaded from module_path/data/
         data_file_name. For example 'salt_info.csv'.
-    pickleFile : boolean, optional
-        default = False. if True opens pickled file
-    simpleList : boolean, optional
-        default = False. If true will open the saved list and
+    pickleFile : boolean, optional, default = False
+        if True opens pickled file
+    simpleList : boolean, optional, default = False
+        if true will open the saved list and
         properly handle split lines
 
     Returns
@@ -188,15 +190,10 @@ def load_data(data_file_name, pickleFile=False, simpleList=False):
     return data
 
 
-class suppress_stdout_stderr(object):
+class suppress_rdkit_sanity(object):
     """
-    Context manager for doing a "deep suppression" of stdout and stderr in
-    Python, i.e. will suppress all print, even if the print originates in a
-    compiled C/Fortran sub-function.
-
-    The purpose of this is to suppress error outputs from rdkit. The engine
-    uses rdkit as a final sanity check on molecular candidates. Subsequently,
-    error messages from rdkit are produced all the time
+    Context manager for doing a "deep suppression" of stdout and stderr
+    during certain calls to RDKit.
     """
     def __init__(self):
         # Open a pair of null files
