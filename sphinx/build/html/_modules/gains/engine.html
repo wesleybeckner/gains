@@ -251,8 +251,8 @@
             <span class="n">molecular_relative</span> <span class="o">=</span> <span class="n">parent_candidates</span><span class="p">[</span><span class="n">sim_index</span><span class="p">]</span>
             <span class="n">show_ion</span><span class="p">(</span><span class="n">child</span><span class="o">.</span><span class="n">Genes</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">mutation_attempts</span><span class="p">,</span> <span class="n">sim_score</span><span class="p">,</span>
                      <span class="n">molecular_relative</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">child</span></div>
-        <span class="n">bestParent</span> <span class="o">=</span> <span class="n">child</span>
+            <span class="k">return</span> <span class="n">child</span>
+        <span class="n">bestParent</span> <span class="o">=</span> <span class="n">child</span></div>
 
 
 <div class="viewcode-block" id="molecular_similarity"><a class="viewcode-back" href="../../gains.html#gains.engine.molecular_similarity">[docs]</a><span class="k">def</span> <span class="nf">molecular_similarity</span><span class="p">(</span><span class="n">best</span><span class="p">,</span> <span class="n">parent_candidates</span><span class="p">,</span> <span class="nb">all</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -309,8 +309,8 @@
             <span class="n">ms</span> <span class="o">=</span> <span class="p">[</span><span class="n">best</span><span class="o">.</span><span class="n">Mol</span><span class="p">,</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">parent_candidates</span><span class="p">[</span><span class="n">i</span><span class="p">])]</span>
             <span class="n">fps</span> <span class="o">=</span> <span class="p">[</span><span class="n">FingerprintMols</span><span class="o">.</span><span class="n">FingerprintMol</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">ms</span><span class="p">]</span>
             <span class="n">score</span> <span class="o">=</span> <span class="n">DataStructs</span><span class="o">.</span><span class="n">FingerprintSimilarity</span><span class="p">(</span><span class="n">fps</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fps</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-            <span class="n">scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">score</span><span class="p">)</span></div>
-        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">scores</span><span class="p">),</span> <span class="n">scores</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">scores</span><span class="p">))</span>
+            <span class="n">scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">score</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">scores</span><span class="p">),</span> <span class="n">scores</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">scores</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="load_data"><a class="viewcode-back" href="../../gains.html#gains.engine.load_data">[docs]</a><span class="k">def</span> <span class="nf">load_data</span><span class="p">(</span><span class="n">data_file_name</span><span class="p">,</span> <span class="n">pickleFile</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">simpleList</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -345,8 +345,8 @@
             <span class="n">data</span> <span class="o">=</span> <span class="n">csv_file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">module_path</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="n">data_file_name</span><span class="p">),</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csv_file</span><span class="p">:</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">csv_file</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;latin1&#39;</span><span class="p">)</span></div>
-    <span class="k">return</span> <span class="n">data</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">csv_file</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;latin1&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span></div>
 
 
 <div class="viewcode-block" id="suppress_stdout_stderr"><a class="viewcode-back" href="../../gains.html#gains.engine.suppress_stdout_stderr">[docs]</a><span class="k">class</span> <span class="nc">suppress_stdout_stderr</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -375,8 +375,8 @@
         <span class="n">os</span><span class="o">.</span><span class="n">dup2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_fds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">os</span><span class="o">.</span><span class="n">dup2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_fds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span>
         <span class="c1"># Close all file descriptors</span>
-        <span class="k">for</span> <span class="n">fd</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">null_fds</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_fds</span><span class="p">:</span></div>
-            <span class="n">os</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">fd</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">null_fds</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_fds</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Benchmark"><a class="viewcode-back" href="../../gains.html#gains.engine.Benchmark">[docs]</a><span class="k">class</span> <span class="nc">Benchmark</span><span class="p">:</span>
@@ -396,8 +396,8 @@
             <span class="n">timings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">seconds</span><span class="p">)</span>
             <span class="n">mean</span> <span class="o">=</span> <span class="n">statistics</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">timings</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> </span><span class="si">{:3.2f}</span><span class="s2"> </span><span class="si">{:3.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="mi">1</span> <span class="o">+</span> <span class="n">i</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span></div>
-                <span class="n">statistics</span><span class="o">.</span><span class="n">stdev</span><span class="p">(</span><span class="n">timings</span><span class="p">,</span> <span class="n">mean</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="mi">0</span><span class="p">))</span>
+                <span class="mi">1</span> <span class="o">+</span> <span class="n">i</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span>
+                <span class="n">statistics</span><span class="o">.</span><span class="n">stdev</span><span class="p">(</span><span class="n">timings</span><span class="p">,</span> <span class="n">mean</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="mi">0</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="GeneSet"><a class="viewcode-back" href="../../gains.html#gains.engine.GeneSet">[docs]</a><span class="k">class</span> <span class="nc">GeneSet</span><span class="p">():</span>
@@ -410,8 +410,8 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atoms</span><span class="p">,</span> <span class="n">rdkitFrags</span><span class="p">,</span> <span class="n">customFrags</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Atoms</span> <span class="o">=</span> <span class="n">atoms</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">RdkitFrags</span> <span class="o">=</span> <span class="n">rdkitFrags</span></div>
-        <span class="bp">self</span><span class="o">.</span><span class="n">CustomFrags</span> <span class="o">=</span> <span class="n">customFrags</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">RdkitFrags</span> <span class="o">=</span> <span class="n">rdkitFrags</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CustomFrags</span> <span class="o">=</span> <span class="n">customFrags</span></div>
 
 
 <div class="viewcode-block" id="Chromosome"><a class="viewcode-back" href="../../gains.html#gains.engine.Chromosome">[docs]</a><span class="k">class</span> <span class="nc">Chromosome</span><span class="p">(</span><span class="n">Chem</span><span class="o">.</span><span class="n">rdchem</span><span class="o">.</span><span class="n">Mol</span><span class="p">):</span>
@@ -427,8 +427,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">Genes</span> <span class="o">=</span> <span class="n">genes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Fitness</span> <span class="o">=</span> <span class="n">fitness</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Mol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">genes</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">RWMol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">genes</span><span class="p">)</span></div>
-        <span class="bp">self</span><span class="o">.</span><span class="n">RWMol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">RWMol</span><span class="p">(</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">genes</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">RWMol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">genes</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">RWMol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">RWMol</span><span class="p">(</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">genes</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="generate_geneset"><a class="viewcode-back" href="../../gains.html#gains.engine.generate_geneset">[docs]</a><span class="k">def</span> <span class="nf">generate_geneset</span><span class="p">():</span>
@@ -453,8 +453,8 @@
     <span class="n">customFrags</span> <span class="o">=</span> <span class="n">FragmentCatalog</span><span class="o">.</span><span class="n">FragCatalog</span><span class="p">(</span><span class="n">rdkitFrags</span><span class="p">)</span>
     <span class="n">fcgen</span> <span class="o">=</span> <span class="n">FragmentCatalog</span><span class="o">.</span><span class="n">FragCatGenerator</span><span class="p">()</span>
     <span class="n">m</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="s1">&#39;CCCC&#39;</span><span class="p">)</span>
-    <span class="n">fcgen</span><span class="o">.</span><span class="n">AddFragsFromMol</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">customFrags</span><span class="p">)</span></div>
-    <span class="k">return</span> <span class="n">GeneSet</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">rdkitFrags</span><span class="p">,</span> <span class="n">customFrags</span><span class="p">)</span>
+    <span class="n">fcgen</span><span class="o">.</span><span class="n">AddFragsFromMol</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">customFrags</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">GeneSet</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">rdkitFrags</span><span class="p">,</span> <span class="n">customFrags</span><span class="p">)</span></div>
 
 
 <span class="k">def</span> <span class="nf">_generate_parent</span><span class="p">(</span><span class="n">parent_candidates</span><span class="p">,</span> <span class="n">get_fitness</span><span class="p">):</span>
@@ -616,7 +616,7 @@
       <script type="text/javascript" src="../../_static/jquery.js"></script>
       <script type="text/javascript" src="../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

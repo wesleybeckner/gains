@@ -36,7 +36,7 @@
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="gains 0.2.1 documentation" href="index.html"/>
-        <link rel="prev" title="Welcome to GAINS’s documentation" href="index.html"/> 
+        <link rel="prev" title="Welcome to documentation for GAINS" href="index.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -175,29 +175,29 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>get_fitness</strong> (<em>function</em>) – the fitness function. Usually based on a molecular property.
+<li><strong>get_fitness</strong> (<em>function</em>) &#8211; the fitness function. Usually based on a molecular property.
 An example can be found in the salt_generator module</li>
-<li><strong>optimalFitness</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.6)"><em>float</em></a>) – 0-1 the user specifies how close the engine should get to
+<li><strong>optimalFitness</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.6)"><em>float</em></a>) &#8211; 0-1 the user specifies how close the engine should get to
 the target (1 = exact)</li>
-<li><strong>geneSet</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.6)"><em>object</em></a>) – consists of atomtypes (by periodic number), rdkit molecular
+<li><strong>geneSet</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.6)"><em>object</em></a>) &#8211; consists of atomtypes (by periodic number), rdkit molecular
 fragments and custom fragments (that are currently hard
 coded into the engine). These are the building blocks that
 the engine can use to mutate the molecular candidate via the
 _mutate() function</li>
-<li><strong>display</strong> (<em>function</em>) – for printing results to the screen. Display is called for
+<li><strong>display</strong> (<em>function</em>) &#8211; for printing results to the screen. Display is called for
 every accepted mutation</li>
-<li><strong>show_ion</strong> (<em>function</em>) – for printing results to the screen. show_ion is called when
+<li><strong>show_ion</strong> (<em>function</em>) &#8211; for printing results to the screen. show_ion is called when
 a candidate has achieved the desired fitness score and is
 returned by the engine</li>
-<li><strong>target</strong> (<em>array</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.6)"><em>float</em></a><em>, or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.6)"><em>int</em></a>) – the desired property value to be achieved by the engine.
+<li><strong>target</strong> (<a class="reference external" href="https://docs.python.org/3/library/array.html#module-array" title="(in Python v3.6)"><em>array</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.6)"><em>float</em></a><em>, or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.6)"><em>int</em></a>) &#8211; the desired property value to be achieved by the engine.
 If an array, a model containing multi-output targets must
 be supplied to the engine</li>
-<li><strong>parent_candidates</strong> (<em>array</em>) – an array of smiles strings that the engine uses to choose
+<li><strong>parent_candidates</strong> (<a class="reference external" href="https://docs.python.org/3/library/array.html#module-array" title="(in Python v3.6)"><em>array</em></a>) &#8211; an array of smiles strings that the engine uses to choose
 a starting atomic configuration</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>child</strong> – the accepted molecular configuration. See Chromosome class
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>child</strong> &#8211; the accepted molecular configuration. See Chromosome class
 for details</p>
 </td>
 </tr>
@@ -218,11 +218,11 @@ closest molecular relative in parent_candidates</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>best</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.6)"><em>object</em></a>) – a genetic.Chromosome() object, this is the
+<li><strong>best</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.6)"><em>object</em></a>) &#8211; a genetic.Chromosome() object, this is the
 molecular candidate under investigation</li>
-<li><strong>parent_candidates</strong> (<em>array</em>) – an array of smiles strings to compare with
+<li><strong>parent_candidates</strong> (<a class="reference external" href="https://docs.python.org/3/library/array.html#module-array" title="(in Python v3.6)"><em>array</em></a>) &#8211; an array of smiles strings to compare with
 best</li>
-<li><strong>all</strong> (<em>boolean</em><em>, </em><em>optional</em>) – default behavior is false and the tanimoto
+<li><strong>all</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; default behavior is false and the tanimoto
 similarity score is returned. If True
 tanimoto, dice, cosine, sokal, kulczynski,
 and mcconnaughey similarities are returned</li>
@@ -259,9 +259,9 @@ but will probably be adapted in future versions</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>None</strong> – </td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>None</strong> &#8211; </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>GeneSet</strong> – returns an instance of the GeneSet class containing atoms,
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>GeneSet</strong> &#8211; returns an instance of the GeneSet class containing atoms,
 rdkit fragments, and custom fragments</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.6)">object</a></td>
@@ -299,15 +299,15 @@ by the fitness function</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>data_file_name</strong> (<em>string</em>) – name of csv file to be loaded from module_path/data/
-data_file_name. For example ‘salt_info.csv’.</li>
-<li><strong>pickleFile</strong> (<em>boolean</em><em>, </em><em>optional</em>) – default = False. if True opens pickled file</li>
-<li><strong>simpleList</strong> (<em>boolean</em><em>, </em><em>optional</em>) – default = False. If true will open the saved list and
+<li><strong>data_file_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/string.html#module-string" title="(in Python v3.6)"><em>string</em></a>) &#8211; name of csv file to be loaded from module_path/data/
+data_file_name. For example &#8216;salt_info.csv&#8217;.</li>
+<li><strong>pickleFile</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; default = False. if True opens pickled file</li>
+<li><strong>simpleList</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; default = False. If true will open the saved list and
 properly handle split lines</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>data</strong> – A data frame. For example with each row representing one
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>data</strong> &#8211; A data frame. For example with each row representing one
 salt and each column representing the features of a given
 salt</p>
 </td>
@@ -322,7 +322,7 @@ salt</p>
 <dl class="class">
 <dt id="gains.engine.suppress_stdout_stderr">
 <em class="property">class </em><code class="descclassname">gains.engine.</code><code class="descname">suppress_stdout_stderr</code><a class="reference internal" href="_modules/gains/engine.html#suppress_stdout_stderr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gains.engine.suppress_stdout_stderr" title="Permalink to this definition">¶</a></dt>
-<dd><p>Context manager for doing a “deep suppression” of stdout and stderr in
+<dd><p>Context manager for doing a &#8220;deep suppression&#8221; of stdout and stderr in
 Python, i.e. will suppress all print, even if the print originates in a
 compiled C/Fortran sub-function.</p>
 <p>The purpose of this is to suppress error outputs from rdkit. The engine
@@ -342,21 +342,21 @@ error messages from rdkit are produced all the time</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>target</strong> (<em>array</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.6)"><em>float</em></a><em>, or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.6)"><em>int</em></a>) – the desired property value to be achieved by the engine, if
+<li><strong>target</strong> (<a class="reference external" href="https://docs.python.org/3/library/array.html#module-array" title="(in Python v3.6)"><em>array</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.6)"><em>float</em></a><em>, or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.6)"><em>int</em></a>) &#8211; the desired property value to be achieved by the engine, if
 an array, a multi-output model must be supplied to the engine</li>
-<li><strong>model_ID</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a>) – the name of the model to be used by the engine. Gains has
+<li><strong>model_ID</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a>) &#8211; the name of the model to be used by the engine. Gains has
 several built-in models to choose from</li>
-<li><strong>heavy_atom_limit</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.6)"><em>int</em></a><em>, </em><em>optional</em>) – the upper value for allowable heavy atoms in the returned
+<li><strong>heavy_atom_limit</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.6)"><em>int</em></a><em>, </em><em>optional</em>) &#8211; the upper value for allowable heavy atoms in the returned
 candidate</li>
-<li><strong>sim_bounds</strong> (<em>array</em><em>, </em><em>optional</em>) – the tanimoto similarity score between the returned candidate
+<li><strong>sim_bounds</strong> (<a class="reference external" href="https://docs.python.org/3/library/array.html#module-array" title="(in Python v3.6)"><em>array</em></a><em>, </em><em>optional</em>) &#8211; the tanimoto similarity score between the returned candidate
 and its closest molecular relative in parent_candidates</li>
-<li><strong>hits</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.6)"><em>int</em></a><em>, </em><em>optional</em>) – the number of desired solutions</li>
-<li><strong>write_file</strong> (<em>boolean</em><em>, </em><em>optional</em>) – defaults to False. if True will return the solutions and a
+<li><strong>hits</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.6)"><em>int</em></a><em>, </em><em>optional</em>) &#8211; the number of desired solutions</li>
+<li><strong>write_file</strong> (<em>boolean</em><em>, </em><em>optional</em>) &#8211; defaults to False. if True will return the solutions and a
 csv log file</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>new</strong> – default behavior is to return a pandas DataFrame. This is
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>new</strong> &#8211; default behavior is to return a pandas DataFrame. This is
 a log file of the solution(s). if write_file = True the
 function will also return pdb files of the solutions</p>
 </td>
@@ -382,7 +382,7 @@ function will also return pdb files of the solutions</p>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
       
-        <a href="index.html" class="btn btn-neutral" title="Welcome to GAINS’s documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral" title="Welcome to documentation for GAINS" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -423,7 +423,7 @@ function will also return pdb files of the solutions</p>
       <script type="text/javascript" src="_static/jquery.js"></script>
       <script type="text/javascript" src="_static/underscore.js"></script>
       <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 
