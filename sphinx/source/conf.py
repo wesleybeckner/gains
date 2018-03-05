@@ -144,7 +144,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'gains.tex', 'gains Documentation',
+    (master_doc, 'gains.tex', 'GAINS Documentation',
      'Wesley Beckner', 'manual'),
 ]
 
@@ -154,7 +154,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'gains', 'gains Documentation',
+    (master_doc, 'gains', 'GAINS Documentation',
      [author], 1)
 ]
 
@@ -165,7 +165,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'gains', 'gains Documentation',
+    (master_doc, 'gains', 'GAINS Documentation',
      author, 'gains', 'One line description of project.',
      'Miscellaneous'),
 ]
