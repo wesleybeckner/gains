@@ -43,7 +43,7 @@ def generate_solvent(target, model_ID, heavy_atom_limit=50,
     new : object
         default behavior is to return a pandas DataFrame. This is
         a log file of the solution(s). if write_file = True the
-        function will also return pdb files of the solutions
+        function will also return pdb files of the cations/anions
     """
 
     parent_candidates = eval(genetic.load_data("{}_summary.csv".
