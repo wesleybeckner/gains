@@ -45,14 +45,16 @@ class GuessIonTests(unittest.TestCase):
         best = genetic.get_best(fnGetFitness, optimalFitness,
                                 self.geneSet, fnDisplay,
                                 fnShowIon, target, self.parent_candidates)
-        cation = Chem.AddHs(best.Mol)
-        Chem.EmbedMolecule(cation, Chem.ETKDG())
-        Chem.UFFOptimizeMolecule(cation)
+        cation = best.Mol
+        anion = self.anion
         # Uncomment PDB lines to wrote PDB file
+        # cation = Chem.AddHs(best.Mol)
+        # Chem.EmbedMolecule(cation, Chem.ETKDG())
+        # Chem.UFFOptimizeMolecule(cation)
         # Chem.rdmolfiles.MolToPDBFile(cation, "cation_test.pdb")
-        anion = Chem.AddHs(self.anion)
-        Chem.EmbedMolecule(anion, Chem.ETKDG())
-        Chem.UFFOptimizeMolecule(anion)
+        # anion = Chem.AddHs(self.anion)
+        # Chem.EmbedMolecule(anion, Chem.ETKDG())
+        # Chem.UFFOptimizeMolecule(anion)
         # Chem.rdmolfiles.MolToPDBFile(anion, "anion_test.pdb")
         return cation, anion
 
