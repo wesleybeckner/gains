@@ -1,4 +1,4 @@
-gains package
+GAINS package
 =============
 
 gains\.engine module

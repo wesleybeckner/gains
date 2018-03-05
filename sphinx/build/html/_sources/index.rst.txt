@@ -23,6 +23,7 @@ GAINS is currently under development by researchers at the `University of Washin
    :maxdepth: 2
    :caption: Contents:
 
+   example_engine_module
    gains
 
 
