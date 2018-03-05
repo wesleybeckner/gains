@@ -20,7 +20,7 @@ target = "CCCC" #butane smiles
 parent_candidates = np.array(["CCCO"]) #propanol smiles, numpy array
 ```
 
-In order to begin manipulating the parent_candidate we have to, at a minimum, define three additional functions to interact with the engine: a fitness function, and two display functions; one for displaying accepted mutations one for displaying the final result. 
+In order to begin manipulating the parent_candidate we have to, at a minimum, define three additional functions to interact with the engine: a fitness function, and two display functions; one for displaying accepted mutations and one for displaying the final result. 
 
 The fitness function is the most important user-defined function to interact with the engine, so we'll start there. It allows us to plug any desired objective into the engine; whether it be a quantitative structure property relationship (QSPR), an acitivity/toxicity score, or, as in this case, a simple similarity mapping between a target and a starting structure:
 

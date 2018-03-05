@@ -36,7 +36,7 @@
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="gains 0.2.1 documentation" href="index.html"/>
-        <link rel="next" title="gains package" href="gains.html"/>
+        <link rel="next" title="GAINS package" href="gains.html"/>
         <link rel="prev" title="Welcome to the documentation for GAINS" href="index.html"/> 
 
   
@@ -100,7 +100,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#the-mutate-function">The mutate function</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="gains.html">gains package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gains.html">GAINS package</a></li>
 </ul>
 
             
@@ -179,7 +179,7 @@
 <span class="n">parent_candidates</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">&quot;CCCO&quot;</span><span class="p">])</span> <span class="c1">#propanol smiles, numpy array</span>
 </pre></div>
 </div>
-<p>In order to begin manipulating the parent_candidate we have to, at a minimum, define three additional functions to interact with the engine: a fitness function, and two display functions; one for displaying accepted mutations one for displaying the final result.</p>
+<p>In order to begin manipulating the parent_candidate we have to, at a minimum, define three additional functions to interact with the engine: a fitness function, and two display functions; one for displaying accepted mutations and one for displaying the final result.</p>
 <p>The fitness function is the most important user-defined function to interact with the engine, so we&#8217;ll start there. It allows us to plug any desired objective into the engine; whether it be a quantitative structure property relationship (QSPR), an acitivity/toxicity score, or, as in this case, a simple similarity mapping between a target and a starting structure:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">rdkit</span> <span class="kn">import</span> <span class="n">DataStructs</span>
 <span class="kn">from</span> <span class="nn">rdkit.Chem.Fingerprints</span> <span class="kn">import</span> <span class="n">FingerprintMols</span>
@@ -398,7 +398,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="gains.html" class="btn btn-neutral float-right" title="gains package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="gains.html" class="btn btn-neutral float-right" title="GAINS package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="index.html" class="btn btn-neutral" title="Welcome to the documentation for GAINS" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
