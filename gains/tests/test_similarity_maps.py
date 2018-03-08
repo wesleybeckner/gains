@@ -7,6 +7,7 @@ import random
 import unittest
 import datetime
 import salty
+from numpy import array
 
 
 class GuessIonTests(unittest.TestCase):
@@ -23,6 +24,12 @@ class GuessIonTests(unittest.TestCase):
     df = df.loc[~df["name"].str.contains("azepinium", case=False)]
     parent_candidates = df['smiles'].unique()
 
+    def test_2_similarity_map(self):
+        parent_candidates = eval(genetic.load_data("{}_summary.csv".
+                                                   format("density_m3")).loc[1][1])
+        best = genetic.Chromosome('CCCO', 0)
+        genetic.molecular_similarity(best, parent_candidates, all=True)
+
     def test_1_similarity_map(self):
         df = self.parent_candidates
         ohPickMe = random.sample(range(df.shape[0]), 1)
@@ -31,6 +38,7 @@ class GuessIonTests(unittest.TestCase):
 
     def test_benchmark(self):
         genetic.Benchmark.run(self.test_1_similarity_map)
+        genetic.Benchmark.run(self.test_2_similarity_map)
 
     def guess_password(self, target):
         startTime = datetime.datetime.now()

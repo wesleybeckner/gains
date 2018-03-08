@@ -154,7 +154,7 @@ def molecular_similarity(best, parent_candidates, all=False):
         return max(scores), scores.index(max(scores))
 
 
-def load_data(data_file_name, pickleFile=False, simpleList=False):
+def load_data(data_file_name, pickleFile=False):
     """
     Loads data from module_path/data/data_file_name.
 
@@ -165,9 +165,6 @@ def load_data(data_file_name, pickleFile=False, simpleList=False):
         data_file_name.
     pickleFile : boolean, optional, default = False
         if True opens pickled file
-    simpleList : boolean, optional, default = False
-        if true will open the saved list and
-        properly handle split lines
 
     Returns
     -------
@@ -178,9 +175,6 @@ def load_data(data_file_name, pickleFile=False, simpleList=False):
         with open(join(module_path, 'data', data_file_name), 'rb') as \
                 pickle_file:
             data = pickle.load(pickle_file, encoding='latin1')
-    elif simpleList:
-        with open(join(module_path, 'data', data_file_name)) as csv_file:
-            data = csv_file.read().splitlines()
     else:
         with open(join(module_path, 'data', data_file_name), 'rb') as csv_file:
             data = pd.read_csv(csv_file, encoding='latin1')
