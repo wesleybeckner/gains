@@ -34,6 +34,8 @@ install:
 - travis_retry pip install pyyaml
 script:
 - flake8 --ignore N802,N806,F401 `find . -name \*.py | grep -v setup.py | grep -v /docs/ | grep -v /sphinx/`
-- py.test
+- mkdir for_test
+- cd for_test
+- py.test --pyargs gains --cov-report term-missing --cov=gains
 after_success:
 - coveralls
