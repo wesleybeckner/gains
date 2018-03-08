@@ -248,7 +248,8 @@ of the closest molecular relative are returned</li>
 <dl class="class">
 <dt id="gains.engine.suppress_rdkit_sanity">
 <em class="property">class </em><code class="descclassname">gains.engine.</code><code class="descname">suppress_rdkit_sanity</code><a class="reference internal" href="_modules/gains/engine.html#suppress_rdkit_sanity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gains.engine.suppress_rdkit_sanity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Context manager for doing a “deep suppression” of stdout and stderr
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Context manager for doing a “deep suppression” of stdout and stderr
 during certain calls to RDKit.</p>
 </dd></dl>
 
@@ -303,7 +304,8 @@ properly handle split lines</li>
 <dl class="class">
 <dt id="gains.engine.Chromosome">
 <em class="property">class </em><code class="descclassname">gains.engine.</code><code class="descname">Chromosome</code><span class="sig-paren">(</span><em>genes</em>, <em>fitness</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gains/engine.html#Chromosome"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gains.engine.Chromosome" title="Permalink to this definition">¶</a></dt>
-<dd><p>The main object handled by the engine. The Chromosome object
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rdkit.Chem.rdchem.Mol</span></code></p>
+<p>The main object handled by the engine. The Chromosome object
 inherits the RWMol and Mol attributes from rdkit. Two additional
 attributes are added: genes and fitness. Genes is the SMILES
 encoding of the molecule, fitness is the score (0-1) returned
@@ -313,7 +315,8 @@ by the fitness function</p>
 <dl class="class">
 <dt id="gains.engine.GeneSet">
 <em class="property">class </em><code class="descclassname">gains.engine.</code><code class="descname">GeneSet</code><span class="sig-paren">(</span><em>atoms</em>, <em>rdkitFrags</em>, <em>customFrags</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gains/engine.html#GeneSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gains.engine.GeneSet" title="Permalink to this definition">¶</a></dt>
-<dd><p>Consists of atomtypes (by periodic number), rdkit molecular
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Consists of atomtypes (by periodic number), rdkit molecular
 fragments and custom fragments (that are currently hard
 coded into the engine). These are the building blocks that
 the engine can use to mutate the molecular candidate via the
@@ -323,7 +326,13 @@ _mutate() function</p>
 <dl class="class">
 <dt id="gains.engine.Benchmark">
 <em class="property">class </em><code class="descclassname">gains.engine.</code><code class="descname">Benchmark</code><a class="reference internal" href="_modules/gains/engine.html#Benchmark"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gains.engine.Benchmark" title="Permalink to this definition">¶</a></dt>
-<dd><p>benchmark method used by the unittests</p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>benchmark method used by the unittests</p>
+<dl class="staticmethod">
+<dt id="gains.engine.Benchmark.run">
+<em class="property">static </em><code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gains/engine.html#Benchmark.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gains.engine.Benchmark.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 </div>

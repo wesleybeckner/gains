@@ -94,7 +94,7 @@ best = genetic.get_best(fnGetFitness, optimalFitness, geneSet,
       mutation attempts:             34
 
 
-In this simple example it took 34 mutation attempt to get from "CCCO" (propanol) to "CCCC" (butane); only 3 of which were accepted because they resulted in a higher fitness score than the candidate being mutated.
+In this simple example it took 34 mutation attempts to get from "CCCO" (propanol) to "CCCC" (butane); only 3 of which were accepted because they resulted in a higher fitness score than the parent.
 
 In the next section we'll go over the different mutations available to the engine.
 

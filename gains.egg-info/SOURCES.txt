@@ -28,4 +28,8 @@ gains/data/density_m3_summary.csv
 gains/data/density_m4.sav
 gains/data/density_m4_descriptors.csv
 gains/data/pychem
+gains/tests/__init__.py
+gains/tests/test_get_pdb.py
+gains/tests/test_model.py
 gains/tests/test_similarity_maps.py
+gains/tests/test_simple_mutate.py

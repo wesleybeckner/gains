@@ -378,7 +378,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    benchmark method used by the unittests</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="Benchmark.run"><a class="viewcode-back" href="../../gains.html#gains.engine.Benchmark.run">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="n">function</span><span class="p">):</span>
         <span class="n">timings</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">stdout</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
@@ -391,7 +391,7 @@
             <span class="n">timings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">seconds</span><span class="p">)</span>
             <span class="n">mean</span> <span class="o">=</span> <span class="n">statistics</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">timings</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> </span><span class="si">{:3.2f}</span><span class="s2"> </span><span class="si">{:3.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="mi">1</span> <span class="o">+</span> <span class="n">i</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span></div>
+                <span class="mi">1</span> <span class="o">+</span> <span class="n">i</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span></div></div>
                 <span class="n">statistics</span><span class="o">.</span><span class="n">stdev</span><span class="p">(</span><span class="n">timings</span><span class="p">,</span> <span class="n">mean</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="mi">0</span><span class="p">))</span>
 
 
