@@ -11,6 +11,11 @@ class GuessIonTests(unittest.TestCase):
         model_ID = "density_m3"
         generate_solvent(target, model_ID, heavy_atom_limit=300)
 
+    def test_2_model(self):
+        target = 1000
+        model_ID = "density_m3"
+        generate_solvent(target, model_ID, heavy_atom_limit=300, hits=11)
+
     def test_benchmark(self):
         genetic.Benchmark.run(self.test_1_model)
 
