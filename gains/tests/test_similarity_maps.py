@@ -26,7 +26,8 @@ class GuessIonTests(unittest.TestCase):
 
     def test_2_similarity_map(self):
         parent_candidates = eval(genetic.load_data("{}_summary.csv".
-                                                   format("density_m3")).loc[1][1])
+                                                   format("density_m3"))
+                                 .loc[1][1])
         best = genetic.Chromosome('CCCO', 0)
         genetic.molecular_similarity(best, parent_candidates, all=True)
 
