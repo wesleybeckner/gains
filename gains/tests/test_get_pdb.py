@@ -72,9 +72,11 @@ class prod_model():
 
 
 def get_fitness(anion, genes, target):
+    model_ID = "density_qspr"
     cation = Chem.MolFromSmiles(genes)
-    model = genetic.load_data("density_m1.sav", pickleFile=True)
-    deslist = genetic.load_data("density_m1_descriptors.csv")
+    model = genetic.load_data("{}.sav".format(model_ID), dillFile=True).Model
+    deslist = genetic.load_data("{}.sav".format(model_ID),
+                                dillFile=True).Descriptors
     feature_vector = []
     with genetic.suppress_rdkit_sanity():
         for item in deslist:
@@ -84,9 +86,9 @@ def get_fitness(anion, genes, target):
             elif "cation" in item:
                 feature_vector.append(calculator([item.partition('-')
                                       [0]]).CalcDescriptors(cation)[0])
-            elif "Temperature_K" in item:
+            elif "Temperature, K" in item:
                 feature_vector.append(298.15)
-            elif "Pressure_kPa" in item:
+            elif "Pressure, kPa" in item:
                 feature_vector.append(101.325)
             else:
                 print("unknown descriptor in list: %s" % item)

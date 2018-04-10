@@ -73,7 +73,7 @@ class prod_model():
 
 def get_fitness(anion, genes, target):
     cation = Chem.MolFromSmiles(genes)
-    model = genetic.load_data("density_m1.sav", pickleFile=True)
+    model = genetic.load_data("density_m1.sav", dillFile=True)
     deslist = genetic.load_data("density_m1_descriptors.csv")
     feature_vector = []
     with genetic.suppress_rdkit_sanity():

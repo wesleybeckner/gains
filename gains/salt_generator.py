@@ -14,7 +14,8 @@ import random
 
 
 def generate_solvent(target, model_ID, heavy_atom_limit=50,
-                     sim_bounds=[0.4, 1.0], hits=1, write_file=False):
+                     sim_bounds=[0.4, 1.0], hits=1, write_file=False,
+                     parent_candidates=None):
     """
     the primary public function of the salt_generator module
 
@@ -46,10 +47,11 @@ def generate_solvent(target, model_ID, heavy_atom_limit=50,
         function will also return pdb files of the cations/anions
     """
 
-    parent_candidates = eval(genetic.load_data("{}_summary.csv".
-                             format(model_ID)).loc[1][1])
-    anion_candidates = eval(genetic.load_data("{}_summary.csv".
-                            format(model_ID)).loc[2][1])
+    summary = genetic.load_data("{}.sav".format(model_ID),
+                                dillFile=True).Summary
+    if parent_candidates is None:
+        parent_candidates = eval(summary.iloc[1][0])
+    anion_candidates = eval(summary.iloc[2][0])
     cols = ["Salt ID", "Salt Smiles", "Cation Heavy Atoms",
             "Tanimoto Similarity Score", "Molecular Relative", "Anion",
             "Model Prediction", "MD Calculation", "Error"]
@@ -154,8 +156,9 @@ def _get_fitness(anion, genes, target, model_ID):
     output models
     """
     cation = Chem.MolFromSmiles(genes)
-    model = genetic.load_data("{}.sav".format(model_ID), pickleFile=True)
-    deslist = genetic.load_data("{}_descriptors.csv".format(model_ID))
+    model = genetic.load_data("{}.sav".format(model_ID), dillFile=True).Model
+    deslist = genetic.load_data("{}.sav".format(model_ID),
+                                dillFile=True).Descriptors
     feature_vector = []
 
     for item in deslist:

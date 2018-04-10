@@ -1,12 +1,12 @@
 from __future__ import absolute_import, division, print_function
 from os.path import dirname, join
 import pandas as pd
+import dill
 from rdkit import RDConfig
 from rdkit.Chem import FragmentCatalog
 from rdkit.Chem import AllChem as Chem
 from rdkit.Chem.Fingerprints import FingerprintMols
 from rdkit import DataStructs
-import pickle
 import os
 import statistics
 import time
@@ -154,7 +154,7 @@ def molecular_similarity(best, parent_candidates, all=False):
         return max(scores), scores.index(max(scores))
 
 
-def load_data(data_file_name, pickleFile=False):
+def load_data(data_file_name, dillFile=False):
     """
     Loads data from module_path/data/data_file_name.
 
@@ -163,18 +163,18 @@ def load_data(data_file_name, pickleFile=False):
     data_file_name : string
         name of csv file to be loaded from module_path/data/
         data_file_name.
-    pickleFile : boolean, optional, default = False
-        if True opens pickled file
+    dillFile : boolean, optional, default = False
+        if True opens dill file
 
     Returns
     -------
     data : Pandas DataFrame
     """
     module_path = dirname(__file__)
-    if pickleFile:
+    if dillFile:
         with open(join(module_path, 'data', data_file_name), 'rb') as \
-                pickle_file:
-            data = pickle.load(pickle_file, encoding='latin1')
+                dill_file:
+            data = dill.load(dill_file)
     else:
         with open(join(module_path, 'data', data_file_name), 'rb') as csv_file:
             data = pd.read_csv(csv_file, encoding='latin1')
