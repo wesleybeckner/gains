@@ -23,14 +23,19 @@ class GuessIonTests(unittest.TestCase):
     df = df.loc[~df["name"].str.contains("azepinium", case=False)]
     parent_candidates = df['smiles'].unique()
 
-    def test_1_similarity_map(self):
-        df = self.parent_candidates
-        ohPickMe = random.sample(range(df.shape[0]), 1)
-        target = df[ohPickMe[0]]
-        self.guess_password(target)
+    def test_2_similarity_map(self):
+        best = genetic.Chromosome('CCCO', 0)
+        genetic.molecular_similarity(best, self.parent_candidates, all=True)
+
+#    def test_1_similarity_map(self):
+#        df = self.parent_candidates
+#        ohPickMe = random.sample(range(df.shape[0]), 1)
+#        target = df[ohPickMe[0]]
+#        self.guess_password(target)
 
     def test_benchmark(self):
-        genetic.Benchmark.run(self.test_1_similarity_map)
+#        genetic.Benchmark.run(self.test_1_similarity_map)
+        genetic.Benchmark.run(self.test_2_similarity_map)
 
     def guess_password(self, target):
         startTime = datetime.datetime.now()
@@ -49,7 +54,7 @@ class GuessIonTests(unittest.TestCase):
         optimalFitness, prediction = get_fitness(target, target)
         best = genetic.get_best(fnGetFitness, optimalFitness, self.geneSet,
                                 fnDisplay, fnShowIon, target,
-                                self.parent_candidates)
+                                self.parent_candidates, maxAge=50)
         return best
 
 

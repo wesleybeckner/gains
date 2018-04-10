@@ -41,10 +41,11 @@ class GuessIonTests(unittest.TestCase):
             show_ion(genes, target, mutation_attempts, sim_score,
                      molecular_relative, self.anion)
 
-        optimalFitness = 0.8
+        optimalFitness = 0.9
         best = genetic.get_best(fnGetFitness, optimalFitness,
                                 self.geneSet, fnDisplay,
-                                fnShowIon, target, self.parent_candidates)
+                                fnShowIon, target, self.parent_candidates,
+                                maxAge=None)
         cation = best.Mol
         anion = self.anion
         # Uncomment PDB lines to wrote PDB file

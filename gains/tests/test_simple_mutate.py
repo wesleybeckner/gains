@@ -12,13 +12,13 @@ class GuessIonTests(unittest.TestCase):
     def test_1_model(self):
         def fnGetFitness(genes):
             return get_fitness(genes, target)
-        target = "CCCC"
+        target = "COCOCO"
         parent_candidates = np.array(["CCCO"])
         geneSet = genetic.generate_geneset()
         optimalFitness, prediction = get_fitness(target, target)
         genetic.get_best(fnGetFitness, optimalFitness, geneSet,
                          display, result_display, target,
-                         parent_candidates)
+                         parent_candidates, maxAge=0)
 
     def test_benchmark(self):
         genetic.Benchmark.run(self.test_1_model)

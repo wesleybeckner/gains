@@ -175,38 +175,80 @@
 <span class="kn">import</span> <span class="nn">random</span>
 
 
-<div class="viewcode-block" id="generate_solvent"><a class="viewcode-back" href="../../gains.html#gains.salt_generator.generate_solvent">[docs]</a><span class="k">def</span> <span class="nf">generate_solvent</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">model_ID</span><span class="p">,</span> <span class="n">heavy_atom_limit</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
-                     <span class="n">sim_bounds</span><span class="o">=</span><span class="p">[</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span> <span class="n">hits</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">write_file</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    the primary public function of the salt_generator module</span>
+<div class="viewcode-block" id="guess_password"><a class="viewcode-back" href="../../gains.html#gains.salt_generator.guess_password">[docs]</a><span class="k">def</span> <span class="nf">guess_password</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">anion</span><span class="p">,</span> <span class="n">parent_candidates</span><span class="p">,</span> <span class="n">model_ID</span><span class="p">):</span>
+    <span class="n">startTime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    target : array, float, or int</span>
-<span class="sd">        the desired property value to be achieved by the engine, if</span>
-<span class="sd">        an array, a multi-output model must be supplied to the engine</span>
-<span class="sd">    model_ID : str</span>
-<span class="sd">        the name of the model to be used by the engine. Gains has</span>
-<span class="sd">        several built-in models to choose from</span>
-<span class="sd">    heavy_atom_limit : int, optional</span>
-<span class="sd">        the upper value for allowable heavy atoms in the returned</span>
-<span class="sd">        candidate</span>
-<span class="sd">    sim_bounds : array, optional</span>
-<span class="sd">        the tanimoto similarity score between the returned candidate</span>
-<span class="sd">        and its closest molecular relative in parent_candidates</span>
-<span class="sd">    hits : int, optional</span>
-<span class="sd">        the number of desired solutions</span>
-<span class="sd">    write_file : boolean, optional</span>
-<span class="sd">        defaults to False. if True will return the solutions and a</span>
-<span class="sd">        csv log file</span>
+    <span class="k">def</span> <span class="nf">fnGetFitness</span><span class="p">(</span><span class="n">genes</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">get_fitness</span><span class="p">(</span><span class="n">anion</span><span class="p">,</span> <span class="n">genes</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">model_ID</span><span class="p">)</span>
 
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    new : object</span>
-<span class="sd">        default behavior is to return a pandas DataFrame. This is</span>
-<span class="sd">        a log file of the solution(s). if write_file = True the</span>
-<span class="sd">        function will also return pdb files of the solutions</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">fnDisplay</span><span class="p">(</span><span class="n">candidate</span><span class="p">,</span> <span class="n">mutation</span><span class="p">):</span>
+        <span class="n">display</span><span class="p">(</span><span class="n">candidate</span><span class="p">,</span> <span class="n">mutation</span><span class="p">,</span> <span class="n">startTime</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">fnShowIon</span><span class="p">(</span><span class="n">genes</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">mutation_attempts</span><span class="p">,</span> <span class="n">sim_score</span><span class="p">,</span>
+                  <span class="n">molecular_relative</span><span class="p">):</span>
+        <span class="n">show_ion</span><span class="p">(</span><span class="n">genes</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">mutation_attempts</span><span class="p">,</span> <span class="n">sim_score</span><span class="p">,</span>
+                 <span class="n">molecular_relative</span><span class="p">,</span> <span class="n">model_ID</span><span class="p">,</span> <span class="n">anion</span><span class="p">)</span>
+
+    <span class="n">optimalFitness</span> <span class="o">=</span> <span class="mf">0.99</span>
+    <span class="n">geneSet</span> <span class="o">=</span> <span class="n">genetic</span><span class="o">.</span><span class="n">generate_geneset</span><span class="p">()</span>
+    <span class="n">best</span> <span class="o">=</span> <span class="n">genetic</span><span class="o">.</span><span class="n">get_best</span><span class="p">(</span><span class="n">fnGetFitness</span><span class="p">,</span>
+                            <span class="n">optimalFitness</span><span class="p">,</span> <span class="n">geneSet</span><span class="p">,</span> <span class="n">fnDisplay</span><span class="p">,</span>
+                            <span class="n">fnShowIon</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">parent_candidates</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">best</span></div>
+
+
+<div class="viewcode-block" id="display"><a class="viewcode-back" href="../../gains.html#gains.salt_generator.display">[docs]</a><span class="k">def</span> <span class="nf">display</span><span class="p">(</span><span class="n">candidate</span><span class="p">,</span> <span class="n">mutation</span><span class="p">,</span> <span class="n">startTime</span><span class="p">):</span>
+    <span class="n">timeDiff</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">startTime</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="se">\t</span><span class="si">{}</span><span class="se">\t</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">candidate</span><span class="o">.</span><span class="n">Genes</span><span class="p">,</span> <span class="n">candidate</span><span class="o">.</span><span class="n">Fitness</span><span class="p">,</span> <span class="n">mutation</span><span class="p">,</span> <span class="n">timeDiff</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="get_fitness"><a class="viewcode-back" href="../../gains.html#gains.salt_generator.get_fitness">[docs]</a><span class="k">def</span> <span class="nf">get_fitness</span><span class="p">(</span><span class="n">anion</span><span class="p">,</span> <span class="n">genes</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">model_ID</span><span class="p">):</span>
+    <span class="n">cation</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">genes</span><span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">genetic</span><span class="o">.</span><span class="n">load_data</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.sav&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model_ID</span><span class="p">),</span> <span class="n">pickleFile</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">deslist</span> <span class="o">=</span> <span class="n">genetic</span><span class="o">.</span><span class="n">load_data</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_descriptors.csv&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model_ID</span><span class="p">))</span>
+    <span class="n">feature_vector</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">deslist</span><span class="p">:</span>
+
+        <span class="k">if</span> <span class="s2">&quot;anion&quot;</span> <span class="ow">in</span> <span class="n">item</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">genetic</span><span class="o">.</span><span class="n">suppress_stdout_stderr</span><span class="p">():</span>
+                <span class="n">feature_vector</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">calculator</span><span class="p">([</span><span class="n">item</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+                                      <span class="p">[</span><span class="mi">0</span><span class="p">]])</span><span class="o">.</span><span class="n">CalcDescriptors</span><span class="p">(</span><span class="n">anion</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="s2">&quot;cation&quot;</span> <span class="ow">in</span> <span class="n">item</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">genetic</span><span class="o">.</span><span class="n">suppress_stdout_stderr</span><span class="p">():</span>
+                <span class="n">feature_vector</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">calculator</span><span class="p">([</span><span class="n">item</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+                                      <span class="p">[</span><span class="mi">0</span><span class="p">]])</span><span class="o">.</span><span class="n">CalcDescriptors</span><span class="p">(</span><span class="n">cation</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="s2">&quot;Temperature, K&quot;</span> <span class="ow">in</span> <span class="n">item</span><span class="p">:</span>
+            <span class="n">feature_vector</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">298.15</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s2">&quot;Pressure, kPa&quot;</span> <span class="ow">in</span> <span class="n">item</span><span class="p">:</span>
+            <span class="n">feature_vector</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">101.325</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;unknown descriptor in list: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">item</span><span class="p">)</span>
+    <span class="n">features_normalized</span> <span class="o">=</span> <span class="p">(</span><span class="n">feature_vector</span> <span class="o">-</span> <span class="n">deslist</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span> <span class="o">/</span>\
+        <span class="n">deslist</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">prediction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">features_normalized</span><span class="p">)</span><span class="o">.</span>
+                          <span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">decimals</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">error</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">((</span><span class="n">prediction</span> <span class="o">-</span> <span class="n">target</span><span class="p">)</span> <span class="o">/</span> <span class="n">target</span><span class="p">)</span>
+    <span class="n">error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">error</span><span class="p">,</span> <span class="n">prediction</span></div>
+
+
+<div class="viewcode-block" id="show_ion"><a class="viewcode-back" href="../../gains.html#gains.salt_generator.show_ion">[docs]</a><span class="k">def</span> <span class="nf">show_ion</span><span class="p">(</span><span class="n">genes</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">mutation_attempts</span><span class="p">,</span> <span class="n">sim_score</span><span class="p">,</span> <span class="n">molecular_relative</span><span class="p">,</span>
+             <span class="n">model_ID</span><span class="p">,</span> <span class="n">anion</span><span class="p">):</span>
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">genes</span><span class="p">)</span>
+    <span class="n">fitness</span><span class="p">,</span> <span class="n">mol_property</span> <span class="o">=</span> <span class="n">get_fitness</span><span class="p">(</span><span class="n">anion</span><span class="p">,</span> <span class="n">genes</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">model_ID</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="se">\t</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;number of atoms: &quot;</span><span class="p">,</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="se">\t</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;mutation attempts: &quot;</span><span class="p">,</span> <span class="n">mutation_attempts</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;with prediction: </span><span class="se">\t</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mol_property</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;similarity score:  </span><span class="si">{0:10.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sim_score</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="se">\t</span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;molecular relative: &quot;</span><span class="p">,</span>
+          <span class="n">salty</span><span class="o">.</span><span class="n">check_name</span><span class="p">(</span><span class="n">molecular_relative</span><span class="p">)))</span></div>
+
+
+<div class="viewcode-block" id="generate_solvent"><a class="viewcode-back" href="../../gains.html#gains.salt_generator.generate_solvent">[docs]</a><span class="k">def</span> <span class="nf">generate_solvent</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">model_ID</span><span class="p">,</span> <span class="n">heavy_atom_limit</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+                     <span class="n">sim_bounds</span><span class="o">=</span><span class="p">[</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span> <span class="n">hits</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">write_file</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 
     <span class="n">parent_candidates</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">genetic</span><span class="o">.</span><span class="n">load_data</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_summary.csv&quot;</span><span class="o">.</span>
                              <span class="nb">format</span><span class="p">(</span><span class="n">model_ID</span><span class="p">))</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
@@ -220,7 +262,7 @@
         <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
             <span class="n">anion_smiles</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">anion_candidates</span><span class="p">),</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">anion</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">anion_smiles</span><span class="p">)</span>
-            <span class="n">best</span> <span class="o">=</span> <span class="n">_guess_password</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">anion</span><span class="p">,</span> <span class="n">parent_candidates</span><span class="p">,</span> <span class="n">model_ID</span><span class="p">)</span>
+            <span class="n">best</span> <span class="o">=</span> <span class="n">guess_password</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">anion</span><span class="p">,</span> <span class="n">parent_candidates</span><span class="p">,</span> <span class="n">model_ID</span><span class="p">)</span>
             <span class="n">tan_sim_score</span><span class="p">,</span> <span class="n">sim_index</span> <span class="o">=</span>\
                 <span class="n">genetic</span><span class="o">.</span><span class="n">molecular_similarity</span><span class="p">(</span><span class="n">best</span><span class="p">,</span> <span class="n">parent_candidates</span><span class="p">)</span>
             <span class="n">cation_heavy_atoms</span> <span class="o">=</span> <span class="n">best</span><span class="o">.</span><span class="n">Mol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()</span>
@@ -229,7 +271,7 @@
                     <span class="n">tan_sim_score</span> <span class="o">&gt;=</span> <span class="n">sim_bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span>\
                     <span class="n">tan_sim_score</span> <span class="o">&lt;</span> <span class="n">sim_bounds</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">and</span>\
                     <span class="n">salt_smiles</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">salts</span><span class="p">[</span><span class="s2">&quot;Salt Smiles&quot;</span><span class="p">]:</span>
-                <span class="n">scr</span><span class="p">,</span> <span class="n">pre</span> <span class="o">=</span> <span class="n">_get_fitness</span><span class="p">(</span><span class="n">anion</span><span class="p">,</span> <span class="n">best</span><span class="o">.</span><span class="n">Genes</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">model_ID</span><span class="p">)</span>
+                <span class="n">scr</span><span class="p">,</span> <span class="n">pre</span> <span class="o">=</span> <span class="n">get_fitness</span><span class="p">(</span><span class="n">anion</span><span class="p">,</span> <span class="n">best</span><span class="o">.</span><span class="n">Genes</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">model_ID</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
                     <span class="n">CAT_ID</span> <span class="o">=</span> <span class="s2">&quot;C0</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span>
                     <span class="n">AN_ID</span> <span class="o">=</span> <span class="s2">&quot;A0</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">i</span>
@@ -268,98 +310,8 @@
         <span class="k">if</span> <span class="n">write_file</span><span class="p">:</span>
             <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">new</span><span class="p">,</span> <span class="n">path_or_buf</span><span class="o">=</span><span class="s2">&quot;salt_log.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="n">salts</span> <span class="o">=</span> <span class="n">new</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">write_file</span><span class="p">:</span></div>
-        <span class="k">return</span> <span class="n">new</span>
-
-
-<span class="k">def</span> <span class="nf">_guess_password</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">anion</span><span class="p">,</span> <span class="n">parent_candidates</span><span class="p">,</span> <span class="n">model_ID</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    for interacting with the main engine. Contains helper functions</span>
-<span class="sd">    to pass to the engine what it expects</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">startTime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">fnGetFitness</span><span class="p">(</span><span class="n">genes</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">_get_fitness</span><span class="p">(</span><span class="n">anion</span><span class="p">,</span> <span class="n">genes</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">model_ID</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">fndisplay</span><span class="p">(</span><span class="n">candidate</span><span class="p">,</span> <span class="n">mutation</span><span class="p">):</span>
-        <span class="n">_display</span><span class="p">(</span><span class="n">candidate</span><span class="p">,</span> <span class="n">mutation</span><span class="p">,</span> <span class="n">startTime</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">fnShowIon</span><span class="p">(</span><span class="n">genes</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">mutation_attempts</span><span class="p">,</span> <span class="n">sim_score</span><span class="p">,</span>
-                  <span class="n">molecular_relative</span><span class="p">):</span>
-        <span class="n">_show_ion</span><span class="p">(</span><span class="n">genes</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">mutation_attempts</span><span class="p">,</span> <span class="n">sim_score</span><span class="p">,</span>
-                  <span class="n">molecular_relative</span><span class="p">,</span> <span class="n">model_ID</span><span class="p">,</span> <span class="n">anion</span><span class="p">)</span>
-
-    <span class="n">optimalFitness</span> <span class="o">=</span> <span class="mf">0.99</span>
-    <span class="n">geneSet</span> <span class="o">=</span> <span class="n">genetic</span><span class="o">.</span><span class="n">generate_geneset</span><span class="p">()</span>
-    <span class="n">best</span> <span class="o">=</span> <span class="n">genetic</span><span class="o">.</span><span class="n">get_best</span><span class="p">(</span><span class="n">fnGetFitness</span><span class="p">,</span>
-                            <span class="n">optimalFitness</span><span class="p">,</span> <span class="n">geneSet</span><span class="p">,</span> <span class="n">fndisplay</span><span class="p">,</span>
-                            <span class="n">fnShowIon</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">parent_candidates</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">best</span>
-
-
-<span class="k">def</span> <span class="nf">_display</span><span class="p">(</span><span class="n">candidate</span><span class="p">,</span> <span class="n">mutation</span><span class="p">,</span> <span class="n">startTime</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    for printing results to the screen. _display is called for every</span>
-<span class="sd">    accepted mutation</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">timeDiff</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">startTime</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="se">\t</span><span class="si">{}</span><span class="se">\t</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-        <span class="n">candidate</span><span class="o">.</span><span class="n">Genes</span><span class="p">,</span> <span class="n">candidate</span><span class="o">.</span><span class="n">Fitness</span><span class="p">,</span> <span class="n">mutation</span><span class="p">,</span> <span class="n">timeDiff</span><span class="p">))</span>
-
-
-<span class="k">def</span> <span class="nf">_get_fitness</span><span class="p">(</span><span class="n">anion</span><span class="p">,</span> <span class="n">genes</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">model_ID</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    the fitness function passed to the engine. In this case fitness</span>
-<span class="sd">    is determined by a model developed by the salty module. It is</span>
-<span class="sd">    important to note that the fitness function can handle multi-</span>
-<span class="sd">    output models</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">cation</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">genes</span><span class="p">)</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">genetic</span><span class="o">.</span><span class="n">load_data</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.sav&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model_ID</span><span class="p">),</span> <span class="n">pickleFile</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">deslist</span> <span class="o">=</span> <span class="n">genetic</span><span class="o">.</span><span class="n">load_data</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_descriptors.csv&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model_ID</span><span class="p">))</span>
-    <span class="n">feature_vector</span> <span class="o">=</span> <span class="p">[]</span>
-
-    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">deslist</span><span class="p">:</span>
-
-        <span class="k">if</span> <span class="s2">&quot;anion&quot;</span> <span class="ow">in</span> <span class="n">item</span><span class="p">:</span>
-            <span class="k">with</span> <span class="n">genetic</span><span class="o">.</span><span class="n">suppress_rdkit_sanity</span><span class="p">():</span>
-                <span class="n">feature_vector</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">calculator</span><span class="p">([</span><span class="n">item</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
-                                      <span class="p">[</span><span class="mi">0</span><span class="p">]])</span><span class="o">.</span><span class="n">CalcDescriptors</span><span class="p">(</span><span class="n">anion</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="k">elif</span> <span class="s2">&quot;cation&quot;</span> <span class="ow">in</span> <span class="n">item</span><span class="p">:</span>
-            <span class="k">with</span> <span class="n">genetic</span><span class="o">.</span><span class="n">suppress_rdkit_sanity</span><span class="p">():</span>
-                <span class="n">feature_vector</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">calculator</span><span class="p">([</span><span class="n">item</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
-                                      <span class="p">[</span><span class="mi">0</span><span class="p">]])</span><span class="o">.</span><span class="n">CalcDescriptors</span><span class="p">(</span><span class="n">cation</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="k">elif</span> <span class="s2">&quot;Temperature, K&quot;</span> <span class="ow">in</span> <span class="n">item</span><span class="p">:</span>
-            <span class="n">feature_vector</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">298.15</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="s2">&quot;Pressure, kPa&quot;</span> <span class="ow">in</span> <span class="n">item</span><span class="p">:</span>
-            <span class="n">feature_vector</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">101.325</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;unknown descriptor in list: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">item</span><span class="p">)</span>
-    <span class="n">features_normalized</span> <span class="o">=</span> <span class="p">(</span><span class="n">feature_vector</span> <span class="o">-</span> <span class="n">deslist</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span> <span class="o">/</span>\
-        <span class="n">deslist</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
-    <span class="n">prediction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">features_normalized</span><span class="p">)</span><span class="o">.</span>
-                          <span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">decimals</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-    <span class="n">error</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">((</span><span class="n">prediction</span> <span class="o">-</span> <span class="n">target</span><span class="p">)</span> <span class="o">/</span> <span class="n">target</span><span class="p">)</span>
-    <span class="n">error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">error</span><span class="p">,</span> <span class="n">prediction</span>
-
-
-<span class="k">def</span> <span class="nf">_show_ion</span><span class="p">(</span><span class="n">genes</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">mutation_attempts</span><span class="p">,</span> <span class="n">sim_score</span><span class="p">,</span> <span class="n">molecular_relative</span><span class="p">,</span>
-              <span class="n">model_ID</span><span class="p">,</span> <span class="n">anion</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    for printing results to the screen. _show_ion is called when a candidate</span>
-<span class="sd">    has achieved the desired fitness core and is returned by the engine</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">mol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">genes</span><span class="p">)</span>
-    <span class="n">fitness</span><span class="p">,</span> <span class="n">mol_property</span> <span class="o">=</span> <span class="n">_get_fitness</span><span class="p">(</span><span class="n">anion</span><span class="p">,</span> <span class="n">genes</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">model_ID</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="se">\t</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;number of atoms: &quot;</span><span class="p">,</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="se">\t</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;mutation attempts: &quot;</span><span class="p">,</span> <span class="n">mutation_attempts</span><span class="p">))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;with prediction: </span><span class="se">\t</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mol_property</span><span class="p">))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;similarity score:  </span><span class="si">{0:10.3f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sim_score</span><span class="p">))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="se">\t</span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;molecular relative: &quot;</span><span class="p">,</span>
-          <span class="n">salty</span><span class="o">.</span><span class="n">check_name</span><span class="p">(</span><span class="n">molecular_relative</span><span class="p">)))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">write_file</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">new</span></div>
 </pre></div>
 
            </div>
@@ -406,7 +358,7 @@
       <script type="text/javascript" src="../../_static/jquery.js"></script>
       <script type="text/javascript" src="../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

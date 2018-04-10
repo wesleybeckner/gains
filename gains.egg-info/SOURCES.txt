@@ -13,11 +13,13 @@ gains/data/cpt_density_devmodel.pkl
 gains/data/cpt_density_m1.sav
 gains/data/cpt_density_m1_descriptors.csv
 gains/data/cpt_density_m1_summary.csv
+gains/data/cpt_density_qspr.sav
 gains/data/cpt_devmodel.pkl
 gains/data/cpt_m1.sav
 gains/data/cpt_m1_descriptors.csv
 gains/data/cpt_m1_summary.csv
 gains/data/cpt_premodel.csv
+gains/data/cpt_qspr.sav
 gains/data/density_m1.sav
 gains/data/density_m1_descriptors.csv
 gains/data/density_m2.sav
@@ -27,7 +29,9 @@ gains/data/density_m3_descriptors.csv
 gains/data/density_m3_summary.csv
 gains/data/density_m4.sav
 gains/data/density_m4_descriptors.csv
+gains/data/density_qspr.sav
 gains/data/pychem
+gains/data/viscosity_qspr.sav
 gains/tests/__init__.py
 gains/tests/test_get_pdb.py
 gains/tests/test_model.py

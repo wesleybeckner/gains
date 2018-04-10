@@ -96,7 +96,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="example_engine_module.html">Getting started</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">GAINS package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#module-gains.engine">gains.engine module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#gains-engine-module">gains.engine module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-gains.salt_generator">gains.salt_generator module</a></li>
 </ul>
 </li>
@@ -165,213 +165,35 @@
             
   <div class="section" id="gains-package">
 <h1>GAINS package<a class="headerlink" href="#gains-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-gains.engine">
-<span id="gains-engine-module"></span><h2>gains.engine module<a class="headerlink" href="#module-gains.engine" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
-<dt id="gains.engine.get_best">
-<code class="descclassname">gains.engine.</code><code class="descname">get_best</code><span class="sig-paren">(</span><em>get_fitness</em>, <em>optimalFitness</em>, <em>geneSet</em>, <em>display</em>, <em>show_ion</em>, <em>target</em>, <em>parent_candidates</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gains/engine.html#get_best"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gains.engine.get_best" title="Permalink to this definition">¶</a></dt>
-<dd><p>the primary public function of the engine</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>get_fitness</strong> (<em>function</em>) – the fitness function. Usually based on a molecular property.
-An example can be found in the salt_generator module</li>
-<li><strong>optimalFitness</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.6)"><em>float</em></a>) – 0-1 the user specifies how close the engine should get to
-the target (1 = exact)</li>
-<li><strong>geneSet</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.6)"><em>object</em></a>) – consists of atomtypes (by periodic number), rdkit molecular
-fragments and custom fragments (that are currently hard
-coded into the engine). These are the building blocks that
-the engine can use to mutate the molecular candidate via the
-_mutate() function</li>
-<li><strong>display</strong> (<em>function</em>) – for printing results to the screen. Display is called for
-every accepted mutation</li>
-<li><strong>show_ion</strong> (<em>function</em>) – for printing results to the screen. show_ion is called when
-a candidate has achieved the desired fitness score and is
-returned by the engine</li>
-<li><strong>target</strong> (<em>array</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.6)"><em>float</em></a><em>, or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.6)"><em>int</em></a>) – the desired property value to be achieved by the engine.
-If an array, a model containing multi-output targets must
-be supplied to the engine</li>
-<li><strong>parent_candidates</strong> (<em>array</em>) – an array of smiles strings that the engine uses to choose
-a starting atomic configuration</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>child</strong> – the accepted molecular configuration. See Chromosome class
-for details</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Chromosome object</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="gains.engine.molecular_similarity">
-<code class="descclassname">gains.engine.</code><code class="descname">molecular_similarity</code><span class="sig-paren">(</span><em>best</em>, <em>parent_candidates</em>, <em>all=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gains/engine.html#molecular_similarity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gains.engine.molecular_similarity" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns a similarity score (0-1) of best with the
-closest molecular relative in parent_candidates</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>best</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.6)"><em>object</em></a>) – Chromosome object, the current
-mutated candidate</li>
-<li><strong>parent_candidates</strong> (<em>array</em>) – parent pool of molecules to compare with best.
-These are represented by SMILES</li>
-<li><strong>all</strong> (<em>boolean</em><em>, </em><em>optional</em><em>, </em><em>default = False</em>) – default behavior is false and the tanimoto
-similarity score is returned. If True
-tanimoto, dice, cosine, sokal, kulczynski,
-and mcconnaughey similarities are returned</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
-<li><strong>similarity_score</strong> (<em>float</em>)</li>
-<li><strong>similarity_index</strong> (<em>int</em>) – if all=False the best tanimoto similarity score
-as well as the index of the closest molecular
-relative are returned
-if all=True an array of best scores and indeces
-of the closest molecular relative are returned</li>
-</ul>
-</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="class">
-<dt id="gains.engine.suppress_rdkit_sanity">
-<em class="property">class </em><code class="descclassname">gains.engine.</code><code class="descname">suppress_rdkit_sanity</code><a class="reference internal" href="_modules/gains/engine.html#suppress_rdkit_sanity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gains.engine.suppress_rdkit_sanity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<p>Context manager for doing a “deep suppression” of stdout and stderr
-during certain calls to RDKit.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="gains.engine.generate_geneset">
-<code class="descclassname">gains.engine.</code><code class="descname">generate_geneset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gains/engine.html#generate_geneset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gains.engine.generate_geneset" title="Permalink to this definition">¶</a></dt>
-<dd><p>Populates the GeneSet class with atoms and fragments to be used
-by the engine. As it stands these are hardcoded into the engine
-but will probably be adapted in future versions</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>None</strong> – </td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><strong>GeneSet</strong> – returns an instance of the GeneSet class containing atoms,
-rdkit fragments, and custom fragments</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.6)">object</a></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="gains.engine.load_data">
-<code class="descclassname">gains.engine.</code><code class="descname">load_data</code><span class="sig-paren">(</span><em>data_file_name</em>, <em>pickleFile=False</em>, <em>simpleList=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gains/engine.html#load_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gains.engine.load_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loads data from module_path/data/data_file_name.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>data_file_name</strong> (<em>string</em>) – name of csv file to be loaded from module_path/data/
-data_file_name.</li>
-<li><strong>pickleFile</strong> (<em>boolean</em><em>, </em><em>optional</em><em>, </em><em>default = False</em>) – if True opens pickled file</li>
-<li><strong>simpleList</strong> (<em>boolean</em><em>, </em><em>optional</em><em>, </em><em>default = False</em>) – if true will open the saved list and
-properly handle split lines</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>data</strong></p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Pandas DataFrame</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="class">
-<dt id="gains.engine.Chromosome">
-<em class="property">class </em><code class="descclassname">gains.engine.</code><code class="descname">Chromosome</code><span class="sig-paren">(</span><em>genes</em>, <em>fitness</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gains/engine.html#Chromosome"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gains.engine.Chromosome" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rdkit.Chem.rdchem.Mol</span></code></p>
-<p>The main object handled by the engine. The Chromosome object
-inherits the RWMol and Mol attributes from rdkit. Two additional
-attributes are added: genes and fitness. Genes is the SMILES
-encoding of the molecule, fitness is the score (0-1) returned
-by the fitness function</p>
-</dd></dl>
-
-<dl class="class">
-<dt id="gains.engine.GeneSet">
-<em class="property">class </em><code class="descclassname">gains.engine.</code><code class="descname">GeneSet</code><span class="sig-paren">(</span><em>atoms</em>, <em>rdkitFrags</em>, <em>customFrags</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gains/engine.html#GeneSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gains.engine.GeneSet" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<p>Consists of atomtypes (by periodic number), rdkit molecular
-fragments and custom fragments (that are currently hard
-coded into the engine). These are the building blocks that
-the engine can use to mutate the molecular candidate via the
-_mutate() function</p>
-</dd></dl>
-
-<dl class="class">
-<dt id="gains.engine.Benchmark">
-<em class="property">class </em><code class="descclassname">gains.engine.</code><code class="descname">Benchmark</code><a class="reference internal" href="_modules/gains/engine.html#Benchmark"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gains.engine.Benchmark" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.6)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<p>benchmark method used by the unittests</p>
-<dl class="staticmethod">
-<dt id="gains.engine.Benchmark.run">
-<em class="property">static </em><code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gains/engine.html#Benchmark.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gains.engine.Benchmark.run" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
+<div class="section" id="gains-engine-module">
+<h2>gains.engine module<a class="headerlink" href="#gains-engine-module" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="module-gains.salt_generator">
 <span id="gains-salt-generator-module"></span><h2>gains.salt_generator module<a class="headerlink" href="#module-gains.salt_generator" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
+<dt id="gains.salt_generator.display">
+<code class="descclassname">gains.salt_generator.</code><code class="descname">display</code><span class="sig-paren">(</span><em>candidate</em>, <em>mutation</em>, <em>startTime</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gains/salt_generator.html#display"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gains.salt_generator.display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
 <dt id="gains.salt_generator.generate_solvent">
-<code class="descclassname">gains.salt_generator.</code><code class="descname">generate_solvent</code><span class="sig-paren">(</span><em>target, model_ID, heavy_atom_limit=50, sim_bounds=[0.4, 1.0], hits=1, write_file=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gains/salt_generator.html#generate_solvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gains.salt_generator.generate_solvent" title="Permalink to this definition">¶</a></dt>
-<dd><p>the primary public function of the salt_generator module</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>target</strong> (<em>array</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.6)"><em>float</em></a><em>, or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.6)"><em>int</em></a>) – the desired property value to be achieved by the engine, if
-an array, a multi-output model must be supplied to the engine</li>
-<li><strong>model_ID</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.6)"><em>str</em></a>) – the name of the model to be used by the engine. Gains has
-several built-in models to choose from</li>
-<li><strong>heavy_atom_limit</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.6)"><em>int</em></a><em>, </em><em>optional</em>) – the upper value for allowable heavy atoms in the returned
-candidate</li>
-<li><strong>sim_bounds</strong> (<em>array</em><em>, </em><em>optional</em>) – the tanimoto similarity score between the returned candidate
-and its closest molecular relative in parent_candidates</li>
-<li><strong>hits</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.6)"><em>int</em></a><em>, </em><em>optional</em>) – the number of desired solutions</li>
-<li><strong>write_file</strong> (<em>boolean</em><em>, </em><em>optional</em>) – defaults to False. if True will return the solutions and a
-csv log file</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>new</strong> – default behavior is to return a pandas DataFrame. This is
-a log file of the solution(s). if write_file = True the
-function will also return pdb files of the solutions</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.6)">object</a></p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
+<code class="descclassname">gains.salt_generator.</code><code class="descname">generate_solvent</code><span class="sig-paren">(</span><em>target, model_ID, heavy_atom_limit=30, sim_bounds=[0.6, 1.0], hits=1, write_file=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gains/salt_generator.html#generate_solvent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gains.salt_generator.generate_solvent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="gains.salt_generator.get_fitness">
+<code class="descclassname">gains.salt_generator.</code><code class="descname">get_fitness</code><span class="sig-paren">(</span><em>anion</em>, <em>genes</em>, <em>target</em>, <em>model_ID</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gains/salt_generator.html#get_fitness"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gains.salt_generator.get_fitness" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="gains.salt_generator.guess_password">
+<code class="descclassname">gains.salt_generator.</code><code class="descname">guess_password</code><span class="sig-paren">(</span><em>target</em>, <em>anion</em>, <em>parent_candidates</em>, <em>model_ID</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gains/salt_generator.html#guess_password"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gains.salt_generator.guess_password" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="gains.salt_generator.show_ion">
+<code class="descclassname">gains.salt_generator.</code><code class="descname">show_ion</code><span class="sig-paren">(</span><em>genes</em>, <em>target</em>, <em>mutation_attempts</em>, <em>sim_score</em>, <em>molecular_relative</em>, <em>model_ID</em>, <em>anion</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gains/salt_generator.html#show_ion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gains.salt_generator.show_ion" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </div>
 </div>
@@ -428,7 +250,7 @@ function will also return pdb files of the solutions</p>
       <script type="text/javascript" src="_static/jquery.js"></script>
       <script type="text/javascript" src="_static/underscore.js"></script>
       <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

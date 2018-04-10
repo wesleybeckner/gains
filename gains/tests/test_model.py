@@ -7,13 +7,13 @@ import unittest
 class GuessIonTests(unittest.TestCase):
 
     def test_1_model(self):
-        target = 1000
-        model_ID = "density_m3"
+        target = 1
+        model_ID = "viscosity_qspr"
         generate_solvent(target, model_ID, heavy_atom_limit=300)
 
     def test_2_model(self):
-        target = 1000
-        model_ID = "density_m3"
+        target = 1
+        model_ID = "viscosity_qspr"
         generate_solvent(target, model_ID, heavy_atom_limit=300, hits=11)
 
     def test_benchmark(self):

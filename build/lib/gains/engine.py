@@ -7,11 +7,14 @@ from rdkit.Chem import AllChem as Chem
 from rdkit.Chem.Fingerprints import FingerprintMols
 from rdkit import DataStructs
 import pickle
+import dill
 import os
 import statistics
 import time
 import random
 import sys
+from bisect import bisect_left
+from math import exp
 
 __all__ = ["get_best", "molecular_similarity", "suppress_rdkit_sanity",
            "generate_geneset", "load_data", "Chromosome",
@@ -24,7 +27,7 @@ This GA uses RDKit to search molecular structure
 
 
 def get_best(get_fitness, optimalFitness, geneSet, display,
-             show_ion, target, parent_candidates):
+             show_ion, target, parent_candidates, maxAge=None):
     """
     the primary public function of the engine
 
@@ -63,35 +66,51 @@ def get_best(get_fitness, optimalFitness, geneSet, display,
         the accepted molecular configuration. See Chromosome class
         for details
     """
-    mutation_attempts = 0
-    attempts_since_last_adoption = 0
-    random.seed()
-    bestParent = _generate_parent(parent_candidates, get_fitness)
-    display(bestParent, "starting structure")
-    if bestParent.Fitness >= optimalFitness:
-        return bestParent
-    while True:
-        with suppress_rdkit_sanity():
-            child, mutation = _mutate(bestParent, geneSet, get_fitness, target)
-        mutation_attempts += 1
-        attempts_since_last_adoption += 1
 
-        if attempts_since_last_adoption > 1100:
-            child = _generate_parent(parent_candidates, get_fitness)
-            attempts_since_last_adoption = 0
-            print("starting from new parent")
-        elif bestParent.Fitness >= child.Fitness:
-            continue
-        display(child, mutation)
-        attempts_since_last_adoption = 0
-        if child.Fitness >= optimalFitness:
-            sim_score, sim_index = molecular_similarity(child,
+    def fnMutate(parent):
+        return _mutate(parent, geneSet, get_fitness, target)
+
+    def fnGenerateParent():
+        return _generate_parent(parent_candidates, get_fitness)
+
+    for improvement, mutation in _get_improvement(fnMutate, fnGenerateParent, maxAge):
+        display(improvement, mutation)
+        if not optimalFitness > improvement.Fitness:
+            sim_score, sim_index = molecular_similarity(improvement,
                                                         parent_candidates)
             molecular_relative = parent_candidates[sim_index]
-            show_ion(child.Genes, target, mutation_attempts, sim_score,
-                     molecular_relative)
-            return child
-        bestParent = child
+            show_ion(improvement.Genes, target, improvement.Mutation_Attempts,
+                     sim_score, molecular_relative)
+            return improvement
+#    mutation_attempts = 0
+#    attempts_since_last_adoption = 0
+#    random.seed()
+#    bestParent = _generate_parent(parent_candidates, get_fitness)
+#    display(bestParent, "starting structure")
+#    if bestParent.Fitness >= optimalFitness:
+#        return bestParent
+#    while True:
+#        with suppress_rdkit_sanity():
+#            child, mutation = _mutate(bestParent, geneSet, get_fitness, target)
+#        mutation_attempts += 1
+#        attempts_since_last_adoption += 1
+#
+#        if attempts_since_last_adoption > 1100:
+#            child = _generate_parent(parent_candidates, get_fitness)
+#            attempts_since_last_adoption = 0
+#            print("starting from new parent")
+#        elif bestParent.Fitness >= child.Fitness:
+#            continue
+#        display(child, mutation)
+#        attempts_since_last_adoption = 0
+#        if child.Fitness >= optimalFitness:
+#            sim_score, sim_index = molecular_similarity(child,
+#                                                        parent_candidates)
+#            molecular_relative = parent_candidates[sim_index]
+#            show_ion(child.Genes, target, mutation_attempts, sim_score,
+#                     molecular_relative)
+#            return child
+#        bestParent = child
 
 
 def molecular_similarity(best, parent_candidates, all=False):
@@ -154,7 +173,7 @@ def molecular_similarity(best, parent_candidates, all=False):
         return max(scores), scores.index(max(scores))
 
 
-def load_data(data_file_name, pickleFile=False, simpleList=False):
+def load_data(data_file_name, pickleFile=False, dillFile=False):
     """
     Loads data from module_path/data/data_file_name.
 
@@ -165,9 +184,6 @@ def load_data(data_file_name, pickleFile=False, simpleList=False):
         data_file_name.
     pickleFile : boolean, optional, default = False
         if True opens pickled file
-    simpleList : boolean, optional, default = False
-        if true will open the saved list and
-        properly handle split lines
 
     Returns
     -------
@@ -178,9 +194,11 @@ def load_data(data_file_name, pickleFile=False, simpleList=False):
         with open(join(module_path, 'data', data_file_name), 'rb') as \
                 pickle_file:
             data = pickle.load(pickle_file, encoding='latin1')
-    elif simpleList:
-        with open(join(module_path, 'data', data_file_name)) as csv_file:
-            data = csv_file.read().splitlines()
+    elif dillFile:
+        with open(join(module_path, 'data', data_file_name), 'rb') as \
+                pickle_file:
+            data = dill.load(pickle_file)
+
     else:
         with open(join(module_path, 'data', data_file_name), 'rb') as csv_file:
             data = pd.read_csv(csv_file, encoding='latin1')
@@ -262,6 +280,8 @@ class Chromosome(Chem.rdchem.Mol):
         self.Mol = Chem.MolFromSmiles(genes)
         self.RWMol = Chem.MolFromSmiles(genes)
         self.RWMol = Chem.RWMol(Chem.MolFromSmiles(genes))
+        self.Age = 0
+        self.Mutation_Attempts = 0
 
 
 def generate_geneset():
@@ -288,6 +308,48 @@ def generate_geneset():
     m = Chem.MolFromSmiles('CCCC')
     fcgen.AddFragsFromMol(m, customFrags)
     return GeneSet(atoms, rdkitFrags, customFrags)
+
+
+def _get_improvement(new_child, generate_parent, maxAge):
+    parent = bestParent = generate_parent()
+    yield bestParent, "starting structure"
+    historicalFitnesses = [bestParent.Fitness]
+    while True:
+        with suppress_rdkit_sanity():
+            child, mutation = new_child(parent)
+        parent.Mutation_Attempts += 1
+        bestParent.Mutation_Attempts = child.Mutation_Attempts =\
+        parent.Mutation_Attempts
+        if parent.Mutation_Attempts > 999 and parent.Mutation_Attempts % 1000 == 0:
+            print("genetic age:" ,parent.Mutation_Attempts)
+        if parent.Age > 999 and parent.Age % 1000 == 0:
+            print("parent age:" ,parent.Age)
+        if parent.Fitness > child.Fitness:
+            if maxAge is None:
+                continue
+            parent.Age += 1
+            if maxAge > parent.Age:
+                continue
+            index = bisect_left(historicalFitnesses, child.Fitness)
+            difference = len(historicalFitnesses) - index
+            proportionSimilar = difference / len(historicalFitnesses)
+            if random.random()/3 < exp(-proportionSimilar):
+                parent = child
+                continue
+            bestParent.Age = 0
+            parent = bestParent
+            continue
+        if not child.Fitness > parent.Fitness:
+            # same fitness
+            child.Age = parent.Age + 1
+            parent = child
+            continue
+        child.Age = 0
+        parent = child
+        if child.Fitness > bestParent.Fitness:
+            bestParent = child
+            yield bestParent, mutation
+            historicalFitnesses.append(bestParent.Fitness)
 
 
 def _generate_parent(parent_candidates, get_fitness):
