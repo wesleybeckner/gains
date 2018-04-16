@@ -1,6 +1,7 @@
 numpy
 pandas
 salty-ilthermo
+tensorflow
 keras
 sphinx_rtd_theme
 numpydoc
