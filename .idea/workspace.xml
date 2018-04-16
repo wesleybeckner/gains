@@ -1,23 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="aa217916-1033-4c0e-90ba-25a8b71ffd85" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/build/lib/gains/engine.py" afterPath="$PROJECT_DIR$/build/lib/gains/engine.py" />
-      <change beforePath="$PROJECT_DIR$/build/lib/gains/salt_generator.py" afterPath="$PROJECT_DIR$/build/lib/gains/salt_generator.py" />
-      <change beforePath="$PROJECT_DIR$/build/lib/gains/tests/test_get_pdb.py" afterPath="$PROJECT_DIR$/build/lib/gains/tests/test_get_pdb.py" />
-      <change beforePath="$PROJECT_DIR$/build/lib/gains/tests/test_model.py" afterPath="$PROJECT_DIR$/build/lib/gains/tests/test_model.py" />
-      <change beforePath="$PROJECT_DIR$/build/lib/gains/tests/test_similarity_maps.py" afterPath="$PROJECT_DIR$/build/lib/gains/tests/test_similarity_maps.py" />
-      <change beforePath="$PROJECT_DIR$/dist/gains-0.2.1-py3.6.egg" afterPath="$PROJECT_DIR$/dist/gains-0.2.1-py3.6.egg" />
-      <change beforePath="$PROJECT_DIR$/dist/gains-0.2.1.tar.gz" afterPath="$PROJECT_DIR$/dist/gains-0.2.1.tar.gz" />
-      <change beforePath="$PROJECT_DIR$/gains.egg-info/SOURCES.txt" afterPath="$PROJECT_DIR$/gains.egg-info/SOURCES.txt" />
-      <change beforePath="$PROJECT_DIR$/gains/.idea/gains.iml" afterPath="$PROJECT_DIR$/gains/.idea/gains.iml" />
-      <change beforePath="$PROJECT_DIR$/gains/.idea/misc.xml" afterPath="$PROJECT_DIR$/gains/.idea/misc.xml" />
-      <change beforePath="$PROJECT_DIR$/gains/.idea/workspace.xml" afterPath="$PROJECT_DIR$/gains/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/gains/engine.py" afterPath="$PROJECT_DIR$/gains/engine.py" />
-      <change beforePath="$PROJECT_DIR$/gains/salt_generator.py" afterPath="$PROJECT_DIR$/gains/salt_generator.py" />
-      <change beforePath="$PROJECT_DIR$/gains/tests/test_get_pdb.py" afterPath="$PROJECT_DIR$/gains/tests/test_get_pdb.py" />
-      <change beforePath="$PROJECT_DIR$/gains/tests/test_model.py" afterPath="$PROJECT_DIR$/gains/tests/test_model.py" />
-    </list>
+    <list default="true" id="aa217916-1033-4c0e-90ba-25a8b71ffd85" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
