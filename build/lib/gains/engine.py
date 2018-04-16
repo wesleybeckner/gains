@@ -1,7 +1,7 @@
 from __future__ import absolute_import, division, print_function
 from os.path import dirname, join
 import pandas as pd
-import dill
+from keras.models import load_model
 from rdkit import RDConfig
 from rdkit.Chem import FragmentCatalog
 from rdkit.Chem import AllChem as Chem
@@ -154,7 +154,7 @@ def molecular_similarity(best, parent_candidates, all=False):
         return max(scores), scores.index(max(scores))
 
 
-def load_data(data_file_name, dillFile=False):
+def load_data(data_file_name, h5File=False):
     """
     Loads data from module_path/data/data_file_name.
 
@@ -163,18 +163,16 @@ def load_data(data_file_name, dillFile=False):
     data_file_name : string
         name of csv file to be loaded from module_path/data/
         data_file_name.
-    dillFile : boolean, optional, default = False
-        if True opens dill file
+    h5File : boolean, optional, default = False
+        if True opens hdf5 file
 
     Returns
     -------
     data : Pandas DataFrame
     """
     module_path = dirname(__file__)
-    if dillFile:
-        with open(join(module_path, 'data', data_file_name), 'rb') as \
-                dill_file:
-            data = dill.load(dill_file)
+    if h5File:
+        data = load_model(join(module_path, 'data', data_file_name))
     else:
         with open(join(module_path, 'data', data_file_name), 'rb') as csv_file:
             data = pd.read_csv(csv_file, encoding='latin1')

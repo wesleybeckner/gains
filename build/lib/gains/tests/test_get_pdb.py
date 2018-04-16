@@ -17,11 +17,12 @@ class GuessIonTests(unittest.TestCase):
     parent_candidates = df['smiles'].unique()
     df = salty.load_data("anionInfo.csv")
     df = df['smiles'].unique()
+    random.seed(123)
     ohPickMe = random.sample(range(df.shape[0]), 1)
     anion = Chem.MolFromSmiles(df[ohPickMe[0]])
 
     def test_1_density(self):
-        target = 800
+        target = 1250
         self.guess_password(target)
 
     def test_benchmark(self):
@@ -72,9 +73,10 @@ class prod_model():
 
 
 def get_fitness(anion, genes, target):
+    model_ID = "density"
     cation = Chem.MolFromSmiles(genes)
-    model = genetic.load_data("density_m1.sav", dillFile=True)
-    deslist = genetic.load_data("density_m1_descriptors.csv")
+    model = genetic.load_data("{}_qspr.h5".format(model_ID), h5File=True)
+    deslist = genetic.load_data("{}_desc.csv".format(model_ID))
     feature_vector = []
     with genetic.suppress_rdkit_sanity():
         for item in deslist:
@@ -84,9 +86,9 @@ def get_fitness(anion, genes, target):
             elif "cation" in item:
                 feature_vector.append(calculator([item.partition('-')
                                       [0]]).CalcDescriptors(cation)[0])
-            elif "Temperature_K" in item:
+            elif "Temperature, K" in item:
                 feature_vector.append(298.15)
-            elif "Pressure_kPa" in item:
+            elif "Pressure, kPa" in item:
                 feature_vector.append(101.325)
             else:
                 print("unknown descriptor in list: %s" % item)

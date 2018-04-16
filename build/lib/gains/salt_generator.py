@@ -47,11 +47,10 @@ def generate_solvent(target, model_ID, heavy_atom_limit=50,
         function will also return pdb files of the cations/anions
     """
 
-    summary = genetic.load_data("{}.sav".format(model_ID),
-                                dillFile=True).Summary
+    summary = genetic.load_data("{}_summ.csv".format(model_ID))
     if parent_candidates is None:
-        parent_candidates = eval(summary.iloc[1][0])
-    anion_candidates = eval(summary.iloc[2][0])
+        parent_candidates = eval(summary.iloc[1][1])
+    anion_candidates = eval(summary.iloc[2][1])
     cols = ["Salt ID", "Salt Smiles", "Cation Heavy Atoms",
             "Tanimoto Similarity Score", "Molecular Relative", "Anion",
             "Model Prediction", "MD Calculation", "Error"]
@@ -156,9 +155,8 @@ def _get_fitness(anion, genes, target, model_ID):
     output models
     """
     cation = Chem.MolFromSmiles(genes)
-    model = genetic.load_data("{}.sav".format(model_ID), dillFile=True).Model
-    deslist = genetic.load_data("{}.sav".format(model_ID),
-                                dillFile=True).Descriptors
+    model = genetic.load_data("{}_qspr.h5".format(model_ID), h5File=True)
+    deslist = genetic.load_data("{}_desc.csv".format(model_ID))
     feature_vector = []
 
     for item in deslist:
