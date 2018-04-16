@@ -26,6 +26,7 @@ install:
 - conda info -a
 - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION
 - source activate test-environment
+- conda install libgcc
 - conda install -c rdkit rdkit
 - conda install -c scikit-learn scikit-learn==0.19.1
 - travis_retry pip install $PIP_DEPS
