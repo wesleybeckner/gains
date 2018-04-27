@@ -32,7 +32,6 @@ install:
 
   - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION numpy nose matplotlib pandas pytest h5py
   - source activate test-environment
-  - conda install -c rdkit rdkit
   - pip install pytest-cov pytest-xdist
   - pip install pep8 pytest-pep8
   - conda install mkl mkl-service
@@ -55,12 +54,20 @@ install:
   - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
       conda install pydot graphviz;
     fi
+  - conda install libgcc
+  - conda install -c rdkit rdkit
+  # - conda install -c scikit-learn scikit-learn==0.19.1
+  - travis_retry pip install $PIP_DEPS
+  - pip install scipy
+  - travis_retry pip install -r requirements.txt
+  - travis_retry pip install -e .
+  - travis_retry pip install pyyaml
 
 # command to run tests
 script:
-- flake8 --ignore N802,N806,F401 `find . -name \*.py | grep -v setup.py | grep -v /docs/ | grep -v /sphinx/`
-- mkdir for_test
-- cd for_test
-- py.test --pyargs gains --cov-report term-missing --cov=gains
+  - flake8 --ignore N802,N806,F401 `find . -name \*.py | grep -v setup.py | grep -v /docs/ | grep -v /sphinx/`
+  - mkdir for_test
+  - cd for_test
+  - py.test --pyargs gains --cov-report term-missing --cov=gains
 after_success:
-- coveralls
+  - coveralls
