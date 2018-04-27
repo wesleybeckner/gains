@@ -32,6 +32,7 @@ install:
 
   - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION numpy nose matplotlib pandas pytest h5py
   - source activate test-environment
+  - conda install -c rdkit rdkit
   - pip install pytest-cov pytest-xdist
   - pip install pep8 pytest-pep8
   - conda install mkl mkl-service
