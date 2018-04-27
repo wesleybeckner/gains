@@ -62,6 +62,7 @@ install:
   - travis_retry pip install -r requirements.txt
   - travis_retry pip install -e .
   - travis_retry pip install pyyaml
+  - travis_retry pip install dill
 
 # command to run tests
 script:
