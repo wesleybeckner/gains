@@ -50,12 +50,6 @@ install:
       pip install https://cntk.ai/PythonWheel/CPU-Only/cntk-2.2-cp36-cp36m-linux_x86_64.whl;
     fi
 
-  # install pydot for visualization tests
-  - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
-      conda install pydot graphviz;
-    fi
-  - conda install libgcc
-  - conda install -c rdkit rdkit
   # - conda install -c scikit-learn scikit-learn==0.19.1
   - travis_retry pip install $PIP_DEPS
   - pip install scipy
