@@ -1,0 +1,69 @@
+sudo: required
+dist: trusty
+language: python
+matrix:
+    include:
+        - python: 2.7
+          env: KERAS_BACKEND=theano TEST_MODE=PEP8
+        - python: 2.7
+          env: KERAS_BACKEND=tensorflow
+        - python: 3.6
+          env: KERAS_BACKEND=tensorflow
+        - python: 2.7
+          env: KERAS_BACKEND=theano
+        - python: 3.6
+          env: KERAS_BACKEND=theano
+install:
+  # code below is taken from http://conda.pydata.org/docs/travis.html
+  # We do this conditionally because it saves us some downloading if the
+  # version is the same.
+  - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
+      wget https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh;
+    else
+      wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
+    fi
+  - bash miniconda.sh -b -p $HOME/miniconda
+  - export PATH="$HOME/miniconda/bin:$PATH"
+  - hash -r
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  # Useful for debugging any issues with conda
+  - conda info -a
+
+  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION numpy nose matplotlib pandas pytest h5py
+  - source activate test-environment
+  - pip install pytest-cov pytest-xdist
+  - pip install pep8 pytest-pep8
+  - conda install mkl mkl-service
+  - pip install theano
+  - pip install scipy
+  - pip install git+git://github.com/keras-team/keras.git
+
+
+  # install TensorFlow (CPU version).
+  - pip install tensorflow
+  
+  # install cntk
+  - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
+      pip install https://cntk.ai/PythonWheel/CPU-Only/cntk-2.2-cp27-cp27mu-linux_x86_64.whl;
+    elif [[ "$TRAVIS_PYTHON_VERSION" == "3.6" ]]; then
+      pip install https://cntk.ai/PythonWheel/CPU-Only/cntk-2.2-cp36-cp36m-linux_x86_64.whl;
+    fi
+
+  # - conda install -c scikit-learn scikit-learn==0.19.1
+  - conda install -c rdkit rdkit
+  - travis_retry pip install $PIP_DEPS
+  - pip install scipy
+  - travis_retry pip install -r requirements.txt
+  - travis_retry pip install -e .
+  - travis_retry pip install pyyaml
+  - travis_retry pip install dill
+
+# command to run tests
+script:
+  - flake8 --ignore N802,N806,F401 `find . -name \*.py | grep -v setup.py | grep -v /docs/ | grep -v /sphinx/`
+  - mkdir for_test
+  - cd for_test
+  - py.test --pyargs gains --cov-report term-missing --cov=gains
+after_success:
+  - coveralls
