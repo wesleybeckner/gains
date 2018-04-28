@@ -3,7 +3,6 @@
 
 ## Genetic Algorithm for Identifying Novel Structures
 [![Build Status](https://travis-ci.org/wesleybeckner/gains.svg?branch=master)](https://travis-ci.org/wesleybeckner/gains)
-[![Documentation Status](https://readthedocs.org/projects/gains/badge/?version=latest)](http://gains.readthedocs.io/en/latest/?badge=latest)
 [![PyPI version](https://badge.fury.io/py/gains.svg)](https://badge.fury.io/py/gains)
 [![Coverage Status](https://coveralls.io/repos/github/wesleybeckner/gains/badge.svg?branch=master)](https://coveralls.io/github/wesleybeckner/gains?branch=master)
 ========
