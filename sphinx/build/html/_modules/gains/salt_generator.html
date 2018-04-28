@@ -176,7 +176,8 @@
 
 
 <div class="viewcode-block" id="generate_solvent"><a class="viewcode-back" href="../../gains.html#gains.salt_generator.generate_solvent">[docs]</a><span class="k">def</span> <span class="nf">generate_solvent</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">model_ID</span><span class="p">,</span> <span class="n">heavy_atom_limit</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
-                     <span class="n">sim_bounds</span><span class="o">=</span><span class="p">[</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span> <span class="n">hits</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">write_file</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                     <span class="n">sim_bounds</span><span class="o">=</span><span class="p">[</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span> <span class="n">hits</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">write_file</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                     <span class="n">parent_candidates</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    the primary public function of the salt_generator module</span>
 
@@ -205,13 +206,13 @@
 <span class="sd">    new : object</span>
 <span class="sd">        default behavior is to return a pandas DataFrame. This is</span>
 <span class="sd">        a log file of the solution(s). if write_file = True the</span>
-<span class="sd">        function will also return pdb files of the solutions</span>
+<span class="sd">        function will also return pdb files of the cations/anions</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">parent_candidates</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">genetic</span><span class="o">.</span><span class="n">load_data</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_summary.csv&quot;</span><span class="o">.</span>
-                             <span class="nb">format</span><span class="p">(</span><span class="n">model_ID</span><span class="p">))</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
-    <span class="n">anion_candidates</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">genetic</span><span class="o">.</span><span class="n">load_data</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_summary.csv&quot;</span><span class="o">.</span>
-                            <span class="nb">format</span><span class="p">(</span><span class="n">model_ID</span><span class="p">))</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">summary</span> <span class="o">=</span> <span class="n">genetic</span><span class="o">.</span><span class="n">load_data</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_summ.csv&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model_ID</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">parent_candidates</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">parent_candidates</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">summary</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">anion_candidates</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">summary</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
     <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Salt ID&quot;</span><span class="p">,</span> <span class="s2">&quot;Salt Smiles&quot;</span><span class="p">,</span> <span class="s2">&quot;Cation Heavy Atoms&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Tanimoto Similarity Score&quot;</span><span class="p">,</span> <span class="s2">&quot;Molecular Relative&quot;</span><span class="p">,</span> <span class="s2">&quot;Anion&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Model Prediction&quot;</span><span class="p">,</span> <span class="s2">&quot;MD Calculation&quot;</span><span class="p">,</span> <span class="s2">&quot;Error&quot;</span><span class="p">]</span>
@@ -268,8 +269,8 @@
         <span class="k">if</span> <span class="n">write_file</span><span class="p">:</span>
             <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">new</span><span class="p">,</span> <span class="n">path_or_buf</span><span class="o">=</span><span class="s2">&quot;salt_log.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="n">salts</span> <span class="o">=</span> <span class="n">new</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">write_file</span><span class="p">:</span></div>
-        <span class="k">return</span> <span class="n">new</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">write_file</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">new</span></div>
 
 
 <span class="k">def</span> <span class="nf">_guess_password</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">anion</span><span class="p">,</span> <span class="n">parent_candidates</span><span class="p">,</span> <span class="n">model_ID</span><span class="p">):</span>
@@ -316,8 +317,8 @@
 <span class="sd">    output models</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">cation</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">genes</span><span class="p">)</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">genetic</span><span class="o">.</span><span class="n">load_data</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">.sav&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model_ID</span><span class="p">),</span> <span class="n">pickleFile</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">deslist</span> <span class="o">=</span> <span class="n">genetic</span><span class="o">.</span><span class="n">load_data</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_descriptors.csv&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model_ID</span><span class="p">))</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">genetic</span><span class="o">.</span><span class="n">load_data</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_qspr.h5&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model_ID</span><span class="p">),</span> <span class="n">h5File</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">deslist</span> <span class="o">=</span> <span class="n">genetic</span><span class="o">.</span><span class="n">load_data</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">_desc.csv&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">model_ID</span><span class="p">))</span>
     <span class="n">feature_vector</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">deslist</span><span class="p">:</span>
@@ -406,7 +407,7 @@
       <script type="text/javascript" src="../../_static/jquery.js"></script>
       <script type="text/javascript" src="../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

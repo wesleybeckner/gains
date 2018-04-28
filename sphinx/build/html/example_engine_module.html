@@ -167,12 +167,12 @@
   <div class="section" id="getting-started">
 <span id="getting-started"></span><h1>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
 <p>Thanks for checking out GAINS!</p>
-<p>We’ll walk through the simplest usage cases for the engine module.</p>
+<p>We&#8217;ll walk through the simplest usage cases for the engine module.</p>
 <div class="section" id="the-engine-module">
 <span id="the-engine-module"></span><h2>The engine module<a class="headerlink" href="#the-engine-module" title="Permalink to this headline">¶</a></h2>
 <p>GAINS operates using the simplified molecular-input line-entry system (<a class="reference external" href="https://en.wikipedia.org/wiki/Simplified_molecular-input_line-entry_system">SMILES</a>). We use this to create the molecular structures (<a class="reference external" href="https://wesleybeckner.github.io/gains/gains.html#gains.engine.Chromosome">Chromosome</a> objects) to be manipulated by the engine.</p>
-<p>Let’s explore the simple case of creating butane from propanol:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gains</span> <span class="kn">as</span> <span class="nn">genetic</span>
+<p>Let&#8217;s explore the simple case of creating butane from propanol:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gains</span> <span class="kn">as</span> <span class="nn">genetic</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
 <span class="n">target</span> <span class="o">=</span> <span class="s2">&quot;CCCC&quot;</span> <span class="c1">#butane smiles</span>
@@ -180,8 +180,8 @@
 </pre></div>
 </div>
 <p>In order to begin manipulating the parent_candidate we have to, at a minimum, define three additional functions to interact with the engine: a fitness function, and two display functions; one for displaying accepted mutations and one for displaying the final result.</p>
-<p>The fitness function is the most important user-defined function to interact with the engine, so we’ll start there. It allows us to plug any desired objective into the engine; whether it be a quantitative structure property relationship (QSPR), an acitivity/toxicity score, or, as in this case, a simple similarity mapping between a target and a starting structure:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">rdkit</span> <span class="kn">import</span> <span class="n">DataStructs</span>
+<p>The fitness function is the most important user-defined function to interact with the engine, so we&#8217;ll start there. It allows us to plug any desired objective into the engine; whether it be a quantitative structure property relationship (QSPR), an acitivity/toxicity score, or, as in this case, a simple similarity mapping between a target and a starting structure:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">rdkit</span> <span class="kn">import</span> <span class="n">DataStructs</span>
 <span class="kn">from</span> <span class="nn">rdkit.Chem.Fingerprints</span> <span class="kn">import</span> <span class="n">FingerprintMols</span>
 <span class="kn">from</span> <span class="nn">rdkit.Chem</span> <span class="kn">import</span> <span class="n">AllChem</span> <span class="k">as</span> <span class="n">Chem</span>
 
@@ -191,15 +191,15 @@
     <span class="k">return</span> <span class="n">DataStructs</span><span class="o">.</span><span class="n">FingerprintSimilarity</span><span class="p">(</span><span class="n">fps</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fps</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="bp">None</span>
 </pre></div>
 </div>
-<p>You can read more of RDKit’s documentation on molecular fingerprint similarity <a class="reference external" href="http://www.rdkit.org/docs/GettingStartedInPython.html#fingerprinting-and-molecular-similarity">here</a>. Briefly, the fingerprinting algorithm identifies and hashes topological paths in the molecule before folding them down to a set density of bits. We exploit this in the engine to give us a fitness score for a candidate we are attempting to mutate towards the target structure.</p>
-<p>The engine doesn’t need to know anything about the target since the fitness function is defined on the user end. To avoid passing the target to and from the engine (and taking up cpu time) we define a helper function:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">fnGetFitness</span><span class="p">(</span><span class="n">genes</span><span class="p">):</span>
+<p>You can read more of RDKit&#8217;s documentation on molecular fingerprint similarity <a class="reference external" href="http://www.rdkit.org/docs/GettingStartedInPython.html#fingerprinting-and-molecular-similarity">here</a>. Briefly, the fingerprinting algorithm identifies and hashes topological paths in the molecule before folding them down to a set density of bits. We exploit this in the engine to give us a fitness score for a candidate we are attempting to mutate towards the target structure.</p>
+<p>The engine doesn&#8217;t need to know anything about the target since the fitness function is defined on the user end. To avoid passing the target to and from the engine (and taking up cpu time) we define a helper function:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">fnGetFitness</span><span class="p">(</span><span class="n">genes</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">get_fitness</span><span class="p">(</span><span class="n">genes</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>This brings us to the last two functions we need to define, the display functions. There is a lot of freedom here to choose what we would like to print to the screen. At a minimum, the engine expects to pass the candidate (Chromosome object) and the current mutation to the display function; and the candidate’s genes (SMILES string), target (int, float, or array), count of the mutation attempts (int), and two additional variables we’ll get into later (the similarity score and corresponding molecular relative to the molecular solution) to the result display function.</p>
-<p>In the following I’ve chosen to print the mutation performed, the fitness score, and the SMILES of the candidate in the display function and the number of atoms and number of mutations in the result display function:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">display</span><span class="p">(</span><span class="n">candidate</span><span class="p">,</span> <span class="n">mutation</span><span class="p">):</span>
+<p>This brings us to the last two functions we need to define, the display functions. There is a lot of freedom here to choose what we would like to print to the screen. At a minimum, the engine expects to pass the candidate (Chromosome object) and the current mutation to the display function; and the candidate&#8217;s genes (SMILES string), target (int, float, or array), count of the mutation attempts (int), and two additional variables we&#8217;ll get into later (the similarity score and corresponding molecular relative to the molecular solution) to the result display function.</p>
+<p>In the following I&#8217;ve chosen to print the mutation performed, the fitness score, and the SMILES of the candidate in the display function and the number of atoms and number of mutations in the result display function:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">display</span><span class="p">(</span><span class="n">candidate</span><span class="p">,</span> <span class="n">mutation</span><span class="p">):</span>
     <span class="k">print</span><span class="p">(</span><span class="s2">&quot;{:&gt;20}{:&gt;15}{:&gt;15}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mutation</span><span class="p">,</span> <span class="s2">&quot;{:3.4f}&quot;</span><span class="o">.</span>
                                   <span class="n">format</span><span class="p">(</span><span class="n">candidate</span><span class="o">.</span><span class="n">Fitness</span><span class="p">),</span>
                                   <span class="n">candidate</span><span class="o">.</span><span class="n">Genes</span><span class="p">))</span>
@@ -215,17 +215,17 @@
 <p>We have just two more items to pass to the engine: the geneSet object and the optimal fitness we are searching for.</p>
 <p>The geneSet object contains the atoms and fragments the engine is allowed to use in any mutation attempt. For now these are hard coded into the engine and may be viewed <a class="reference external" href="https://wesleybeckner.github.io/gains/gains.html#gains.engine.GeneSet">here</a>.</p>
 <p>The optimal fitness in our case is 1 (perfect mapping between candidate and target). But to be thorough we set this by passing the fitness score between the target and itself:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">geneSet</span> <span class="o">=</span> <span class="n">genetic</span><span class="o">.</span><span class="n">generate_geneset</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">geneSet</span> <span class="o">=</span> <span class="n">genetic</span><span class="o">.</span><span class="n">generate_geneset</span><span class="p">()</span>
 <span class="n">optimalFitness</span><span class="p">,</span> <span class="n">prediction</span> <span class="o">=</span> <span class="n">get_fitness</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>We’re now ready to put this all together:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">best</span> <span class="o">=</span> <span class="n">genetic</span><span class="o">.</span><span class="n">get_best</span><span class="p">(</span><span class="n">fnGetFitness</span><span class="p">,</span> <span class="n">optimalFitness</span><span class="p">,</span> <span class="n">geneSet</span><span class="p">,</span>
+<p>We&#8217;re now ready to put this all together:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">best</span> <span class="o">=</span> <span class="n">genetic</span><span class="o">.</span><span class="n">get_best</span><span class="p">(</span><span class="n">fnGetFitness</span><span class="p">,</span> <span class="n">optimalFitness</span><span class="p">,</span> <span class="n">geneSet</span><span class="p">,</span>
                         <span class="n">display</span><span class="p">,</span> <span class="n">result_display</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span>
                         <span class="n">parent_candidates</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="n">starting</span> <span class="n">structure</span>         <span class="mf">0.3333</span>           <span class="n">CCCO</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span>  <span class="n">starting</span> <span class="n">structure</span>         <span class="mf">0.3333</span>           <span class="n">CCCO</span>
  <span class="n">add_custom_fragment</span>         <span class="mf">0.3529</span>         <span class="n">CCCCCO</span>
          <span class="n">remove_atom</span>         <span class="mf">0.4615</span>          <span class="n">CCCCO</span>
          <span class="n">remove_atom</span>         <span class="mf">1.0000</span>           <span class="n">CCCC</span>
@@ -233,8 +233,8 @@
   <span class="n">mutation</span> <span class="n">attempts</span><span class="p">:</span>             <span class="mi">34</span>
 </pre></div>
 </div>
-<p>In this simple example it took 34 mutation attempts to get from “CCCO” (propanol) to “CCCC” (butane); only 3 of which were accepted because they resulted in a higher fitness score than the parent.</p>
-<p>In the next section we’ll go over the different mutations available to the engine.</p>
+<p>In this simple example it took 34 mutation attempts to get from &#8220;CCCO&#8221; (propanol) to &#8220;CCCC&#8221; (butane); only 3 of which were accepted because they resulted in a higher fitness score than the parent.</p>
+<p>In the next section we&#8217;ll go over the different mutations available to the engine.</p>
 </div>
 <div class="section" id="the-mutate-function">
 <span id="the-mutate-function"></span><h2>The mutate function<a class="headerlink" href="#the-mutate-function" title="Permalink to this headline">¶</a></h2>
@@ -249,7 +249,7 @@
 <li>remove_rdkit_fragment</li>
 </ul>
 <p>To understand these sub functions, it is illustrative to look at the <a class="reference external" href="https://wesleybeckner.github.io/gains/_modules/gains/engine.html#generate_geneset">function</a> that generates the geneSet:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="n">atoms</span> <span class="o">=</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">17</span><span class="p">]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span>    <span class="n">atoms</span> <span class="o">=</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">17</span><span class="p">]</span>
     <span class="n">fName</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">RDConfig</span><span class="o">.</span><span class="n">RDDataDir</span><span class="p">,</span> <span class="s1">&#39;FunctionalGroups.txt&#39;</span><span class="p">)</span>
     <span class="n">rdkitFrags</span> <span class="o">=</span> <span class="n">FragmentCatalog</span><span class="o">.</span><span class="n">FragCatParams</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">fName</span><span class="p">)</span>
     <span class="n">customFrags</span> <span class="o">=</span> <span class="n">FragmentCatalog</span><span class="o">.</span><span class="n">FragCatalog</span><span class="p">(</span><span class="n">rdkitFrags</span><span class="p">)</span>
@@ -259,9 +259,9 @@
     <span class="k">return</span> <span class="n">GeneSet</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">rdkitFrags</span><span class="p">,</span> <span class="n">customFrags</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">atoms</span></code> is set according to atomic number: carbon, nitrogen, oxygen, fluorine, boron, phosphorus, sulfur, and chlorine.</p>
-<p><code class="docutils literal notranslate"><span class="pre">rdkitFrags</span></code> is best understood by showing the output from rdkit itself:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">rdkit</span> <span class="kn">import</span> <span class="n">RDConfig</span>
+<p><code class="docutils literal"><span class="pre">atoms</span></code> is set according to atomic number: carbon, nitrogen, oxygen, fluorine, boron, phosphorus, sulfur, and chlorine.</p>
+<p><code class="docutils literal"><span class="pre">rdkitFrags</span></code> is best understood by showing the output from rdkit itself:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">rdkit</span> <span class="kn">import</span> <span class="n">RDConfig</span>
 <span class="kn">from</span> <span class="nn">rdkit.Chem</span> <span class="kn">import</span> <span class="n">FragmentCatalog</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="n">fName</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">RDConfig</span><span class="o">.</span><span class="n">RDDataDir</span><span class="p">,</span> <span class="s1">&#39;FunctionalGroups.txt&#39;</span><span class="p">)</span>
@@ -269,22 +269,22 @@
 <span class="n">rdkitFrags</span><span class="o">.</span><span class="n">GetNumFuncGroups</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">39</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="mi">39</span>
 </pre></div>
 </div>
 <p>The engine is utilizing 39 built-in fragments from RDKit. We can view these fragments individually:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">rdkit.Chem</span> <span class="kn">import</span> <span class="n">Draw</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">rdkit.Chem</span> <span class="kn">import</span> <span class="n">Draw</span>
 <span class="n">Draw</span><span class="o">.</span><span class="n">MolToMPL</span><span class="p">(</span><span class="n">rdkitFrags</span><span class="o">.</span><span class="n">GetFuncGroup</span><span class="p">(</span><span class="mi">38</span><span class="p">))</span>
 </pre></div>
 </div>
 <p><img alt="png" src="_images/example_engine_module_16_0.png" /></p>
 <p>and view all of their smiles strings:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">rdkit</span> <span class="kn">import</span> <span class="n">Chem</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">rdkit</span> <span class="kn">import</span> <span class="n">Chem</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">rdkitFrags</span><span class="o">.</span><span class="n">GetNumFuncGroups</span><span class="p">()):</span>
     <span class="k">print</span><span class="p">(</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolToSmiles</span><span class="p">(</span><span class="n">rdkitFrags</span><span class="o">.</span><span class="n">GetFuncGroup</span><span class="p">(</span><span class="n">i</span><span class="p">)))</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">*</span><span class="p">]</span><span class="n">NC</span><span class="p">(</span><span class="n">C</span><span class="p">)</span><span class="o">=</span><span class="n">O</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">*</span><span class="p">]</span><span class="n">NC</span><span class="p">(</span><span class="n">C</span><span class="p">)</span><span class="o">=</span><span class="n">O</span>
 <span class="p">[</span><span class="o">*</span><span class="p">]</span><span class="n">C</span><span class="p">(</span><span class="o">=</span><span class="n">O</span><span class="p">)</span><span class="n">O</span>
 <span class="p">[</span><span class="o">*</span><span class="p">]</span><span class="n">C</span><span class="p">(</span><span class="o">=</span><span class="n">O</span><span class="p">)</span><span class="n">OC</span>
 <span class="p">[</span><span class="o">*</span><span class="p">]</span><span class="n">C</span><span class="p">(</span><span class="n">C</span><span class="p">)</span><span class="o">=</span><span class="n">O</span>
@@ -326,7 +326,7 @@
 </pre></div>
 </div>
 <p>You can learn more about RDKit fragments <a class="reference external" href="http://www.rdkit.org/docs/GettingStartedInPython.html#molecular-fragments">here</a>. The customFrags will change in future versions of GAINS. For now they are simply substructures of butane:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fName</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">RDConfig</span><span class="o">.</span><span class="n">RDDataDir</span><span class="p">,</span> <span class="s1">&#39;FunctionalGroups.txt&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">fName</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">RDConfig</span><span class="o">.</span><span class="n">RDDataDir</span><span class="p">,</span> <span class="s1">&#39;FunctionalGroups.txt&#39;</span><span class="p">)</span>
 <span class="n">rdkitFrags</span> <span class="o">=</span> <span class="n">FragmentCatalog</span><span class="o">.</span><span class="n">FragCatParams</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">fName</span><span class="p">)</span>
 <span class="n">customFrags</span> <span class="o">=</span> <span class="n">FragmentCatalog</span><span class="o">.</span><span class="n">FragCatalog</span><span class="p">(</span><span class="n">rdkitFrags</span><span class="p">)</span>
 <span class="n">fcgen</span> <span class="o">=</span> <span class="n">FragmentCatalog</span><span class="o">.</span><span class="n">FragCatGenerator</span><span class="p">()</span>
@@ -336,13 +336,13 @@
     <span class="k">print</span><span class="p">(</span><span class="n">customFrags</span><span class="o">.</span><span class="n">GetEntryDescription</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CC</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">CC</span>
 <span class="n">CCC</span>
 <span class="n">CCCC</span>
 </pre></div>
 </div>
-<p>We’ve covered the important information you need to know to get up and running with GAINS. In the next chapter of the series we’ll go over more complex fitness and display functions to take full advantage of the package. For convenience here is the full code of minimal functions we’ve described for interacting with the engine module:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gains</span> <span class="kn">as</span> <span class="nn">genetic</span>
+<p>We&#8217;ve covered the important information you need to know to get up and running with GAINS. In the next chapter of the series we&#8217;ll go over more complex fitness and display functions to take full advantage of the package. For convenience here is the full code of minimal functions we&#8217;ve described for interacting with the engine module:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">gains</span> <span class="kn">as</span> <span class="nn">genetic</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">rdkit</span> <span class="kn">import</span> <span class="n">DataStructs</span>
 <span class="kn">from</span> <span class="nn">rdkit.Chem.Fingerprints</span> <span class="kn">import</span> <span class="n">FingerprintMols</span>
@@ -377,7 +377,7 @@
                         <span class="n">parent_candidates</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="n">starting</span> <span class="n">structure</span>         <span class="mf">0.3333</span>           <span class="n">CCCO</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span>  <span class="n">starting</span> <span class="n">structure</span>         <span class="mf">0.3333</span>           <span class="n">CCCO</span>
          <span class="n">remove_atom</span>         <span class="mf">0.6667</span>            <span class="n">CCC</span>
  <span class="n">add_custom_fragment</span>         <span class="mf">0.7500</span>          <span class="n">CCCCC</span>
          <span class="n">remove_atom</span>         <span class="mf">1.0000</span>           <span class="n">CCCC</span>
@@ -442,7 +442,7 @@
       <script type="text/javascript" src="_static/jquery.js"></script>
       <script type="text/javascript" src="_static/underscore.js"></script>
       <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

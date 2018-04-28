@@ -1,7 +1,7 @@
 *.pyc
 *~
 *.DS_Store
-*-checkpoint.ipynb
+*.ipynb
 .ipynb_checkpoints
 _build/
 scripts/development/
