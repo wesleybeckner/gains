@@ -11,16 +11,26 @@
   </component>
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/gains$test_similarity_maps.coverage" NAME="test_similarity_maps Coverage Results" MODIFIED="1523391678441" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+<<<<<<< HEAD
     <SUITE FILE_PATH="coverage/gains$test_model.coverage" NAME="test_model Coverage Results" MODIFIED="1523717589005" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/gains$test_get_pdb.coverage" NAME="test_get_pdb Coverage Results" MODIFIED="1523392582004" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+=======
+    <SUITE FILE_PATH="coverage/gains$test_model.coverage" NAME="test_model Coverage Results" MODIFIED="1523391985570" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/gains$test_get_pdb.coverage" NAME="test_get_pdb Coverage Results" MODIFIED="1523472769857" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+>>>>>>> master
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file leaf-file-name="engine.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/engine.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="345">
               <caret line="177" column="19" lean-forward="false" selection-start-line="177" selection-start-column="19" selection-end-line="177" selection-end-column="19" />
+=======
+            <state relative-caret-position="2490">
+              <caret line="179" column="41" lean-forward="false" selection-start-line="179" selection-start-column="41" selection-end-line="179" selection-end-column="41" />
+>>>>>>> master
               <folding>
                 <element signature="e#0#64#0" expanded="true" />
               </folding>
@@ -31,8 +41,13 @@
       <file leaf-file-name="salt_generator.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/salt_generator.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="225">
               <caret line="15" column="29" lean-forward="false" selection-start-line="15" selection-start-column="29" selection-end-line="15" selection-end-column="29" />
+=======
+            <state relative-caret-position="2610">
+              <caret line="186" column="32" lean-forward="false" selection-start-line="186" selection-start-column="32" selection-end-line="186" selection-end-column="32" />
+>>>>>>> master
               <folding>
                 <element signature="e#0#64#0" expanded="true" />
               </folding>
@@ -43,7 +58,11 @@
       <file leaf-file-name="test_similarity_maps.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tests/test_similarity_maps.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="420">
+=======
+            <state relative-caret-position="300">
+>>>>>>> master
               <caret line="28" column="0" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
               <folding>
                 <element signature="e#0#64#0" expanded="true" />
@@ -67,6 +86,7 @@
       <file leaf-file-name="test_model.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tests/test_model.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="345">
               <caret line="23" column="18" lean-forward="false" selection-start-line="22" selection-start-column="0" selection-end-line="23" selection-end-column="19" />
               <folding>
@@ -91,6 +111,10 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
               <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+=======
+            <state relative-caret-position="195">
+              <caret line="16" column="72" lean-forward="false" selection-start-line="16" selection-start-column="72" selection-end-line="16" selection-end-column="72" />
+>>>>>>> master
               <folding>
                 <element signature="e#0#64#0" expanded="true" />
               </folding>
@@ -117,6 +141,7 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
+<<<<<<< HEAD
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="y" value="23" />
     <option name="width" value="1440" />
@@ -143,6 +168,13 @@
         </selected-state>
       </profile-state>
     </entry>
+=======
+  <component name="ProjectFrameBounds">
+    <option name="x" value="2400" />
+    <option name="y" value="23" />
+    <option name="width" value="960" />
+    <option name="height" value="1177" />
+>>>>>>> master
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -181,6 +213,11 @@
           <select />
         </subPane>
       </pane>
+<<<<<<< HEAD
+=======
+      <pane id="Scratches" />
+      <pane id="Scope" />
+>>>>>>> master
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -288,6 +325,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
+<<<<<<< HEAD
     <frame x="0" y="23" width="1440" height="810" extended-state="6" />
     <editor active="true" />
     <layout>
@@ -298,6 +336,17 @@
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295562" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295562" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.123032905" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+=======
+    <frame x="2400" y="23" width="960" height="1177" extended-state="0" />
+    <layout>
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33050048" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3295562" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1906318" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+>>>>>>> master
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="SciView" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -325,19 +374,14 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/salt_generator.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2790">
-          <caret line="186" column="32" lean-forward="false" selection-start-line="186" selection-start-column="32" selection-end-line="186" selection-end-column="32" />
-          <folding>
-            <element signature="e#0#64#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+=======
     <entry file="file://$PROJECT_DIR$/engine.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2685">
+        <state relative-caret-position="2490">
           <caret line="179" column="41" lean-forward="false" selection-start-line="179" selection-start-column="41" selection-end-line="179" selection-end-column="41" />
           <folding>
             <element signature="e#0#64#0" expanded="true" />
@@ -345,9 +389,25 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/salt_generator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2610">
+>>>>>>> master
+          <caret line="186" column="32" lean-forward="false" selection-start-line="186" selection-start-column="32" selection-end-line="186" selection-end-column="32" />
+          <folding>
+            <element signature="e#0#64#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+<<<<<<< HEAD
+    <entry file="file://$PROJECT_DIR$/engine.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2685">
+=======
     <entry file="file://$PROJECT_DIR$/tests/test_similarity_maps.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
+        <state relative-caret-position="300">
           <caret line="28" column="0" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
           <folding>
             <element signature="e#0#64#0" expanded="true" />
@@ -357,7 +417,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tests/test_model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
+        <state relative-caret-position="195">
           <caret line="16" column="72" lean-forward="false" selection-start-line="16" selection-start-column="72" selection-end-line="16" selection-end-column="72" />
           <folding>
             <element signature="e#0#64#0" expanded="true" />
@@ -367,7 +427,72 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tests/test_get_pdb.py">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1200">
+          <caret line="90" column="28" lean-forward="false" selection-start-line="90" selection-start-column="28" selection-end-line="90" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#64#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/engine.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2490">
+>>>>>>> master
+          <caret line="179" column="41" lean-forward="false" selection-start-line="179" selection-start-column="41" selection-end-line="179" selection-end-column="41" />
+          <folding>
+            <element signature="e#0#64#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+<<<<<<< HEAD
+    <entry file="file://$PROJECT_DIR$/tests/test_similarity_maps.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+=======
+    <entry file="file://$PROJECT_DIR$/salt_generator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2610">
+          <caret line="186" column="32" lean-forward="false" selection-start-line="186" selection-start-column="32" selection-end-line="186" selection-end-column="32" />
+          <folding>
+            <element signature="e#0#64#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/test_similarity_maps.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+>>>>>>> master
+          <caret line="28" column="0" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#64#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/test_model.py">
+      <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
+        <state relative-caret-position="240">
+=======
+        <state relative-caret-position="195">
+>>>>>>> master
+          <caret line="16" column="72" lean-forward="false" selection-start-line="16" selection-start-column="72" selection-end-line="16" selection-end-column="72" />
+          <folding>
+            <element signature="e#0#64#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/test_get_pdb.py">
+      <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="1350">
+=======
+        <state relative-caret-position="1200">
+>>>>>>> master
           <caret line="90" column="28" lean-forward="false" selection-start-line="90" selection-start-column="28" selection-end-line="90" selection-end-column="28" />
           <folding>
             <element signature="e#0#64#0" expanded="true" />
@@ -407,8 +532,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tests/test_similarity_maps.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="420">
           <caret line="28" column="0" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+=======
+        <state relative-caret-position="195">
+          <caret line="16" column="72" lean-forward="false" selection-start-line="16" selection-start-column="72" selection-end-line="16" selection-end-column="72" />
+>>>>>>> master
           <folding>
             <element signature="e#0#64#0" expanded="true" />
           </folding>
@@ -417,8 +547,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/engine.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="345">
           <caret line="177" column="19" lean-forward="false" selection-start-line="177" selection-start-column="19" selection-end-line="177" selection-end-column="19" />
+=======
+        <state relative-caret-position="2490">
+          <caret line="179" column="41" lean-forward="false" selection-start-line="179" selection-start-column="41" selection-end-line="179" selection-end-column="41" />
+>>>>>>> master
           <folding>
             <element signature="e#0#64#0" expanded="true" />
           </folding>
@@ -427,6 +562,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tests/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
@@ -437,6 +573,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+=======
+        <state relative-caret-position="300">
+          <caret line="28" column="0" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+>>>>>>> master
           <folding>
             <element signature="e#0#64#0" expanded="true" />
           </folding>
@@ -445,8 +585,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/salt_generator.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="225">
           <caret line="15" column="29" lean-forward="false" selection-start-line="15" selection-start-column="29" selection-end-line="15" selection-end-column="29" />
+=======
+        <state relative-caret-position="2610">
+          <caret line="186" column="32" lean-forward="false" selection-start-line="186" selection-start-column="32" selection-end-line="186" selection-end-column="32" />
+>>>>>>> master
           <folding>
             <element signature="e#0#64#0" expanded="true" />
           </folding>

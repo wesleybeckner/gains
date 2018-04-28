@@ -32,6 +32,10 @@ To take full advantage of rdkit you will also need Matplotlib >= 1.3.1.
 You will first need to install [rdkit](http://www.rdkit.org/docs/GettingStartedInPython.html):
 ```
 conda create -n py36 python=3.6 anaconda
+# activate the new virtual environment, e.g. on OSX/Linux
+source activate py36
+# on Windows
+# activate py36
 conda install -c rdkit rdkit
 ```
 
