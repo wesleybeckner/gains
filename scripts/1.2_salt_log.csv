@@ -1,0 +1,10 @@
+Salt ID,Salt Smiles,Cation Heavy Atoms,Tanimoto Similarity Score,Molecular Relative,Anion,Model Prediction,MD Calculation,Error
+C01_A01,CCC[NH+]1C=CN(Cc2ccccc2)C1.CCCCCCCCOS(=O)(=O)[O-],15,0.8232758620689655,1-benzyl-3-methyl-1H-imidazolium,octyl sulfate,[  980.0    1028.76],"761.02, 1081.21","[28.77, 4.85]"
+C03_A03,CCCC(CCCP)CCC[NH+]1CCCC(C)C1.O=S(=O)([N-]S(=O)(=O)C(F)(F)F)C(F)(F)F,18,0.6153846153846154,"N,N,N-triethyldodecan-1-aminium",bis(trifluoromethylsulfonyl)imide,[  781.96  1208.65],"750.80, 1264.40","[4.15, 4.41]"
+C01_A01,CCCCCCCCCCn1cc[n+](CN)c1.O=S(=O)([N-]S(=O)(=O)C(F)(F)F)C(F)(F)F,17,0.8072289156626506,1-butyl-3-methylimidazolium,bis(trifluoromethylsulfonyl)imide,[  621.67  1385.55],"602.92, 1343.89","[3.11, 3.1]"
+C04_A04,CCCCn1cc[n+](CP)c1.O=S(=O)([N-]S(=O)(=O)C(F)(F)F)C(F)(F)F,11,0.8535031847133758,1-butyl-3-methylimidazolium,bis(trifluoromethylsulfonyl)imide,[  634.27  1383.61],"605.25, 1385.28","[4.79, 0.12]"
+C05_A05,CCCCC[n+]1ccccc1C.O=S(=O)([N-]S(=O)(=O)C(F)(F)F)C(F)(F)F,12,0.8074534161490683,1-ethyl-2-methylpyridinium,bis(trifluoromethylsulfonyl)imide,[  626.39  1395.58],"609.53, 1454.36","[2.77, 4.04]"
+C01_A01,PCCCC[n+]1ccccc1.O=C([O-])C(F)(F)F,11,0.8981481481481481,1-butylpyridinium,trifluoroacetate,[  436.06  1203.69],"433.43, 1215.41","[0.61, 0.96]"
+C03_A03,CCCCC(CCCCCn1cc[n+](C)c1)NC.O=S(=O)([N-]S(=O)(=O)C(F)(F)F)C(F)(F)F,18,0.8217821782178217,1-methyl-3-octyl-1H-imidazol-3-ium,bis(trifluoromethylsulfonyl)imide,[  805.55  1247.81],"782.28, 1268.55","[2.97, 1.63]"
+C06_A06,CCCCCC(CCCCn1cc[n+](C)c1)NC.O=S(=O)([N-]S(=O)(=O)C(F)(F)F)C(F)(F)F,18,0.8019323671497585,1-methyl-3-octyl-1H-imidazol-3-ium,bis(trifluoromethylsulfonyl)imide,[  804.76  1249.16],"782.77, 1265.75","[2.81, 1.31]"
+C01_A01,CC(CCS)Cn1cc[n+](C)c1.[O-]c1ccccc1,12,0.8589743589743589,1-butyl-3-methylimidazolium,phenolate,[  376.8   1183.93],"484.15, 1088.49","[22.17, 8.77]"

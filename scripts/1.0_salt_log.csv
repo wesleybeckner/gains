@@ -1,0 +1,8 @@
+Salt ID,Salt Smiles,Cation Heavy Atoms,Tanimoto Similarity Score,Molecular Relative,Anion,Model Prediction,MD Calculation,Error
+C01_A01,CCCCCCCCN1CCN(CCCC)C1.NCCS(O)(O)O,17,0.5730337078651685,"N,N,N-triethyldodecan-1-aminium",tetrafluoroborate,[  974.96  1108.4 ],"718.63, 1045.30","[35.67, 6.04]"
+C02_A02,CCCCCCCCCCN1CCN(CC)C1.NCCS(O)(O)O,17,0.5730337078651685,"N,N,N-triethyldodecan-1-aminium",dicyanamide,[  995.6   1103.04],"769.82, 1045.13","[29.33, 5.54]"
+C01_A01,NCC1CCN(CCCCCCS)CC1.OS(O)(NS(O)(O)C(F)(F)F)C(F)(F)F,15,0.6419753086419753,1-butyl-1-methylpiperidinium,methanesulfonate,[  690.35  1588.86],"658.78, 1420.76","[4.79, 11.83]"
+C02_A02,NCC1CCCN(CCCCCCS)C1.OS(O)(NS(O)(O)C(F)(F)F)C(F)(F)F,15,0.5638297872340425,1-butyl-1-methylpiperidinium,diethylphosphate,[  692.82  1590.73],"618.29, 1423.17","[12.05, 11.77]"
+C03_A03,NCCCCCCN1CCC(CN)CC1.OS(O)(NS(O)(O)C(F)(F)F)C(F)(F)F,15,0.68,1-butyl-1-methylpiperidinium,iodide,[  724.04  1575.81],"622.70, 1412.82","[16.27, 11.54]"
+C01_A01,CN1CCN(CCCCCCCCCCP)C1.OS(O)(NS(O)(O)C(F)(F)F)C(F)(F)F,17,0.5578947368421052,"N,N,N-triethyldodecan-1-aminium",L-cysteinate,[ 1085.27  1514.25],"750.10, 1285.36","[44.68, 17.81]"
+C02_A02,CCCCCCCCCCCCN1CCN(C)C1.OS(O)(NS(O)(O)C(F)(F)F)C(F)(F)F,18,0.5730337078651685,"N,N,N-triethyldodecan-1-aminium",trifluoroacetate,[ 1193.36  1492.26],"775.38, 1278.20","[53.91, 16.75]"

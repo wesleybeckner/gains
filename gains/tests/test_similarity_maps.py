@@ -29,6 +29,7 @@ class GuessIonTests(unittest.TestCase):
 
     def test_1_similarity_map(self):
         df = self.parent_candidates
+        random.seed(1234)
         ohPickMe = random.sample(range(df.shape[0]), 1)
         target = df[ohPickMe[0]]
         self.guess_password(target)
