@@ -14,7 +14,8 @@ import random
 
 
 def generate_solvent(target, model_ID, heavy_atom_limit=50,
-                     sim_bounds=[0.4, 1.0], hits=1, write_file=False):
+                     sim_bounds=[0.4, 1.0], hits=1, write_file=False,
+                     seed=None):
     """
     the primary public function of the salt_generator module
 
@@ -63,9 +64,12 @@ def generate_solvent(target, model_ID, heavy_atom_limit=50,
     salts = pd.DataFrame(columns=cols)
     for i in range(1, hits + 1):
         while True:
+            if seed:
+                random.seed(seed)
             anion_smiles = random.sample(list(anion_candidates), 1)[0]
             anion = Chem.MolFromSmiles(anion_smiles)
-            best = _guess_password(target, anion, parent_candidates, model_ID)
+            best = _guess_password(target, anion, parent_candidates, model_ID,
+                                   seed=seed)
             tan_sim_score, sim_index =\
                 genetic.molecular_similarity(best, parent_candidates)
             cation_heavy_atoms = best.Mol.GetNumAtoms()
@@ -117,7 +121,7 @@ def generate_solvent(target, model_ID, heavy_atom_limit=50,
         return new
 
 
-def _guess_password(target, anion, parent_candidates, model_ID):
+def _guess_password(target, anion, parent_candidates, model_ID, seed=None):
     """
     for interacting with the main engine. Contains helper functions
     to pass to the engine what it expects
@@ -137,9 +141,10 @@ def _guess_password(target, anion, parent_candidates, model_ID):
 
     optimalFitness = 0.99
     geneSet = genetic.generate_geneset()
-    best = genetic.get_best(fnGetFitness,
+    if seed:
+        best = genetic.get_best(fnGetFitness,
                             optimalFitness, geneSet, fndisplay,
-                            fnShowIon, target, parent_candidates)
+                            fnShowIon, target, parent_candidates, seed=seed)
     return best
 
 

@@ -45,7 +45,8 @@ class GuessIonTests(unittest.TestCase):
         optimalFitness = 0.8
         best = genetic.get_best(fnGetFitness, optimalFitness,
                                 self.geneSet, fnDisplay,
-                                fnShowIon, target, self.parent_candidates)
+                                fnShowIon, target, self.parent_candidates,
+                                seed=123)
         cation = best.Mol
         anion = self.anion
         # Uncomment PDB lines to wrote PDB file
