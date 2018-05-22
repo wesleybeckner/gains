@@ -6,8 +6,8 @@ import unittest
 class GuessIonTests(unittest.TestCase):
 
     def test_1_model(self):
-        target = [1000, 1000]
-        model_ID = ["cpt", "density"]
+        target = [1000]
+        model_ID = ["density"]
         generate_solvent(target, model_ID, heavy_atom_limit=300)
 
 
