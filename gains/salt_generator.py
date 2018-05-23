@@ -142,9 +142,9 @@ def _guess_password(target, anion, parent_candidates, model_ID, seed=None):
     optimalFitness = 0.99
     geneSet = genetic.generate_geneset()
     if seed:
-        best = genetic.get_best(fnGetFitness,
-                            optimalFitness, geneSet, fndisplay,
-                            fnShowIon, target, parent_candidates, seed=seed)
+        best = genetic.get_best(fnGetFitness, optimalFitness, geneSet,
+                                fndisplay, fnShowIon, target,
+                                parent_candidates, seed=seed)
     return best
 
 
