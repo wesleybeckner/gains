@@ -18,7 +18,7 @@ class GuessIonTests(unittest.TestCase):
         optimalFitness, prediction = get_fitness(target, target)
         genetic.get_best(fnGetFitness, optimalFitness, geneSet,
                          display, result_display, target,
-                         parent_candidates)
+                         parent_candidates, seed=123)
 
     def test_benchmark(self):
         genetic.Benchmark.run(self.test_1_model)

@@ -15,7 +15,7 @@ import random
 
 def generate_solvent(target, model_ID, heavy_atom_limit=50,
                      sim_bounds=[0.4, 1.0], hits=1, write_file=False,
-                     parent_candidates=None):
+                     seed=None):
     """
     the primary public function of the salt_generator module
 
@@ -46,20 +46,30 @@ def generate_solvent(target, model_ID, heavy_atom_limit=50,
         a log file of the solution(s). if write_file = True the
         function will also return pdb files of the cations/anions
     """
-
-    summary = genetic.load_data("{}_summ.csv".format(model_ID))
-    if parent_candidates is None:
-        parent_candidates = eval(summary.iloc[1][1])
-    anion_candidates = eval(summary.iloc[2][1])
+    parent_candidates = []
+    anion_candidates = []
+    for i, name in enumerate(model_ID):
+        summary = genetic.load_data("{}_summ.csv".format(name))
+        parents = eval(summary.iloc[1][1])
+        anions = eval(summary.iloc[2][1])
+        if i > 0:
+            parent_candidates = np.concatenate((parents, parent_candidates))
+            anion_candidates = np.concatenate((anions, anion_candidates))
+        else:
+            parent_candidates = parents
+            anion_candidates = anions
     cols = ["Salt ID", "Salt Smiles", "Cation Heavy Atoms",
             "Tanimoto Similarity Score", "Molecular Relative", "Anion",
             "Model Prediction", "MD Calculation", "Error"]
     salts = pd.DataFrame(columns=cols)
     for i in range(1, hits + 1):
         while True:
+            if seed:
+                random.seed(seed)
             anion_smiles = random.sample(list(anion_candidates), 1)[0]
             anion = Chem.MolFromSmiles(anion_smiles)
-            best = _guess_password(target, anion, parent_candidates, model_ID)
+            best = _guess_password(target, anion, parent_candidates, model_ID,
+                                   seed=seed)
             tan_sim_score, sim_index =\
                 genetic.molecular_similarity(best, parent_candidates)
             cation_heavy_atoms = best.Mol.GetNumAtoms()
@@ -111,7 +121,7 @@ def generate_solvent(target, model_ID, heavy_atom_limit=50,
         return new
 
 
-def _guess_password(target, anion, parent_candidates, model_ID):
+def _guess_password(target, anion, parent_candidates, model_ID, seed=None):
     """
     for interacting with the main engine. Contains helper functions
     to pass to the engine what it expects
@@ -131,9 +141,10 @@ def _guess_password(target, anion, parent_candidates, model_ID):
 
     optimalFitness = 0.99
     geneSet = genetic.generate_geneset()
-    best = genetic.get_best(fnGetFitness,
-                            optimalFitness, geneSet, fndisplay,
-                            fnShowIon, target, parent_candidates)
+    if seed:
+        best = genetic.get_best(fnGetFitness, optimalFitness, geneSet,
+                                fndisplay, fnShowIon, target,
+                                parent_candidates, seed=seed)
     return best
 
 
@@ -150,39 +161,43 @@ def _display(candidate, mutation, startTime):
 def _get_fitness(anion, genes, target, model_ID):
     """
     the fitness function passed to the engine. In this case fitness
-    is determined by a model developed by the salty module. It is
-    important to note that the fitness function can handle multi-
-    output models
+    is determined by a model developed by the salty module.
+    The fitness function can handle multi-output models
     """
-    cation = Chem.MolFromSmiles(genes)
-    model = genetic.load_data("{}_qspr.h5".format(model_ID), h5File=True)
-    deslist = genetic.load_data("{}_desc.csv".format(model_ID))
-    feature_vector = []
+    predictions = []
+    for i, name in enumerate(model_ID):
+        cation = Chem.MolFromSmiles(genes)
+        model = genetic.load_data("{}_qspr.h5".format(name), h5File=True)
+        deslist = genetic.load_data("{}_desc.csv".format(name))
+        feature_vector = []
 
-    for item in deslist:
+        for item in deslist:
 
-        if "anion" in item:
-            with genetic.suppress_rdkit_sanity():
-                feature_vector.append(calculator([item.partition('-')
-                                      [0]]).CalcDescriptors(anion)[0])
-        elif "cation" in item:
-            with genetic.suppress_rdkit_sanity():
-                feature_vector.append(calculator([item.partition('-')
-                                      [0]]).CalcDescriptors(cation)[0])
-        elif "Temperature, K" in item:
-            feature_vector.append(298.15)
-        elif "Pressure, kPa" in item:
-            feature_vector.append(101.325)
-        else:
-            print("unknown descriptor in list: %s" % item)
-    features_normalized = (feature_vector - deslist.iloc[0].values) /\
-        deslist.iloc[1].values
-    prediction = np.round(np.exp(model.predict(np.array(features_normalized).
-                          reshape(1, -1))[0]), decimals=2)
-    error = abs((prediction - target) / target)
+            if "anion" in item:
+                with genetic.suppress_rdkit_sanity():
+                    feature_vector.append(calculator([item.partition('-')
+                                          [0]]).CalcDescriptors(anion)[0])
+            elif "cation" in item:
+                with genetic.suppress_rdkit_sanity():
+                    feature_vector.append(calculator([item.partition('-')
+                                          [0]]).CalcDescriptors(cation)[0])
+            elif "Temperature, K" in item:
+                feature_vector.append(298.15)
+            elif "Pressure, kPa" in item:
+                feature_vector.append(101.325)
+            else:
+                print("unknown descriptor in list: %s" % item)
+        features_normalized = (feature_vector - deslist.iloc[0].values) /\
+            deslist.iloc[1].values
+        prediction = np.round(np.exp(model.predict(np.array(
+                              features_normalized).reshape(1, -1))[0]),
+                              decimals=2)
+        predictions.append(prediction[0])
+    predictions = np.array(predictions)
+    error = abs((predictions - target) / target)
     error = np.average(error)
 
-    return 1 - error, prediction
+    return 1 - error, predictions
 
 
 def _show_ion(genes, target, mutation_attempts, sim_score, molecular_relative,
