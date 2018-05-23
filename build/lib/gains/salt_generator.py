@@ -77,8 +77,8 @@ def generate_solvent(target, model_ID, heavy_atom_limit=50,
                 random.seed(seed)
             anion_smiles = random.sample(list(anion_candidates), 1)[0]
             anion = Chem.MolFromSmiles(anion_smiles)
-            best = _guess_password(target, anion, parent_candidates, models,
-                                   deslists, seed=seed)
+            best = _guess_password(target, anion_smiles, parent_candidates,
+                                   models, deslists, seed=seed)
             tan_sim_score, sim_index =\
                 genetic.molecular_similarity(best, parent_candidates)
             cation_heavy_atoms = best.Mol.GetNumAtoms()
@@ -131,13 +131,14 @@ def generate_solvent(target, model_ID, heavy_atom_limit=50,
         return new
 
 
-def _guess_password(target, anion, parent_candidates, models, deslists,
+def _guess_password(target, anion_smiles, parent_candidates, models, deslists,
                     seed=None):
     """
     for interacting with the main engine. Contains helper functions
     to pass to the engine what it expects
     """
     startTime = datetime.datetime.now()
+    anion = Chem.MolFromSmiles(anion_smiles)
 
     def fnGetFitness(genes):
         return _get_fitness(anion, genes, target, models, deslists)
@@ -148,7 +149,7 @@ def _guess_password(target, anion, parent_candidates, models, deslists,
     def fnShowIon(genes, target, mutation_attempts, sim_score,
                   molecular_relative):
         _show_ion(genes, target, mutation_attempts, sim_score,
-                  molecular_relative, models, deslists, anion)
+                  molecular_relative, models, deslists, anion_smiles)
 
     optimalFitness = 0.99
     geneSet = genetic.generate_geneset()
@@ -218,21 +219,21 @@ def _get_fitness(anion, genes, target, models, deslists):
 
 
 def _show_ion(genes, target, mutation_attempts, sim_score, molecular_relative,
-              models, deslists, anion):
+              models, deslists, anion_smiles):
     """
     for printing results to the screen. _show_ion is called when a candidate
     has achieved the desired fitness core and is returned by the engine
     """
     mol = Chem.MolFromSmiles(genes)
+    anion = Chem.MolFromSmiles(anion_smiles)
     fitness, mol_property = _get_fitness(anion, genes, target,
                                          models, deslists)
-    anion_smiles = Chem.MolToSmiles(anion)
     anion_name = salty.check_name(anion_smiles)
     print("{}\t{}".format("Salt Smiles: ", genes))
     print("{}\t{}".format("Cation Heavy Atoms: ", mol.GetNumAtoms()))
     print("Tanimoto Similarity Score: \t{0:10.3f}".format(sim_score))
     print("{}\t{}".format("Molecular Relative: ",
-                            salty.check_name(molecular_relative)))
+                          salty.check_name(molecular_relative)))
     print("{}\t{}".format("Anion: ", anion_name))
     print("{}\t{}".format("Model Prediction: ", mol_property))
     print("{}\t{}".format("Mutation Attempts: ", mutation_attempts))

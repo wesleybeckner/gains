@@ -77,8 +77,8 @@ def generate_solvent(target, model_ID, heavy_atom_limit=50,
                 random.seed(seed)
             anion_smiles = random.sample(list(anion_candidates), 1)[0]
             anion = Chem.MolFromSmiles(anion_smiles)
-            best = _guess_password(target, anion_smiles, parent_candidates, models,
-                                   deslists, seed=seed)
+            best = _guess_password(target, anion_smiles, parent_candidates,
+                                   models, deslists, seed=seed)
             tan_sim_score, sim_index =\
                 genetic.molecular_similarity(best, parent_candidates)
             cation_heavy_atoms = best.Mol.GetNumAtoms()
@@ -139,6 +139,7 @@ def _guess_password(target, anion_smiles, parent_candidates, models, deslists,
     """
     startTime = datetime.datetime.now()
     anion = Chem.MolFromSmiles(anion_smiles)
+
     def fnGetFitness(genes):
         return _get_fitness(anion, genes, target, models, deslists)
 
@@ -232,7 +233,7 @@ def _show_ion(genes, target, mutation_attempts, sim_score, molecular_relative,
     print("{}\t{}".format("Cation Heavy Atoms: ", mol.GetNumAtoms()))
     print("Tanimoto Similarity Score: \t{0:10.3f}".format(sim_score))
     print("{}\t{}".format("Molecular Relative: ",
-                            salty.check_name(molecular_relative)))
+                          salty.check_name(molecular_relative)))
     print("{}\t{}".format("Anion: ", anion_name))
     print("{}\t{}".format("Model Prediction: ", mol_property))
     print("{}\t{}".format("Mutation Attempts: ", mutation_attempts))
