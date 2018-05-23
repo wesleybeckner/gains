@@ -24,7 +24,7 @@ This GA uses RDKit to search molecular structure
 
 
 def get_best(get_fitness, optimalFitness, geneSet, display,
-             show_ion, target, parent_candidates):
+             show_ion, target, parent_candidates, seed=None):
     """
     the primary public function of the engine
 
@@ -65,7 +65,8 @@ def get_best(get_fitness, optimalFitness, geneSet, display,
     """
     mutation_attempts = 0
     attempts_since_last_adoption = 0
-    random.seed()
+    if seed:
+        random.seed(seed)
     bestParent = _generate_parent(parent_candidates, get_fitness)
     display(bestParent, "starting structure")
     if bestParent.Fitness >= optimalFitness:
@@ -390,7 +391,7 @@ def _mutate(parent, geneSet, get_fitness, target):
         Chem.SanitizeMol(childGenes.RWMol)
         genes = Chem.MolToSmiles(childGenes.RWMol)
         if "." in genes:
-            raise
+            return Chromosome(parent.Genes, 0), mutation
         fitness, prediction = get_fitness(genes)
         return Chromosome(genes, fitness), mutation
     except BaseException:

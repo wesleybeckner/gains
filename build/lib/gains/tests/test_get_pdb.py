@@ -17,7 +17,7 @@ class GuessIonTests(unittest.TestCase):
     parent_candidates = df['smiles'].unique()
     df = salty.load_data("anionInfo.csv")
     df = df['smiles'].unique()
-    random.seed(123)
+    random.seed(1234)
     ohPickMe = random.sample(range(df.shape[0]), 1)
     anion = Chem.MolFromSmiles(df[ohPickMe[0]])
 
@@ -42,10 +42,11 @@ class GuessIonTests(unittest.TestCase):
             show_ion(genes, target, mutation_attempts, sim_score,
                      molecular_relative, self.anion)
 
-        optimalFitness = 0.8
+        optimalFitness = 0.9
         best = genetic.get_best(fnGetFitness, optimalFitness,
                                 self.geneSet, fnDisplay,
-                                fnShowIon, target, self.parent_candidates)
+                                fnShowIon, target, self.parent_candidates,
+                                seed=123)
         cation = best.Mol
         anion = self.anion
         # Uncomment PDB lines to wrote PDB file

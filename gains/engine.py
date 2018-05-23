@@ -391,7 +391,7 @@ def _mutate(parent, geneSet, get_fitness, target):
         Chem.SanitizeMol(childGenes.RWMol)
         genes = Chem.MolToSmiles(childGenes.RWMol)
         if "." in genes:
-            raise
+            return Chromosome(parent.Genes, 0), mutation
         fitness, prediction = get_fitness(genes)
         return Chromosome(genes, fitness), mutation
     except BaseException:

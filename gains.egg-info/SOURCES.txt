@@ -11,14 +11,13 @@ gains.egg-info/requires.txt
 gains.egg-info/top_level.txt
 gains/data/cpt_density_desc.csv
 gains/data/cpt_density_qspr.h5
-gains/data/cpt_density_qspr.sav
 gains/data/cpt_density_summ.csv
-gains/data/cpt_qspr.sav
+gains/data/cpt_desc.csv
+gains/data/cpt_qspr.h5
+gains/data/cpt_summ.csv
 gains/data/density_desc.csv
 gains/data/density_qspr.h5
-gains/data/density_qspr.sav
 gains/data/density_summ.csv
-gains/data/viscosity_qspr.sav
 gains/tests/__init__.py
 gains/tests/test_get_pdb.py
 gains/tests/test_model.py
