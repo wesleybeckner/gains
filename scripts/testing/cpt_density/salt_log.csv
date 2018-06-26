@@ -1,0 +1,12 @@
+Salt ID,Salt Smiles,Cation Heavy Atoms,Tanimoto Similarity Score,Molecular Relative,Anion,Model Prediction,MD Calculation,Error
+C01_A01,CCCC(CC)CC(C)([SH](N)[NH3+])[SH](F)(F)(F)C1CC1O.O=S(=O)([O-])C(F)(F)C(F)F,20,0.52,1-butyl-3-methylimidazolium,"1,1,2,2-tetrafluoroethane-1-sulfonate",[  792.28997803  1222.77001953],,
+C02_A02,CCCCNc1cn(CC)c(NC(C)CC)[n+]1C.N#C[N-]C#N,18,0.5450819672131147,1-butyl-3-methylimidazolium,dicyanamide,[  831.42999268  1217.45996094],,
+C03_A03,CCC(C)CCP([n+]1cc(N)cc(F)c1)C(F)(F)F.CC(=O)[O-],19,0.515625,N-methylpyrrolidone,acetate,[  844.          1248.60998535],,
+C04_A04,CC[SH](F)(F)(F)C(N)C([NH3+])F.[NH3+]C(CCC(=O)[O-])C(=O)[O-],11,0.4956521739130435,(3-aminopropyl)tributylphosphonium,(S)-2-amino-4-carboxybutanoate,[  854.5300293   1220.88000488],,
+C05_A05,CCC(C)CC[P+](C)(CCC#CC(C)(C)C)N=NO.CC(CC(C)(C)C)CP(=O)([O-])CC(C)CC(C)(C)C,19,0.5172413793103449,(3-aminopropyl)tributylphosphonium,"bis(2,4,4-trimethylpentyl)phosphinate",[  862.90002441  1179.93994141],,
+C06_A06,CC(CC(N)(F)F)B(F)[PH3+].CCCCP(=O)([O-])[O-],10,0.5166666666666667,2-hydroxy-N-(2-hydroxyethyl)-N-methylethanaminium,butylphosphonate,[  813.82000732  1224.58996582],,
+C07_A07,CCC(C)CC(=CC(F)[NH+](C)F)C(F)(F)CC.CC(C)C(N)C(=O)[O-],17,0.5206611570247934,1-ethylpyridinium,L-valinate,[  830.15002441  1248.39001465],,
+C08_A08,CCS[NH2+]C(N)CC(F)(F)F.CCC(=O)[O-],11,0.5087719298245614,2-hydroxy-N-(2-hydroxyethyl)-N-methylethanaminium,propionate,[  815.33001709  1247.18005371],,
+C09_A09,CC(F)PSS(N)([NH3+])NN.CCCC(=O)[O-],10,0.49122807017543857,butyltrimethylammonium,butanoate,[  813.14001465  1109.31005859],,
+C10_A10,CCCCC(C)CCB[N+](C)CC(C)CCCF.CCCCC(=O)[O-],18,0.48672566371681414,N-methylpyrrolidone,pentanoate,[  822.66998291  1171.51000977],,
+C11_A11,C#C[SH](CC(C)CC)[n+]1c(CCF)c[nH]c1N.CC(=O)[O-],17,0.5201612903225806,1-isobutyl-3-methylimidazolium,acetate,[  857.60998535  1203.18005371],,

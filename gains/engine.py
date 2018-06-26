@@ -3,13 +3,14 @@ from os.path import dirname, join
 import pandas as pd
 import numpy as np
 from scipy.spatial import ConvexHull
-from numpy.linalg import norm
+from sklearn.preprocessing import MinMaxScaler
 from keras.models import load_model
 from rdkit import RDConfig
 from rdkit.Chem import FragmentCatalog
 from rdkit.Chem import AllChem as Chem
 from rdkit.Chem.Fingerprints import FingerprintMols
 from rdkit import DataStructs
+from math import sqrt
 import os
 import statistics
 import time
@@ -28,7 +29,7 @@ This GA uses RDKit to search molecular structure
 
 def get_best(get_fitness, optimalFitness, geneSet, display,
              show_ion, target, parent_candidates, seed=None,
-             convex_strategy=None):
+             convex_strategy=None, simplex=None):
     """
     the primary public function of the engine
 
@@ -82,9 +83,9 @@ def get_best(get_fitness, optimalFitness, geneSet, display,
         mutation_attempts += 1
         attempts_since_last_adoption += 1
 
-        if attempts_since_last_adoption > 1000:
-            if convex_strategy is not None and parents_sampled > 25:
-                target = convex_search(convex_strategy)
+        if attempts_since_last_adoption > 10:
+            if convex_strategy is not None and parents_sampled > 0:
+                target = convex_search(convex_strategy, simplex)
                 print("assigning new target: {}".format(target))
             child = _generate_parent(parent_candidates, get_fitness)
             attempts_since_last_adoption = 0
@@ -104,36 +105,60 @@ def get_best(get_fitness, optimalFitness, geneSet, display,
         bestParent = child
 
 
-def convex_search(to_hull, minimum_distance=10, maximum_distance=None):
+def convex_search(data, simplex_id, constraints=[0, 1], inner=True):
     """
-    Returns a target for the genetic algorithm that is within
-    the convex hull of the training data
+    need to make sure the minimum distance applies to all simplexes!!!
+    then lets wrap this puppy bad boy up and compute some targets
+    add to the genetic engine (replace/update convex_search)
     """
-    hull = ConvexHull(to_hull)
-    while True:  # sample target within the convex hull
-        p3 = np.array([np.random.randint(min(to_hull.iloc[:, 0]),
-                                         max(to_hull.iloc[:, 0])),
-                       np.random.randint(min(to_hull.iloc[:, 0]),
-                                         max(to_hull.iloc[:, 0]))])
-        new_hull = ConvexHull(np.append([p3], np.array(to_hull), axis=0))
-        if hull.area >= new_hull.area:
-            d = []  # now check minimum distance to edge
-            for simplex in hull.simplices:
-                """
-                Let P1=(x1,y1), P2=(x2,y2) and P3=(x3,y3)
-                """
-                x1, x2 = to_hull.iloc[simplex, 1]
-                y1, y2 = to_hull.iloc[simplex, 0]
-                p1 = np.array([x1, y1])
-                p2 = np.array([x2, y2])
-                d.append(abs(np.cross(p2 - p1, p3 - p1) / norm(p2 - p1)))
-            if min(d) > minimum_distance:
-                if maximum_distance:
-                    if min(d) < maximum_distance:
-                        break
-                else:
-                    break
-    return p3
+
+    def _grab_candidate(data, hull, simplex, constraints, inner=inner):
+        """
+        randomly selects candidate and checks w/in min/max of user defined
+        boundaries from the hull
+        """
+        x1, x2 = data[simplex, 0]
+        y1, y2 = data[simplex, 1]
+        m = (y2 - y1) / (x2 - x1)  # slope
+        b = y2 - (x2 * m)  # intercept
+        while True:
+            x3 = random.random()
+            y3 = random.random()
+            distance = float(abs(m * x3 - y3 + b)) / float(sqrt(m ** 2 + 1))
+            new_hull = ConvexHull(np.append(np.array([[x3, y3]]), data, axis=0))
+            if inner and hull.area >= new_hull.area and constraints[
+                1] > distance > constraints[0]:
+                return x3, y3
+
+    def _check_minimum_distances(data, hull, x3, y3, constraints):
+        """
+        checks to see whether the candidate data point is more than
+        the minimum distance from any of the boundaries
+        """
+        distances = []
+        for simplex_all in hull.simplices:
+            x1_a, x2_a = data[simplex_all, 0]
+            y1_a, y2_a = data[simplex_all, 1]
+            m_a = (y2_a - y1_a) / (x2_a - x1_a)  # slope
+            b_a = y2_a - (x2_a * m_a)  # intercept
+            distances.append(
+                float(abs(m_a * x3 - y3 + b_a)) / float(sqrt(m_a ** 2 + 1)))
+        if any(i < constraints[0] for i in distances):
+            return True
+        else:
+            return None
+
+    instance = MinMaxScaler()
+    data = instance.fit_transform(data)
+    hull = ConvexHull(data)
+    simplex = hull.simplices[simplex_id]
+    while True:
+        x3, y3 = _grab_candidate(data, hull, simplex, constraints, inner=inner)
+        check_pass = _check_minimum_distances(data, hull, x3, y3, constraints)
+        if not check_pass:
+            break
+    values = instance.inverse_transform([[x3, y3]])
+    return values[0][0], values[0][1]
 
 
 def molecular_similarity(best, parent_candidates, all=False):

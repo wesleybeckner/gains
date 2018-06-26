@@ -1,6 +1,9 @@
 from __future__ import absolute_import, division, print_function
 from os.path import dirname, join
 import pandas as pd
+import numpy as np
+from scipy.spatial import ConvexHull
+from numpy.linalg import norm
 from keras.models import load_model
 from rdkit import RDConfig
 from rdkit.Chem import FragmentCatalog
@@ -15,7 +18,7 @@ import sys
 
 __all__ = ["get_best", "molecular_similarity", "suppress_rdkit_sanity",
            "generate_geneset", "load_data", "Chromosome",
-           "GeneSet", "Benchmark"]
+           "GeneSet", "Benchmark", "convex_search"]
 
 
 """
@@ -24,7 +27,8 @@ This GA uses RDKit to search molecular structure
 
 
 def get_best(get_fitness, optimalFitness, geneSet, display,
-             show_ion, target, parent_candidates, seed=None):
+             show_ion, target, parent_candidates, seed=None,
+             convex_strategy=None):
     """
     the primary public function of the engine
 
@@ -65,6 +69,7 @@ def get_best(get_fitness, optimalFitness, geneSet, display,
     """
     mutation_attempts = 0
     attempts_since_last_adoption = 0
+    parents_sampled = 0
     if seed:
         random.seed(seed)
     bestParent = _generate_parent(parent_candidates, get_fitness)
@@ -77,9 +82,13 @@ def get_best(get_fitness, optimalFitness, geneSet, display,
         mutation_attempts += 1
         attempts_since_last_adoption += 1
 
-        if attempts_since_last_adoption > 1100:
+        if attempts_since_last_adoption > 1000:
+            if convex_strategy is not None and parents_sampled > 25:
+                target = convex_search(convex_strategy)
+                print("assigning new target: {}".format(target))
             child = _generate_parent(parent_candidates, get_fitness)
             attempts_since_last_adoption = 0
+            parents_sampled += 1
             print("starting from new parent")
         elif bestParent.Fitness >= child.Fitness:
             continue
@@ -93,6 +102,38 @@ def get_best(get_fitness, optimalFitness, geneSet, display,
                      molecular_relative)
             return child
         bestParent = child
+
+
+def convex_search(to_hull, minimum_distance=10, maximum_distance=None):
+    """
+    Returns a target for the genetic algorithm that is within
+    the convex hull of the training data
+    """
+    hull = ConvexHull(to_hull)
+    while True:  # sample target within the convex hull
+        p3 = np.array([np.random.randint(min(to_hull.iloc[:, 0]),
+                                         max(to_hull.iloc[:, 0])),
+                       np.random.randint(min(to_hull.iloc[:, 0]),
+                                         max(to_hull.iloc[:, 0]))])
+        new_hull = ConvexHull(np.append([p3], np.array(to_hull), axis=0))
+        if hull.area >= new_hull.area:
+            d = []  # now check minimum distance to edge
+            for simplex in hull.simplices:
+                """
+                Let P1=(x1,y1), P2=(x2,y2) and P3=(x3,y3)
+                """
+                x1, x2 = to_hull.iloc[simplex, 1]
+                y1, y2 = to_hull.iloc[simplex, 0]
+                p1 = np.array([x1, y1])
+                p2 = np.array([x2, y2])
+                d.append(abs(np.cross(p2 - p1, p3 - p1) / norm(p2 - p1)))
+            if min(d) > minimum_distance:
+                if maximum_distance:
+                    if min(d) < maximum_distance:
+                        break
+                else:
+                    break
+    return p3
 
 
 def molecular_similarity(best, parent_candidates, all=False):
