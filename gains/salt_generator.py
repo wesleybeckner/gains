@@ -1,4 +1,6 @@
 from __future__ import absolute_import, division, print_function
+from os.path import join
+from keras.models import load_model
 import gains as genetic
 from rdkit.Chem import AllChem as Chem
 from rdkit.ML.Descriptors.MoleculeDescriptors import\
@@ -15,7 +17,8 @@ import random
 
 def generate_solvent(target, model_ID, heavy_atom_limit=50,
                      sim_bounds=[0.4, 1.0], hits=1, write_file=False,
-                     seed=None, hull=None):
+                     seed=None, hull=None, simplex=None, path=None,
+                     exp_data=None):
     """
     the primary public function of the salt_generator module
 
@@ -51,10 +54,20 @@ def generate_solvent(target, model_ID, heavy_atom_limit=50,
     models = []
     deslists = []
     for i, name in enumerate(model_ID):
-        model = np.array([genetic.load_data("{}_qspr.h5".format(name),
-                                            h5File=True)])
-        deslist = list([genetic.load_data("{}_desc.csv".format(name))])
-        summary = genetic.load_data("{}_summ.csv".format(name))
+        if path:
+            model = np.array([load_model(join(path,
+                                              '{}_qspr.h5'.format(name)))])
+            with open(join(path, '{}_desc.csv'.format(name)),
+                      'rb') as csv_file:
+                deslist = list([pd.read_csv(csv_file, encoding='latin1')])
+            with open(join(path, '{}_summ.csv'.format(name)),
+                      'rb') as csv_file:
+                summary = pd.read_csv(csv_file, encoding='latin1')
+        else:
+            model = np.array([genetic.load_data("{}_qspr.h5".format(name),
+                                                h5File=True)])
+            deslist = list([genetic.load_data("{}_desc.csv".format(name))])
+            summary = genetic.load_data("{}_summ.csv".format(name))
         parents = eval(summary.iloc[1][1])
         anions = eval(summary.iloc[2][1])
         if i > 0:
@@ -71,6 +84,8 @@ def generate_solvent(target, model_ID, heavy_atom_limit=50,
             "Tanimoto Similarity Score", "Molecular Relative", "Anion",
             "Model Prediction", "MD Calculation", "Error"]
     salts = pd.DataFrame(columns=cols)
+    if exp_data:
+        anion_candidates = eval(exp_data.Data_summary.iloc[2][0])
     for i in range(1, hits + 1):
         while True:
             if seed:
@@ -78,9 +93,15 @@ def generate_solvent(target, model_ID, heavy_atom_limit=50,
             anion_smiles = random.sample(list(anion_candidates), 1)[0]
             anion = Chem.MolFromSmiles(anion_smiles)
             best = _guess_password(target, anion_smiles, parent_candidates,
-                                   models, deslists, seed=seed, hull=hull)
-            tan_sim_score, sim_index =\
-                genetic.molecular_similarity(best, parent_candidates)
+                                   models, deslists, seed=seed, hull=hull,
+                                   simplex=simplex, exp_data=exp_data)
+            if exp_data:
+                exp_parent_candidates = eval(exp_data.Data_summary.iloc[1][0])
+                tan_sim_score, sim_index = \
+                    genetic.molecular_similarity(best, exp_parent_candidates)
+            else:
+                tan_sim_score, sim_index = \
+                    genetic.molecular_similarity(best, parent_candidates)
             cation_heavy_atoms = best.Mol.GetNumAtoms()
             salt_smiles = best.Genes + "." + Chem.MolToSmiles(anion)
             if cation_heavy_atoms < heavy_atom_limit and\
@@ -96,8 +117,12 @@ def generate_solvent(target, model_ID, heavy_atom_limit=50,
                     CAT_ID = "C%s" % i
                     AN_ID = "A%s" % i
                 salt_ID = CAT_ID + "_" + AN_ID
-                molecular_relative = salty.check_name(parent_candidates
-                                                      [sim_index])
+                if exp_data:
+                    molecular_relative = salty.check_name(exp_parent_candidates
+                                                          [sim_index])
+                else:
+                    molecular_relative = salty.check_name(parent_candidates
+                                                          [sim_index])
                 anion_name = salty.check_name(anion_smiles)
                 new_entry = pd.DataFrame([[salt_ID, salt_smiles,
                                            cation_heavy_atoms,
@@ -132,7 +157,7 @@ def generate_solvent(target, model_ID, heavy_atom_limit=50,
 
 
 def _guess_password(target, anion_smiles, parent_candidates, models, deslists,
-                    seed=None, hull=None):
+                    seed=None, hull=None, simplex=None, exp_data=None):
     """
     for interacting with the main engine. Contains helper functions
     to pass to the engine what it expects
@@ -149,13 +174,15 @@ def _guess_password(target, anion_smiles, parent_candidates, models, deslists,
     def fnShowIon(genes, target, mutation_attempts, sim_score,
                   molecular_relative):
         _show_ion(genes, target, mutation_attempts, sim_score,
-                  molecular_relative, models, deslists, anion_smiles)
+                  molecular_relative, models, deslists, anion_smiles,
+                  exp_data)
 
     optimalFitness = 0.95
     geneSet = genetic.generate_geneset()
     best = genetic.get_best(fnGetFitness, optimalFitness, geneSet,
                             fndisplay, fnShowIon, target,
-                            parent_candidates, seed=seed, convex_strategy=hull)
+                            parent_candidates, seed=seed,
+                            convex_strategy=hull, simplex=simplex)
     return best
 
 
@@ -214,7 +241,7 @@ def _get_fitness(anion, genes, target, models, deslists):
 
 
 def _show_ion(genes, target, mutation_attempts, sim_score, molecular_relative,
-              models, deslists, anion_smiles):
+              models, deslists, anion_smiles, exp_data=None):
     """
     for printing results to the screen. _show_ion is called when a candidate
     has achieved the desired fitness core and is returned by the engine
@@ -224,6 +251,12 @@ def _show_ion(genes, target, mutation_attempts, sim_score, molecular_relative,
     fitness, mol_property = _get_fitness(anion, genes, target,
                                          models, deslists)
     anion_name = salty.check_name(anion_smiles)
+    if exp_data:
+        chrom = genetic.Chromosome(genes, fitness)
+        exp_parent_candidates = eval(exp_data.Data_summary.iloc[1][0])
+        tan_sim_score, sim_index = \
+            genetic.molecular_similarity(chrom, exp_parent_candidates)
+        molecular_relative = exp_parent_candidates[sim_index]
     print("{}\t{}".format("Salt Smiles: ", genes))
     print("{}\t{}".format("Cation Heavy Atoms: ", mol.GetNumAtoms()))
     print("Tanimoto Similarity Score: \t{0:10.3f}".format(sim_score))

@@ -18,6 +18,15 @@ gains/data/cpt_summ.csv
 gains/data/density_desc.csv
 gains/data/density_qspr.h5
 gains/data/density_summ.csv
+gains/data/thermal_conductivity.csv
+gains/data/thermal_conductivity_desc.csv
+gains/data/thermal_conductivity_premodel.csv
+gains/data/thermal_conductivity_qspr.h5
+gains/data/thermal_conductivity_summ.csv
+gains/data/viscosity_desc.csv
+gains/data/viscosity_qspr.h5
+gains/data/viscosity_qspr.sav
+gains/data/viscosity_summ.csv
 gains/tests/__init__.py
 gains/tests/test_get_pdb.py
 gains/tests/test_model.py

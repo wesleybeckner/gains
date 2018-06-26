@@ -15,7 +15,7 @@ import random
 
 def generate_solvent(target, model_ID, heavy_atom_limit=50,
                      sim_bounds=[0.4, 1.0], hits=1, write_file=False,
-                     seed=None):
+                     seed=None, hull=None):
     """
     the primary public function of the salt_generator module
 
@@ -78,7 +78,7 @@ def generate_solvent(target, model_ID, heavy_atom_limit=50,
             anion_smiles = random.sample(list(anion_candidates), 1)[0]
             anion = Chem.MolFromSmiles(anion_smiles)
             best = _guess_password(target, anion_smiles, parent_candidates,
-                                   models, deslists, seed=seed)
+                                   models, deslists, seed=seed, hull=hull)
             tan_sim_score, sim_index =\
                 genetic.molecular_similarity(best, parent_candidates)
             cation_heavy_atoms = best.Mol.GetNumAtoms()
@@ -132,7 +132,7 @@ def generate_solvent(target, model_ID, heavy_atom_limit=50,
 
 
 def _guess_password(target, anion_smiles, parent_candidates, models, deslists,
-                    seed=None):
+                    seed=None, hull=None):
     """
     for interacting with the main engine. Contains helper functions
     to pass to the engine what it expects
@@ -151,16 +151,11 @@ def _guess_password(target, anion_smiles, parent_candidates, models, deslists,
         _show_ion(genes, target, mutation_attempts, sim_score,
                   molecular_relative, models, deslists, anion_smiles)
 
-    optimalFitness = 0.99
+    optimalFitness = 0.95
     geneSet = genetic.generate_geneset()
-    if seed:
-        best = genetic.get_best(fnGetFitness, optimalFitness, geneSet,
-                                fndisplay, fnShowIon, target,
-                                parent_candidates, seed=seed)
-    else:
-        best = genetic.get_best(fnGetFitness, optimalFitness, geneSet,
-                                fndisplay, fnShowIon, target,
-                                parent_candidates)
+    best = genetic.get_best(fnGetFitness, optimalFitness, geneSet,
+                            fndisplay, fnShowIon, target,
+                            parent_candidates, seed=seed, convex_strategy=hull)
     return best
 
 
