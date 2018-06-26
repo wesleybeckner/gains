@@ -1,1 +1,3 @@
-{}
+{
+  "scripts/test_setup.py": true
+}

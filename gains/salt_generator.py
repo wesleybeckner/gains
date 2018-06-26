@@ -18,7 +18,7 @@ import random
 def generate_solvent(target, model_ID, heavy_atom_limit=50,
                      sim_bounds=[0.4, 1.0], hits=1, write_file=False,
                      seed=None, hull=None, simplex=None, path=None,
-                                                            exp_data=None):
+                     exp_data=None):
     """
     the primary public function of the salt_generator module
 
@@ -55,10 +55,13 @@ def generate_solvent(target, model_ID, heavy_atom_limit=50,
     deslists = []
     for i, name in enumerate(model_ID):
         if path:
-            model = np.array([load_model(join(path, '{}_qspr.h5'.format(name)))])
-            with open(join(path, '{}_desc.csv'.format(name)), 'rb') as csv_file:
+            model = np.array([load_model(join(path,
+                                              '{}_qspr.h5'.format(name)))])
+            with open(join(path, '{}_desc.csv'.format(name)),
+                      'rb') as csv_file:
                 deslist = list([pd.read_csv(csv_file, encoding='latin1')])
-            with open(join(path, '{}_summ.csv'.format(name)), 'rb') as csv_file:
+            with open(join(path, '{}_summ.csv'.format(name)),
+                      'rb') as csv_file:
                 summary = pd.read_csv(csv_file, encoding='latin1')
         else:
             model = np.array([genetic.load_data("{}_qspr.h5".format(name),

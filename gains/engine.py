@@ -125,9 +125,10 @@ def convex_search(data, simplex_id, constraints=[0, 1], inner=True):
             x3 = random.random()
             y3 = random.random()
             distance = float(abs(m * x3 - y3 + b)) / float(sqrt(m ** 2 + 1))
-            new_hull = ConvexHull(np.append(np.array([[x3, y3]]), data, axis=0))
-            if inner and hull.area >= new_hull.area and constraints[
-                1] > distance > constraints[0]:
+            new_hull = ConvexHull(np.append(np.array([[x3, y3]]),
+                                            data, axis=0))
+            if inner and hull.area >= new_hull.area and \
+                    constraints[1] > distance > constraints[0]:
                 return x3, y3
 
     def _check_minimum_distances(data, hull, x3, y3, constraints):
