@@ -29,7 +29,7 @@ This GA uses RDKit to search molecular structure
 
 def get_best(get_fitness, optimalFitness, geneSet, display,
              show_ion, target, parent_candidates, seed=None,
-             convex_strategy=None, simplex=None):
+             convex_strategy=None, simplex=None, verbose=0):
     """
     the primary public function of the engine
 
@@ -71,10 +71,12 @@ def get_best(get_fitness, optimalFitness, geneSet, display,
     mutation_attempts = 0
     attempts_since_last_adoption = 0
     parents_sampled = 0
+    targets_sampled = 0
     if seed:
         random.seed(seed)
     bestParent = _generate_parent(parent_candidates, get_fitness)
-    display(bestParent, "starting structure")
+    if verbose == 0:
+        display(bestParent, "starting structure")
     if bestParent.Fitness >= optimalFitness:
         return bestParent
     while True:
@@ -86,21 +88,26 @@ def get_best(get_fitness, optimalFitness, geneSet, display,
         if attempts_since_last_adoption > 10:
             if convex_strategy is not None and parents_sampled > 0:
                 target = convex_search(convex_strategy, simplex)
-                print("assigning new target: {}".format(target))
+                targets_sampled += 1
+                if verbose == any([0, 1, 3]):
+                    print("assigning new target: {}".format(target))
             child = _generate_parent(parent_candidates, get_fitness)
             attempts_since_last_adoption = 0
             parents_sampled += 1
-            print("starting from new parent")
+            if verbose == any([0, 1]):
+                print("starting from new parent")
         elif bestParent.Fitness >= child.Fitness:
             continue
-        display(child, mutation)
+        if verbose == 0:
+            display(child, mutation)
         attempts_since_last_adoption = 0
         if child.Fitness >= optimalFitness:
             sim_score, sim_index = molecular_similarity(child,
                                                         parent_candidates)
             molecular_relative = parent_candidates[sim_index]
-            show_ion(child.Genes, target, mutation_attempts, sim_score,
-                     molecular_relative)
+            if verbose == any([0, 1, 2]):
+                show_ion(child.Genes, target, mutation_attempts, sim_score,
+                         molecular_relative)
             return child
         bestParent = child
 

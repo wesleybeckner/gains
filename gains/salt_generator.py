@@ -16,9 +16,9 @@ import random
 
 
 def generate_solvent(target, model_ID, heavy_atom_limit=50,
-                     sim_bounds=[0.4, 1.0], hits=1, write_file=False,
+                     sim_bounds=[0, 1.0], hits=1, write_file=False,
                      seed=None, hull=None, simplex=None, path=None,
-                     exp_data=None):
+                     exp_data=None, verbose=0):
     """
     the primary public function of the salt_generator module
 
@@ -41,6 +41,27 @@ def generate_solvent(target, model_ID, heavy_atom_limit=50,
     write_file : boolean, optional
         defaults to False. if True will return the solutions and a
         csv log file
+    seed : int, optional
+        optional randint seed for unittest consistency
+    hull : pandas DataFrame, optional
+        nxm pandas DataFrame to use convex hull search strategy. hull
+        columns should be the same properties used in the genetic algorithm
+        fitness test
+    simplex : array, optional
+        array to access boundary datapoints in the convex hull. This is used
+        during target resampling defined by the convex hull/simplex
+    path : str, optional
+        absolute path to the qspr model used as the fitness function
+    exp_data: salty devmodel obj, optional
+        used during hull target reassignment search strategy. Salty devmodel
+        object of the original experimental data
+    verbose : int, optional, default 0
+        0 : most verbose. Best child, parent/target resampling,
+            sanitization failure
+        1 : parent/target resampling, solution metadata, sanitization failure
+        2 : solution metdata, sanitization failure
+        3 : target resampling, csv-formatted solution metadata
+        4 : csv-formatted solution metadata
 
     Returns
     -------
@@ -94,7 +115,8 @@ def generate_solvent(target, model_ID, heavy_atom_limit=50,
             anion = Chem.MolFromSmiles(anion_smiles)
             best = _guess_password(target, anion_smiles, parent_candidates,
                                    models, deslists, seed=seed, hull=hull,
-                                   simplex=simplex, exp_data=exp_data)
+                                   simplex=simplex, exp_data=exp_data,
+                                   verbose=verbose)
             if exp_data:
                 exp_parent_candidates = eval(exp_data.Data_summary.iloc[1][0])
                 tan_sim_score, sim_index = \
@@ -140,8 +162,12 @@ def generate_solvent(target, model_ID, heavy_atom_limit=50,
                     new = pd.DataFrame(pd.concat([salts, new_entry]),
                                        columns=cols)
                 except BaseException:
+                    if verbose == any([0, 1, 2]):
+                        print("molecule not sanitizable")
                     continue
                 if write_file:
+                    if verbose == any([3, 4]):
+                        print(new)
                     MolToPDBFile(cation,
                                  "{}.pdb".format(CAT_ID))
                     MolToPDBFile(anion,
@@ -157,7 +183,8 @@ def generate_solvent(target, model_ID, heavy_atom_limit=50,
 
 
 def _guess_password(target, anion_smiles, parent_candidates, models, deslists,
-                    seed=None, hull=None, simplex=None, exp_data=None):
+                    seed=None, hull=None, simplex=None, exp_data=None,
+                    verbose=0):
     """
     for interacting with the main engine. Contains helper functions
     to pass to the engine what it expects
@@ -182,7 +209,8 @@ def _guess_password(target, anion_smiles, parent_candidates, models, deslists,
     best = genetic.get_best(fnGetFitness, optimalFitness, geneSet,
                             fndisplay, fnShowIon, target,
                             parent_candidates, seed=seed,
-                            convex_strategy=hull, simplex=simplex)
+                            convex_strategy=hull, simplex=simplex,
+                            verbose=verbose)
     return best
 
 

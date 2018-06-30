@@ -1,0 +1,2 @@
+Salt ID,Salt Smiles,Cation Heavy Atoms,Tanimoto Similarity Score,Molecular Relative,Anion,Model Prediction,MD Calculation,Error
+C01_A01,CCCCC(CCC(O)CCC)C(O)[n+]1cc[nH]c1.CC(CC(C)(C)C)CP(=O)([O-])CC(C)CC(C)(C)C,19,0.6225490196078431,1-butyl-3-methylimidazolium,"bis(2,4,4-trimethylpentyl)phosphinate",[ 858.45 1290.99],"753.34, 1166.22","[13.95, 10.7]"

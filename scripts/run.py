@@ -22,6 +22,6 @@ simplex_id = 0 # from 0 to len(simplices)
 generate_solvent(target, model_ID, heavy_atom_limit=20, sim_bounds=[0.8, 1],
                  hits=5, write_file=True, hull=to_hull, simplex=simplex_id,
                  path='/home/wesleybeckner/Dropbox/Python/py3/gains/scripts'
-                      '/adl_models', exp_data=data)
+                      '/adl_models', exp_data=data, verbose=2)
 
 
