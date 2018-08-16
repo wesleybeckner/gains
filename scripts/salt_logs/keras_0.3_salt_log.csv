@@ -1,5 +1,0 @@
-Salt ID,Salt Smiles,Cation Heavy Atoms,Tanimoto Similarity Score,Molecular Relative,Anion,Model Prediction,MD Calculation,Error
-C01_A01,CC(C)C(P)CCCCC[n+]1ccccc1.CCCCCCCCCCOS(=O)(=O)[O-],16,0.8134328358208955,1-octylpyridinium,decylsulfate,[1073.39  997.73],"979.19, 1011.96","[9.62, 1.41]"
-C05_A05,CCCCC(C)(CCC)[n+]1ccn(C)c1.CCCCCCCCCCCCOS(=O)(=O)[O-],15,0.8199233716475096,1-cyclopentyl-3-butylimidazolium,dodecyl sulfate,[1005.3   944.25],"936.06, 966.99","[7.4, 2.35]"
-C11_A11,CCCCC[N+](C)(C)CCCCCCCl.CCCC(=O)[O-],15,0.8059701492537313,1-hexyl-1-methylpiperidin-1-ium,butanoate,[1049.72  988.23],"742.26, 971.35","[41.42, 1.74]"
-C16_A16,CCC[n+]1ccn(CN)c1.CCCCCCCCCCCCOS(=O)(=O)[O-],10,0.8157894736842105,1-methyl-3-propylimidazolium,dodecyl sulfate,[1007.55 1019.64],"775.46, 1036.42","[29.93, 1.62]"

@@ -29,7 +29,8 @@ This GA uses RDKit to search molecular structure
 
 def get_best(get_fitness, optimalFitness, geneSet, display,
              show_ion, target, parent_candidates, seed=None,
-             convex_strategy=None, simplex=None):
+             hull=None, simplex=None, verbose=0, hull_bounds=[0, 1],
+             inner_search=True, parent_cap=25, mutation_cap=1000):
     """
     the primary public function of the engine
 
@@ -61,6 +62,28 @@ def get_best(get_fitness, optimalFitness, geneSet, display,
     parent_candidates : array
         an array of smiles strings that the engine uses to choose
         a starting atomic configuration
+    seed : int, optional
+        optional randint seed for unittest consistency
+    hull : pandas DataFrame, optional
+        nxm pandas DataFrame to use convex hull search strategy. hull
+        columns should be the same properties used in the genetic algorithm
+        fitness test
+    simplex : array, optional
+        array to access boundary datapoints in the convex hull. This is used
+        during target resampling defined by the convex hull/simplex
+    verbose : int, optional, default 0
+        0 : most verbose. Best child, parent/target resampling,
+            sanitization failure
+        1 : parent/target resampling, solution metadata, sanitization failure
+        2 : solution metdata, sanitization failure
+        3 : target resampling, csv-formatted solution metadata
+        4 : csv-formatted solution metadata
+    hull_bounds : array, optional
+        if hull and simplex are not none, hull_bounds describes the
+        proximity convex_search should be to the simplex
+    inner_search : bool, optional
+        if hull and simplex are not none, inner_search specifies if
+        convex_search should return values only within the convex hull
 
     Returns
     ----------
@@ -71,10 +94,12 @@ def get_best(get_fitness, optimalFitness, geneSet, display,
     mutation_attempts = 0
     attempts_since_last_adoption = 0
     parents_sampled = 0
+    targets_sampled = 0
     if seed:
         random.seed(seed)
     bestParent = _generate_parent(parent_candidates, get_fitness)
-    display(bestParent, "starting structure")
+    if verbose == 0:
+        display(bestParent, "starting structure")
     if bestParent.Fitness >= optimalFitness:
         return bestParent
     while True:
@@ -83,24 +108,30 @@ def get_best(get_fitness, optimalFitness, geneSet, display,
         mutation_attempts += 1
         attempts_since_last_adoption += 1
 
-        if attempts_since_last_adoption > 10:
-            if convex_strategy is not None and parents_sampled > 0:
-                target = convex_search(convex_strategy, simplex)
-                print("assigning new target: {}".format(target))
+        if attempts_since_last_adoption > mutation_cap:
+            if hull is not None and parents_sampled > parent_cap:
+                target = convex_search(hull, simplex, hull_bounds,
+                                       inner_search)
+                targets_sampled += 1
+                if verbose in [0, 1, 3]:
+                    print("assigning new target: {}".format(target))
             child = _generate_parent(parent_candidates, get_fitness)
             attempts_since_last_adoption = 0
             parents_sampled += 1
-            print("starting from new parent")
+            if verbose in [0, 1]:
+                print("starting from new parent")
         elif bestParent.Fitness >= child.Fitness:
             continue
-        display(child, mutation)
+        if verbose == 0:
+            display(child, mutation)
         attempts_since_last_adoption = 0
         if child.Fitness >= optimalFitness:
             sim_score, sim_index = molecular_similarity(child,
                                                         parent_candidates)
             molecular_relative = parent_candidates[sim_index]
-            show_ion(child.Genes, target, mutation_attempts, sim_score,
-                     molecular_relative)
+            if verbose in [0, 1, 2]:
+                show_ion(child.Genes, target, mutation_attempts, sim_score,
+                         molecular_relative)
             return child
         bestParent = child
 
@@ -117,21 +148,42 @@ def convex_search(data, simplex_id, constraints=[0, 1], inner=True):
         randomly selects candidate and checks w/in min/max of user defined
         boundaries from the hull
         """
-        x1, x2 = data[simplex, 0]
-        y1, y2 = data[simplex, 1]
-        m = (y2 - y1) / (x2 - x1)  # slope
-        b = y2 - (x2 * m)  # intercept
+        if str(simplex) != 'any':
+            x1, x2 = data[simplex, 0]  # simplex is the
+            y1, y2 = data[
+                simplex, 1]  # index of the datapoint forming the hull
+            segment_length = sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
+            m = (y2 - y1) / (x2 - x1)  # slope
+            b = y2 - (x2 * m)  # intercept
         while True:
             x3 = random.random()
             y3 = random.random()
-            distance = float(abs(m * x3 - y3 + b)) / float(sqrt(m ** 2 + 1))
-            new_hull = ConvexHull(np.append(np.array([[x3, y3]]),
-                                            data, axis=0))
-            if inner and hull.area >= new_hull.area and \
-                    constraints[1] > distance > constraints[0]:
+            new_hull = ConvexHull(
+                np.append(np.array([[x3, y3]]), data, axis=0))
+            if str(simplex) != 'any':
+                distance = float(abs(m * x3 - y3 + b)) / float(
+                    sqrt(m ** 2 + 1))
+                point_1_distance = sqrt((x3 - x1) ** 2 + (y3 - y1) ** 2)
+                point_2_distance = sqrt((x3 - x2) ** 2 + (y3 - y2) ** 2)
+                if segment_length > point_1_distance and segment_length >\
+                        point_2_distance:
+
+                    if inner and hull.area >= new_hull.area:
+
+                        if distance < constraints[1]:
+                            if distance > \
+                                    constraints[0]:
+                                return x3, y3
+                    elif not inner and new_hull.area / hull.area - 1 < \
+                            constraints[1]:
+                        if distance < constraints[1]:
+                            if distance > \
+                                    constraints[0]:
+                                return x3, y3
+            elif inner and hull.area == new_hull.area:  # search inside hull
                 return x3, y3
 
-    def _check_minimum_distances(data, hull, x3, y3, constraints):
+    def _check_minimum_distances(data, hull, x3, y3, constraints, inner=inner):
         """
         checks to see whether the candidate data point is more than
         the minimum distance from any of the boundaries
@@ -144,7 +196,8 @@ def convex_search(data, simplex_id, constraints=[0, 1], inner=True):
             b_a = y2_a - (x2_a * m_a)  # intercept
             distances.append(
                 float(abs(m_a * x3 - y3 + b_a)) / float(sqrt(m_a ** 2 + 1)))
-        if any(i < constraints[0] for i in distances):
+        if any(i < constraints[0] for i in
+               distances):  # check minimum constraint
             return True
         else:
             return None
@@ -152,14 +205,17 @@ def convex_search(data, simplex_id, constraints=[0, 1], inner=True):
     instance = MinMaxScaler()
     data = instance.fit_transform(data)
     hull = ConvexHull(data)
-    simplex = hull.simplices[simplex_id]
+    if str(simplex_id) != 'any':
+        simplex = hull.simplices[simplex_id]
+    else:
+        simplex = 'any'
     while True:
         x3, y3 = _grab_candidate(data, hull, simplex, constraints, inner=inner)
         check_pass = _check_minimum_distances(data, hull, x3, y3, constraints)
         if not check_pass:
             break
     values = instance.inverse_transform([[x3, y3]])
-    return values[0][0], values[0][1]
+    return values[0][1], values[0][0]
 
 
 def molecular_similarity(best, parent_candidates, all=False):

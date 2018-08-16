@@ -9,4 +9,7 @@ tensorflow
 salty-ilthermo
 sphinx_rtd_theme
 numpydoc
-
+dash==0.21.1  # The core dash backend
+dash-renderer==0.13.0  # The dash front-end
+dash-html-components==0.11.0  # HTML components
+dash-core-components==0.24.1  # Supercharged components

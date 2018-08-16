@@ -1,2 +1,0 @@
-Salt ID,Salt Smiles,Cation Heavy Atoms,Tanimoto Similarity Score,Molecular Relative,Anion,Model Prediction,MD Calculation,Error
-C01_A01,CC(=O)NCCCCCCCC[n+]1cccc(C)c1.CC(CC(C)(C)C)CP(=O)([O-])CC(C)CC(C)(C)C,19,0.8055555555555556,N-octyl-3-methylpyridinium,"bis(2,4,4-trimethylpentyl)phosphinate",[1039.81  949.05],,

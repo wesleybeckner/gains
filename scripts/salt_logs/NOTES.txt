@@ -1,0 +1,9 @@
+nomenclature for files: (for 3 cycle adaptive learn)
+x.x.x:
+first x is first round ID
+second x is second round ID
+thrid x is third round ID
+indexing starts at 1. 0 is placeholder
+(i.e. first round is 1.0.0, first of second round series of the same 
+branch is 1.1.0, second of second round series of the same branch is
+1.2.0, etc.)
