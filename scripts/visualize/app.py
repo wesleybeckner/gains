@@ -13,7 +13,7 @@ from matplotlib.colors import TABLEAU_COLORS as tab_colors
 app = dash.Dash()
 asset_directory = os.getcwd() + '/assets/'
 df = pd.read_csv("assets/vizapp.csv")
-starting_round = 0.2 
+starting_round = 1
 dff = df.loc[df['Round'] == starting_round]
 cols = []
 for item in df.columns:
@@ -24,6 +24,8 @@ for item in df.columns:
 available_indicators = cols
 xcolumn = available_indicators[0]
 ycolumn = available_indicators[1]
+
+
 def make_color_dic(dff):
     tab_keys = ['tab:blue', 'tab:orange', 'tab:green', 'tab:red', 'tab:purple',
                 'tab:brown', 'tab:pink', 'tab:gray', 'tab:olive', 'tab:cyan']
@@ -35,15 +37,51 @@ def make_color_dic(dff):
     for i in range(len(categories)):
         colors.append(color_dic[list(categories)[i]])
     return colors
+pareto_xs=[730.0,
+ 1635.0,
+ 310.0,
+ 208.0,
+ 502.0,
+ 1635.0,
+ 502.0,
+ 298.0,
+ 232.0,
+ 208.0,
+ 232.0,
+ 298.0,
+ 522.0,
+ 730.0,
+ 522.0,
+ 310.0]
+
+pareto_ys=[1551.0,
+ 887.0,
+ 1470.0,
+ 1388.0,
+ 1014.0,
+ 887.0,
+ 1014.0,
+ 1047.0,
+ 1153.0,
+ 1388.0,
+ 1153.0,
+ 1047.0,
+ 1536.0,
+ 1551.0,
+ 1536.0,
+ 1470.0]
+
 
 
 def scatter_plot(
+        pareto_xs,
+        pareto_ys,
         dff,
         xcolumn,
         ycolumn,
         size=dff["Cation Heavy Atoms"],
         plot_type='Scatter'):
-    data = [dict(
+    trace0 = [dict(
         x=dff[dff['category'] == i][xcolumn],
         y=dff[dff['category'] == i][ycolumn],
         xlabel=xcolumn,
@@ -56,7 +94,6 @@ def scatter_plot(
         anion=dff['Anion'],
         category=dff['category'],
         name=i,
-        #legendgroup=name,
         mode='markers',
         marker=dict(
             sizeref=45,
@@ -66,8 +103,24 @@ def scatter_plot(
         ),
         type=plot_type,
     ) for i in dff.category.unique()
-    ]
-
+]
+    trace_pareto = [dict(
+        x=pareto_xs,
+        y=pareto_ys,
+        mode='Scatter',
+        dash='dash',
+        connectgaps=True,
+        fillcolor='#FAEBFC',
+        line=dict(
+            color='rgba(32, 32, 32, .6)',
+            width=1
+        ),
+        name='pareto front',
+        hoverinfo='skip',
+        type='Scatter',
+        visible='legendonly'
+    )
+]
     layout = dict(
         margin=dict(r=15, t=15),#, l=40, b=40),
         xaxis=dict(
@@ -77,13 +130,11 @@ def scatter_plot(
             title=ycolumn,
         ),
         showlegend=True,
-        #legend=name
     )
 
-    return dict(data=data, layout=layout)
+    return dict(data=trace0+trace_pareto, layout=layout)
 
-
-###for side panel
+# for side panel
 
 smiles = df.loc[df['Round'] == starting_round]['Salt Smiles'].iloc[1]
 score = df.loc[df['Round'] == starting_round]['Tanimoto Similarity Score'].iloc[1]
@@ -98,17 +149,10 @@ logo_filename = asset_directory + 'gains.png'
 image_filename = asset_directory + image_ID + '.png'
 encoded_logo = base64.b64encode(open(logo_filename, 'rb').read())
 encoded_image = base64.b64encode(open(image_filename, 'rb').read())
-FIGURE = scatter_plot(dff, xcolumn, ycolumn)
+FIGURE = scatter_plot(pareto_xs, pareto_ys, dff, xcolumn, ycolumn)
 
-#styles = {
-#    'pre': {
-#        'border': 'thin lightgrey solid',
-#        'overflowX': 'scroll'
-#    }
-#}
 app.layout = html.Div([
     # Row 1: Header and Intro text
-
     html.Div([
 
         html.Img(src='data:image/png;base64,{}'.format(encoded_logo.decode()),
@@ -200,12 +244,6 @@ app.layout = html.Div([
             html.P('SMILES:  {}'.format(smiles.split(".")[0]),
                    id='chem_smiles',
                    style=dict(maxHeight='400px', fontSize='12px', left='10px')),
-#             dcc.Markdown(d("""
-#                 **Hover Data**
-#
-#                 Mouse over values in the graph.
-#             """)),
-#             html.Pre(id='hover-data')
 
 
         ], className='three columns',
@@ -235,23 +273,17 @@ app.layout = html.Div([
         figure=FIGURE),
 
 
-        dcc.Slider(
+        dcc.RangeSlider(
             id='year--slider',
             min=df['Round'].min(),
             max=df['Round'].max(),
-            value=df['Round'].max(),
+            value=[df['Round'].min(), df['Round'].max()],
             step=None,
             marks={str(year): str(year) for year in df['Round'].unique()}
         ),
     ], className='eight columns'
     ),
 ])
-
-# @app.callback(
-#     dash.dependencies.Output('hover-data', 'children'),
-#     [dash.dependencies.Input('indicator-graphic', 'hoverData')])
-# def display_hover_data(hoverData):
-#     return json.dumps(hoverData, indent=2)
 
 @app.callback(
     dash.dependencies.Output('indicator-graphic', 'figure'),
@@ -260,15 +292,15 @@ app.layout = html.Div([
      dash.dependencies.Input('year--slider', 'value')])
 def update_graph(xcolumn, ycolumn,
                  year_value):
-    dff = df[df['Round'] == year_value]
-    return scatter_plot(dff, xcolumn, ycolumn)
+    dff = df[df['Round'].between(year_value[0], year_value[1])]
+    return scatter_plot(pareto_xs, pareto_ys, dff, xcolumn, ycolumn)
 
 @app.callback(
     dash.dependencies.Output('chem_score', 'children'),
     [dash.dependencies.Input('indicator-graphic', 'hoverData'),
      dash.dependencies.Input('year--slider', 'value')])
 def return_molecule_name(hoverData, year_value):
-    dff = df[df['Round'] == year_value]
+    dff = df[df['Round'].between(year_value[0], year_value[1])]
     if hoverData is not None:
         if 'points' in hoverData:
             firstPoint = hoverData['points'][0]
@@ -286,7 +318,7 @@ def return_molecule_name(hoverData, year_value):
     [dash.dependencies.Input('indicator-graphic', 'hoverData'),
      dash.dependencies.Input('year--slider', 'value')])
 def return_molecule_name(hoverData, year_value):
-    dff = df[df['Round'] == year_value]
+    dff = df[df['Round'].between(year_value[0], year_value[1])]
     if hoverData is not None:
         if 'points' in hoverData:
             firstPoint = hoverData['points'][0]
@@ -304,7 +336,7 @@ def return_molecule_name(hoverData, year_value):
     [dash.dependencies.Input('indicator-graphic', 'hoverData'),
      dash.dependencies.Input('year--slider', 'value')])
 def return_molecule_name(hoverData, year_value):
-    dff = df[df['Round'] == year_value]
+    dff = df[df['Round'].between(year_value[0], year_value[1])]
     if hoverData is not None:
         if 'points' in hoverData:
             firstPoint = hoverData['points'][0]
@@ -321,7 +353,7 @@ def return_molecule_name(hoverData, year_value):
     [dash.dependencies.Input('indicator-graphic', 'hoverData'),
      dash.dependencies.Input('year--slider', 'value')])
 def return_molecule_name(hoverData, year_value):
-    dff = df[df['Round'] == year_value]
+    dff = df[df['Round'].between(year_value[0], year_value[1])]
     if hoverData is not None:
         if 'points' in hoverData:
             firstPoint = hoverData['points'][0]
@@ -339,7 +371,7 @@ def return_molecule_name(hoverData, year_value):
     [dash.dependencies.Input('indicator-graphic', 'hoverData'),
      dash.dependencies.Input('year--slider', 'value')])
 def return_molecule_name(hoverData, year_value):
-    dff = df[df['Round'] == year_value]
+    dff = df[df['Round'].between(year_value[0], year_value[1])]
     if hoverData is not None:
         if 'points' in hoverData:
             firstPoint = hoverData['points'][0]
@@ -357,7 +389,7 @@ def return_molecule_name(hoverData, year_value):
     [dash.dependencies.Input('indicator-graphic', 'hoverData'),
      dash.dependencies.Input('year--slider', 'value')])
 def display_image(hoverData, year_value):
-    dff = df[df['Round'] == year_value]
+    dff = df[df['Round'].between(year_value[0], year_value[1])]
     global encoded_image
     if hoverData is not None:
         if 'points' in hoverData:
