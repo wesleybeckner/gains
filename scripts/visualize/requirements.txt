@@ -1,4 +1,10 @@
-dash==0.21.1  # The core dash backend
-dash-renderer==0.13.0  # The dash front-end
-dash-html-components==0.11.0  # HTML components
-dash-core-components==0.23.0  # Supercharged components
+Flask==1.0.2
+gunicorn==19.7.1
+dash==0.21.1
+dash-core-components==0.22.1
+dash-html-components==0.10.1
+dash-renderer==0.12.1
+plotly==2.5.1
+numpy==1.14.1
+pandas==0.22.0
+matplotlib==2.2.2
