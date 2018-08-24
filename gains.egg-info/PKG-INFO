@@ -1,12 +1,10 @@
-Metadata-Version: 1.2
+Metadata-Version: 1.1
 Name: gains
 Version: 0.2.2.dev3
 Summary: Genetic Algorithm for Identifying Novel Structures (GAINS)
 Home-page: http://github.com/wesleybeckner/gains
 Author: Wesley Beckner
 Author-email: wesleybeckner@gmail.com
-Maintainer: Wesley Beckner
-Maintainer-email: wesleybeckner@gmail.com
 License: MIT
 Description: 
         

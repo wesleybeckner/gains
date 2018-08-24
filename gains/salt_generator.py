@@ -105,8 +105,8 @@ def generate_solvent(target, model_ID, heavy_atom_limit=50,
         if i > 0:
             parent_candidates = np.concatenate((parents, parent_candidates))
             anion_candidates = np.concatenate((anions, anion_candidates))
-            models = np.concatenate((model, models))
-            deslists = list([deslist, deslists])
+            models = np.concatenate((models, model))
+            deslists = list([deslists, deslist])
         else:
             parent_candidates = parents
             anion_candidates = anions
@@ -221,7 +221,10 @@ def _guess_password(target, anion_smiles, parent_candidates, models, deslists,
         return _get_fitness(anion, genes, target, models, deslists)
 
     def fndisplay(candidate, mutation):
-        _display(candidate, mutation, startTime)
+        genes = candidate.Genes
+        scr, pre = _get_fitness(anion, genes, target, models,
+                                deslists)
+        _display(candidate, mutation, startTime, scr, pre, target)
 
     def fnShowIon(genes, target, mutation_attempts, sim_score,
                   molecular_relative):
@@ -241,14 +244,14 @@ def _guess_password(target, anion_smiles, parent_candidates, models, deslists,
     return best
 
 
-def _display(candidate, mutation, startTime):
+def _display(candidate, mutation, startTime, scr, pre, target):
     """
     for printing results to the screen. _display is called for every
     accepted mutation
     """
     timeDiff = datetime.datetime.now() - startTime
-    print("{}\t{}\t{}".format(
-        candidate.Genes, candidate.Fitness, mutation, timeDiff))
+    print("{}\t{}\t{}\t{}\t{}".format(
+        candidate.Genes, candidate.Fitness, mutation, pre, target))
 
 
 def _get_fitness(anion, genes, target, models, deslists):

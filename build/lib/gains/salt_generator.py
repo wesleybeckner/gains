@@ -288,7 +288,7 @@ def _get_fitness(anion, genes, target, models, deslists):
                               features_normalized).reshape(1, -1))[0]),
                               decimals=2)
         predictions.append(prediction[0])
-    predictions = np.array(predictions)
+    predictions = np.flip(np.array(predictions), axis=0)
     error = abs((predictions - target) / target)
     error = np.average(error)
 

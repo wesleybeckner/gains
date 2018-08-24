@@ -1,0 +1,8 @@
+Salt ID,Salt Smiles,Cation Heavy Atoms,Tanimoto Similarity Score,Molecular Relative,Anion,Model Prediction,MD Calculation,Error
+C05_A05,C[n+]1ccn(C(CCF)CCCCCCCCCl)c1.O=C([O-])[C@@H]1CCCN1,19,0.6943005181347149,1-butyl-3-methylimidazolium,L-prolinate,[1084.07 1011.66],"748.96, 1075.04","[44.74, 5.9]"
+C14_A14,CCCCN[NH2+]CC(C)(CCCC)C(S)CC.O=C([O-])[C@@H]1CCCN1,17,0.4782608695652174,triethyloctylammonium,L-prolinate,[1017.81  978.2 ],"793.79, 983.32","[28.22, 0.52]"
+C48_A48,CCCC(N)[NH2+]C(N)(CCCCCl)CN(C)CC.NCCCC[C@H](N)C(=O)[O-],18,0.4957983193277311,triethyloctylammonium,L-lysinate,[1052.11  994.97],"835.82, 1059.29","[25.88, 6.07]"
+C49_A49,CCCCCCCCc1cccc[n+]1CCCC.CCCCCCCCOS(=O)(=O)[O-],18,0.7188612099644128,"1,2-diethylpyridinium",octyl sulfate,[983.76 923.16],"913.16, 964.32","[7.73, 4.27]"
+C63_A63,CCCCCCCC[n+]1cccc(CCCC)c1.CCCCCCCCOS(=O)(=O)[O-],18,0.71900826446281,N-octyl-3-methylpyridinium,octyl sulfate,[989.77 920.58],"962.39, 961.31","[2.85, 4.24]"
+C84_A84,CCCCC(S)CCC(N)[n+]1cc[nH]c1.CCCCCCCCOS(=O)(=O)[O-],15,0.6564102564102564,1-butyl-3-methylimidazolium,octyl sulfate,[1056.48 1038.22],"783.34, 1085.95","[34.87, 4.4]"
+C11_A11,CC(N)C[n+]1cccc(CCCCC(C)(C)C)c1.CCCCCCCCOS(=O)(=O)[O-],18,0.5985663082437276,N-octyl-3-methylpyridinium,octyl sulfate,[1035.58  954.99],"878.62, 1001.27","[17.86, 4.62]"
