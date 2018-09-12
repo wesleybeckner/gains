@@ -217,10 +217,10 @@ def _guess_password(target, anion_smiles, parent_candidates, models, deslists,
     startTime = datetime.datetime.now()
     anion = Chem.MolFromSmiles(anion_smiles)
 
-    def fnGetFitness(genes):
+    def fnGetFitness(genes, target):
         return _get_fitness(anion, genes, target, models, deslists)
 
-    def fndisplay(candidate, mutation):
+    def fndisplay(candidate, mutation, target):
         genes = candidate.Genes
         scr, pre = _get_fitness(anion, genes, target, models,
                                 deslists)
@@ -249,16 +249,28 @@ def _display(candidate, mutation, startTime, scr, pre, target):
     for printing results to the screen. _display is called for every
     accepted mutation
     """
-    timeDiff = datetime.datetime.now() - startTime
     print("{}\t{}\t{}\t{}\t{}".format(
         candidate.Genes, candidate.Fitness, mutation, pre, target))
 
 
 def _get_fitness(anion, genes, target, models, deslists):
     """
-    the fitness function passed to the engine. In this case fitness
-    is determined by a model developed by the salty module.
-    The fitness function can handle multi-output models
+    the fitness function passed to the engine.
+
+    Parameters
+    ----------
+    anion : RDKit Mol Object
+        the anion comprising the IL
+    genes : str
+        the smiles string representing the cation of the IL
+    target : list, int, or array
+        the target property values of the IL
+    models : array of, or single Keras model
+        array or single keras model to use in the prediction
+        of the targets
+    deslists : array of, or single pandas dataFrame
+        contains the mean and stds of the model inputs
+
     """
     predictions = []
     for i, name in enumerate(models):

@@ -105,8 +105,8 @@ def generate_solvent(target, model_ID, heavy_atom_limit=50,
         if i > 0:
             parent_candidates = np.concatenate((parents, parent_candidates))
             anion_candidates = np.concatenate((anions, anion_candidates))
-            models = np.concatenate((model, models))
-            deslists = list([deslist, deslists])
+            models = np.concatenate((models, model))
+            deslists = list([deslists, deslist])
         else:
             parent_candidates = parents
             anion_candidates = anions
@@ -217,11 +217,14 @@ def _guess_password(target, anion_smiles, parent_candidates, models, deslists,
     startTime = datetime.datetime.now()
     anion = Chem.MolFromSmiles(anion_smiles)
 
-    def fnGetFitness(genes):
+    def fnGetFitness(genes, target):
         return _get_fitness(anion, genes, target, models, deslists)
 
-    def fndisplay(candidate, mutation):
-        _display(candidate, mutation, startTime)
+    def fndisplay(candidate, mutation, target):
+        genes = candidate.Genes
+        scr, pre = _get_fitness(anion, genes, target, models,
+                                deslists)
+        _display(candidate, mutation, startTime, scr, pre, target)
 
     def fnShowIon(genes, target, mutation_attempts, sim_score,
                   molecular_relative):
@@ -241,21 +244,33 @@ def _guess_password(target, anion_smiles, parent_candidates, models, deslists,
     return best
 
 
-def _display(candidate, mutation, startTime):
+def _display(candidate, mutation, startTime, scr, pre, target):
     """
     for printing results to the screen. _display is called for every
     accepted mutation
     """
-    timeDiff = datetime.datetime.now() - startTime
-    print("{}\t{}\t{}".format(
-        candidate.Genes, candidate.Fitness, mutation, timeDiff))
+    print("{}\t{}\t{}\t{}\t{}".format(
+        candidate.Genes, candidate.Fitness, mutation, pre, target))
 
 
 def _get_fitness(anion, genes, target, models, deslists):
     """
-    the fitness function passed to the engine. In this case fitness
-    is determined by a model developed by the salty module.
-    The fitness function can handle multi-output models
+    the fitness function passed to the engine.
+
+    Parameters
+    ----------
+    anion : RDKit Mol Object
+        the anion comprising the IL
+    genes : str
+        the smiles string representing the cation of the IL
+    target : list, int, or array
+        the target property values of the IL
+    models : array of, or single Keras model
+        array or single keras model to use in the prediction
+        of the targets
+    deslists : array of, or single pandas dataFrame
+        contains the mean and stds of the model inputs
+
     """
     predictions = []
     for i, name in enumerate(models):
@@ -288,7 +303,7 @@ def _get_fitness(anion, genes, target, models, deslists):
                               features_normalized).reshape(1, -1))[0]),
                               decimals=2)
         predictions.append(prediction[0])
-    predictions = np.flip(np.array(predictions), axis=0)
+    predictions = np.array(predictions)
     error = abs((predictions - target) / target)
     error = np.average(error)
 

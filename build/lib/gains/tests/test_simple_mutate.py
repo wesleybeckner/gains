@@ -10,8 +10,12 @@ from rdkit.Chem import AllChem as Chem
 class GuessIonTests(unittest.TestCase):
 
     def test_1_model(self):
-        def fnGetFitness(genes):
+        def fnGetFitness(genes, target):
             return get_fitness(genes, target)
+
+    def fndisplay(candidate, mutation, target):
+        display(candidate, mutation)
+
         target = "CCCC"
         parent_candidates = np.array(["CCCO"])
         geneSet = genetic.generate_geneset()
