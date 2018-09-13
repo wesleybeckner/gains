@@ -97,9 +97,9 @@ def get_best(get_fitness, optimalFitness, geneSet, display,
     targets_sampled = 0
     if seed:
         random.seed(seed)
-    bestParent = _generate_parent(parent_candidates, get_fitness)
+    bestParent = _generate_parent(parent_candidates, get_fitness, target)
     if verbose == 0:
-        display(bestParent, "starting structure")
+        display(bestParent, "starting structure", target)
     if bestParent.Fitness >= optimalFitness:
         return bestParent
     while True:
@@ -115,15 +115,14 @@ def get_best(get_fitness, optimalFitness, geneSet, display,
                 targets_sampled += 1
                 if verbose in [0, 1, 3]:
                     print("assigning new target: {}".format(target))
-            child = _generate_parent(parent_candidates, get_fitness)
-            attempts_since_last_adoption = 0
+            child = _generate_parent(parent_candidates, get_fitness, target)
             parents_sampled += 1
             if verbose in [0, 1]:
                 print("starting from new parent")
         elif bestParent.Fitness >= child.Fitness:
             continue
         if verbose == 0:
-            display(child, mutation)
+            display(child, mutation, target)
         attempts_since_last_adoption = 0
         if child.Fitness >= optimalFitness:
             sim_score, sim_index = molecular_similarity(child,
@@ -202,7 +201,7 @@ def convex_search(data, simplex_id, constraints=[0, 1], inner=True):
         else:
             return None
 
-    instance = MinMaxScaler()
+    instance = MinMaxScaler(feature_range=(0.1, 0.9))
     data = instance.fit_transform(data)
     hull = ConvexHull(data)
     if str(simplex_id) != 'any':
@@ -215,7 +214,7 @@ def convex_search(data, simplex_id, constraints=[0, 1], inner=True):
         if not check_pass:
             break
     values = instance.inverse_transform([[x3, y3]])
-    return values[0][1], values[0][0]
+    return [values[0][1], values[0][0]]
 
 
 def molecular_similarity(best, parent_candidates, all=False):
@@ -406,11 +405,11 @@ def generate_geneset():
     return GeneSet(atoms, rdkitFrags, customFrags)
 
 
-def _generate_parent(parent_candidates, get_fitness):
+def _generate_parent(parent_candidates, get_fitness, target):
     df = parent_candidates
     ohPickMe = random.sample(range(df.shape[0]), 1)
     genes = df[ohPickMe[0]]
-    fitness, prediction = get_fitness(genes)
+    fitness, prediction = get_fitness(genes, target)
     return Chromosome(genes, fitness)
 
 
@@ -515,7 +514,7 @@ def _mutate(parent, geneSet, get_fitness, target):
         genes = Chem.MolToSmiles(childGenes.RWMol)
         if "." in genes:
             return Chromosome(parent.Genes, 0), mutation
-        fitness, prediction = get_fitness(genes)
+        fitness, prediction = get_fitness(genes, target)
         return Chromosome(genes, fitness), mutation
     except BaseException:
         return Chromosome(parent.Genes, 0), mutation

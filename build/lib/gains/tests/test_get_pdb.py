@@ -31,10 +31,10 @@ class GuessIonTests(unittest.TestCase):
     def guess_password(self, target):
         startTime = datetime.datetime.now()
 
-        def fnGetFitness(genes):
+        def fnGetFitness(genes, target):
             return get_fitness(self.anion, genes, target)
 
-        def fnDisplay(candidate, mutation):
+        def fnDisplay(candidate, mutation, target):
             display(candidate, mutation, startTime)
 
         def fnShowIon(genes, target, mutation_attempts, sim_score,

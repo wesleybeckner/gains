@@ -1,6 +1,7 @@
 README.md
 setup.py
 gains/__init__.py
+gains/adaptive.py
 gains/engine.py
 gains/salt_generator.py
 gains/version.py
@@ -9,6 +10,7 @@ gains.egg-info/SOURCES.txt
 gains.egg-info/dependency_links.txt
 gains.egg-info/requires.txt
 gains.egg-info/top_level.txt
+gains/data/Deslist
 gains/data/cpt_density_desc.csv
 gains/data/cpt_density_qspr.h5
 gains/data/cpt_density_summ.csv
@@ -28,6 +30,7 @@ gains/data/viscosity_qspr.h5
 gains/data/viscosity_qspr.sav
 gains/data/viscosity_summ.csv
 gains/tests/__init__.py
+gains/tests/test_adaptive.py
 gains/tests/test_get_pdb.py
 gains/tests/test_model.py
 gains/tests/test_similarity_maps.py

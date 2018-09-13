@@ -1,12 +1,48 @@
 Salt ID,Salt Smiles,Cation Heavy Atoms,Tanimoto Similarity Score,Molecular Relative,Anion,Model Prediction,MD Calculation,Error
-C01_A01,CC(=O)NCCCCCCCC1C[N+](C)(CCCO)CCO1.CCCCCCCCCCOS(=O)(=O)[O-],22,0.6145251396648045,4-decyl-4-methylmorpholinium,decylsulfate,1003.9,,
-C02_A02,CCC(C)CC[NH3+].CCCCCCCCOS(=O)(=O)[O-],7,0.68,pentylammonium,octyl sulfate,1002.45,,
-C03_A03,CCCCC(CCC)C(CC)n1cc(CC2CC2)[n+](CCCC)c1.CS(=O)(=O)[O-],24,0.5491803278688525,1-butyl-3-methylimidazolium,methanesulfonate,1006.67,,
-C04_A04,CCCCCCCCc1c(N=CC(CCCCCCCC)CC(CCC)CCCC)c[n+](C)c(C)c1C.O=S(=O)(F)[N-]S(=O)(=O)F,37,0.515625,N-methylpyrrolidone,bis(fluorosulfonyl)amide,992.66,,
-C05_A05,CCCC(CC)[SH](C)n1c[n+](C)cc1CC.O=C[O-],16,0.5375,1-butyl-3-methylimidazolium,formate,1009.0,,
-C06_A06,CCCCC(CCC(C)P)C(CNCCn1cc[n+](C(CCC)OC#N)c1)C(CC(C)(CCCC)CC(F)(F)F)N=NC.O=S(=O)([O-])C(F)(F)C(F)OC(F)(F)C(F)(F)F,43,0.5381526104417671,1-butyl-3-methylimidazolium,"1,1,2-trifluoro-2-(perfluoroethoxy)ethanesulfonate",996.41,,
-C07_A07,CCCCCCCc1n(C(C#N)(NC(C(C)=O)C(C)(C)N)C(CCCC)CC(C)F)c(CCC)c(N)[n+]1CCCCC.[I-],42,0.5234375,1-butyl-3-methylimidazolium,iodide,1007.66,,
-C08_A08,CCCCC(NC)PCPCc1c(C)c(C)c(C)c(CCC)[n+]1CC.CC(O)C(N)C(=O)[O-],25,0.6135135135135135,"1-hexyl-3,5-dimethyl-2-pentylpyridinium",L-threoninate,1008.28,,
-C09_A09,CCCCCCCCCCCCCC[P+](CCCCCC)(CCC(Cl)CCC)C(C#N)CCC(CC)CC.CCCCCCCCCC(=O)[O-],38,0.5663716814159292,trihexyl(tetradecyl)phosphonium,decanoate,990.86,,
-C10_A10,CCCCCC(Cl)CCCC(C)(CCCCc1cn(C(C)NC)c[n+]1CCC(CF)C(CCCC)C(Cl)CC)S(C)(=O)=O.O=S(=O)([N-]S(=O)(=O)C(F)(F)C(F)(F)F)C(F)(F)C(F)(F)F,43,0.5275590551181102,1-butyl-3-methylimidazolium,bis(perfluoroethylsulfonyl)imide,1006.79,,
-C11_A11,CCCBCCC(CCCCCCC)n1c[n+](C2CCC(C(C)C(P)CC)C2)cc1CC(CC)CCC.Cl[Fe-](Cl)(Cl)Cl,37,0.5296442687747036,1-butyl-3-methylimidazolium,tetrachloroferrate,995.38,,
+C01_A01,CCCCCCC[n+]1ccn(CC)c1N.O=C([O-])[C@@H]1CCCN1,15,0.7486033519553073,1-butyl-3-methylimidazolium,L-prolinate,[1028.09  946.5 ],"700.69, 1021.13","[46.73, 7.31]"
+C07_A07,Cc1ccc[n+](CCCCCCCCC(F)(F)F)c1.CC(=O)[O-],19,0.8969072164948454,N-octyl-3-methylpyridinium,acetate,[979.53 953.95],"603.44, 1056.07","[62.32, 9.67]"
+C18_A18,PCCCCCCCCCCC[n+]1ccccc1.NCCCC[C@H](N)C(=O)[O-],18,0.8220338983050848,1-butylpyridinium,L-lysinate,[ 990.28 1049.54],"860.11, 1002.63","[15.13, 4.68]"
+C01_A01,CCCCCC(CCCC)Cn1cc[n+](CN)c1.C[C@@H](O)[C@H](N)C(=O)[O-],18,0.7362637362637363,1-butyl-3-methylimidazolium,L-threoninate,[ 936.81 1014.39],"760.15, 1018.00","[23.24, 0.35]"
+C10_A10,FCCCCCn1cc[n+](CCCCF)c1NF.CCOS(=O)(=O)[O-],18,0.6802030456852792,1-butyl-3-methylimidazolium,ethylsulfate,[1087.45 1011.53],"641.26, 1211.79","[69.58, 16.53]"
+C13_A13,CCCC(P)CCCC[N+]1(C)CCCCC1.NCCCC[C@H](N)C(=O)[O-],16,0.8082191780821918,"N,N,N-triethyldodecan-1-aminium",L-lysinate,[ 954.62 1050.04],"824.19, 1027.49","[15.83, 2.19]"
+C16_A16,CCCCn1cc[n+](C)c1NCC.C[C@@H](O)[C@H](N)C(=O)[O-],13,0.6733668341708543,1-butyl-3-methylimidazolium,L-threoninate,[1040.41  966.44],"632.82, 1066.45","[64.41, 9.38]"
+C17_A17,CCCC[P+](CC)(CCCC)CC(S)CC.NCCCC[C@H](N)C(=O)[O-],16,0.675,tetrabutylphosphonium,L-lysinate,[1028.81 1068.43],"910.84, 977.96","[12.95, 9.25]"
+C22_A22,CCCC(CC)CCn1cc[n+](C)c1C(F)(F)F.O=C([O-])C(F)(F)F,18,0.6146788990825688,1-butyl-3-methylimidazolium,trifluoroacetate,[1054.96 1023.65],"589.93, 1192.04","[78.83, 14.13]"
+C24_A24,C=NC([n+]1ccn(CCCCCCC)c1)C(F)(F)F.COP(=O)([O-])OC,19,0.6118721461187214,1-butyl-3-methylimidazolium,dimethylphosphate,[1048.14 1049.15],"645.52, 1166.17","[62.37, 10.03]"
+C26_A26,CCCCC(C)(CCC)CC[N+](C)(C)CC(F)(F)F.C[C@@H](O)[C@H](N)C(=O)[O-],19,0.6145833333333334,"N,N,N-triethyldodecan-1-aminium",L-threoninate,[937.31 976.51],"736.65, 1069.04","[27.24, 8.66]"
+C30_A30,CCCCCCC(N)[N+](C)(CC)CCCC.C[C@@H](O)[C@H](N)C(=O)[O-],16,0.6082474226804123,"N,N,N-triethyldodecan-1-aminium",L-threoninate,[982.91 990.69],"805.99, 982.34","[21.95, 0.85]"
+C43_A43,CCC[n+]1ccn(CC(C)C(N)(F)F)c1.CCOS(=O)(=O)[O-],15,0.7318435754189944,1-isobutyl-3-methylimidazolium,ethylsulfate,[1010.43 1063.49],"584.42, 1237.88","[72.89, 14.09]"
+C44_A44,CCCCCC[n+]1ccn(CC(C)C)c1C(F)(F)F.CCOS(=O)(=O)[O-],19,0.6118721461187214,1-butyl-3-methylimidazolium,ethylsulfate,[1006.36 1061.29],"645.49, 1154.97","[55.91, 8.11]"
+C51_A51,CCCn1cc(N=C=O)[n+](CCC)c1.CS(=O)(=O)[O-],14,0.6111111111111112,1-butyl-3-methylimidazolium,methanesulfonate,[ 983.64 1066.62],"496.28, 1202.08","[98.2, 11.27]"
+C52_A52,CCC[N+](C)(CCO)CCCCCCS(C)(=O)=O.CC(=O)[O-],18,0.6263736263736264,"N,N,N-triethyldodecan-1-aminium",acetate,[1030.2 1058. ],"723.54, 1113.50","[42.38, 4.98]"
+C01_A01,CCCCC(CC)(CCC)CC[N+]1=C(S)CCC1.C[C@@H](O)[C@H](N)C(=O)[O-],18,0.5132743362831859,"N,N,N-triethyldodecan-1-aminium",L-threoninate,[ 985.42 1043.23],"1143.26, 1005.70","[13.81, 3.73]"
+C06_A06,CCCC(C)CCCC([n+]1ccccc1)C(F)(F)F.CCOS(=O)(=O)[O-],19,0.532967032967033,1-butylpyridinium,ethylsulfate,[ 970.89 1057.96],"677.55, 1144.18","[43.29, 7.54]"
+C08_A08,FC[n+]1cc(F)n(CCCOF)c1.N#CN=C=[N-],13,0.6113744075829384,1-isobutyl-3-methylimidazolium,dicyanoazanide,[ 986.13 1078.71],"389.04, 1276.75","[153.48, 15.51]"
+C12_A12,CCCCCCNCn1cc[n+](C)c1C#N.N[C@@H](CO)C(=O)[O-],16,0.5121951219512195,triethyloctylammonium,L-serinate,[ 997.82 1091.8 ],"707.61, 1103.77","[41.01, 1.08]"
+C13_A13,CCCC(C)c1cccc[n+]1C(CCP)C(F)(F)F.CCCCCCCCOS(=O)(=O)[O-],19,0.5394190871369294,1-ethyl-2-methylpyridinium,octyl sulfate,[1014.48 1007.66],"923.17, 1105.62","[9.89, 8.86]"
+C17_A17,CCCCCCC[N+](C)(C)C(P)CCCC.NCCCC[C@H](N)C(=O)[O-],16,0.5714285714285714,"N,N,N-triethyldodecan-1-aminium",L-lysinate,[986.67 991.41],"804.25, 992.33","[22.68, 0.09]"
+C18_A18,CCc1ccc(N=NC)c[n+]1CC(CF)C(=O)F.NCCCC[C@H](N)C(=O)[O-],18,0.5508474576271186,1-ethyl-2-methylpyridinium,L-lysinate,[ 944.84 1030.39],"667.22, 1162.23","[41.61, 11.34]"
+C22_A22,CCCCc1cn(C)c[n+]1CCCC(CF)C(=O)O.N#CN=C=[N-],19,0.5702127659574469,1-butyl-3-methylimidazolium,dicyanoazanide,[ 905.81 1005.56],"564.00, 1109.42","[60.6, 9.36]"
+C23_A23,CCCCNc1[nH]c(N)c[n+]1C.O=S(=O)([N-]S(=O)(=O)C(F)(F)F)C(F)(F)F,12,0.5118483412322274,1-butyl-3-methylimidazolium,bis[(trifluoromethyl)sulfonyl]imide,[1047.22 1041.1 ],"556.43, 1459.54","[88.2, 28.67]"
+C28_A28,C=S(=O)(F)c1n(C)c(NPC(C)C)c(NC)[n+]1F.O=C([O-])[C@@H]1CCCN1,18,0.5137254901960784,1-butyl-3-methylimidazolium,L-prolinate,[1010.42 1044.91],"620.66, 1254.71","[62.8, 16.72]"
+C30_A30,CCC(CC)COC(C(P)CF)C(N)[NH2+]OC.N[C@@H](CO)C(=O)[O-],17,0.5081967213114754,triethyloctylammonium,L-serinate,[ 970.18 1034.92],"689.46, 1151.34","[40.72, 10.11]"
+C36_A36,CCCCCCCCCCn1cc[n+](S)c1N.N#C[N-]C#N,17,0.63,1-butyl-3-methylimidazolium,dicyanamide,[952.72 977.27],"570.41, 1051.01","[67.02, 7.02]"
+C40_A40,CCCCC(F)[N+](C)(C)CCOC(C)=O.N#CN=C=[N-],15,0.5178571428571429,"N,N,N-triethyldodecan-1-aminium",dicyanoazanide,[975.78 975.82],"510.76, 1103.25","[91.04, 11.55]"
+C47_A47,CCCC([NH3+])(F)C(CC(C)C(C)=O)C(N=N)NSC.N#CN=C=[N-],19,0.5150214592274678,1-butyl-3-methylimidazolium,dicyanoazanide,[1004.41 1075.16],"726.67, 1117.98","[38.22, 3.83]"
+C52_A52,CNc1c(F)ccc[n+]1C(OCO)C(C)(C)C.N#C[C-](C#N)C#N,17,0.524,1-butyl-3-methylimidazolium,tricyanomethane,[ 935.93 1032.37],"508.73, 1151.46","[83.97, 10.34]"
+C55_A55,Nc1c(N=NF)ccc(N=NNO)[n+]1C(F)C(O)P.O=S(=O)([O-])C(F)(F)F,19,0.5118110236220472,1-butyl-3-methylimidazolium,trifluoromethanesulfonate,[1064.83 1009.67],"505.09, 1587.92","[110.82, 36.42]"
+C61_A61,CCCCC[n+]1cc(NC)n(CCC)c1NC.O=C([O-])[C@@H]1CCCN1,17,0.5702127659574469,1-butyl-3-methylimidazolium,L-prolinate,[921.84 985.44],"702.53, 1025.09","[31.22, 3.87]"
+C62_A62,CCCC(N)(CCC)[n+]1ccc(N(C)C)c(P)c1.NCCCC[C@H](N)C(=O)[O-],18,0.5186721991701245,1-ethyl-2-methylpyridinium,L-lysinate,[ 931.25 1031.08],"834.27, 1062.80","[11.62, 2.98]"
+C65_A65,CCCCC(N=NC(=O)O)[n+]1ccc(F)cc1N.O=S(=O)([N-]S(=O)(=O)C(F)(F)F)C(F)(F)F,18,0.5397489539748954,1-ethyl-2-methylpyridinium,bis(trifluoromethylsulfonyl)imide,[ 994.35 1038.23],"612.94, 1485.88","[62.23, 30.13]"
+C66_A66,CC(C1CC1)C(CCF)[NH2+]C(N)OO.NCCCC[C@H](N)C(=O)[O-],14,0.5,triethyloctylammonium,L-lysinate,[1009.41 1040.32],"648.08, 1100.88","[55.75, 5.5]"
+C70_A70,CCCC[NH2+]C(S)(OC(C#N)CCCC(C)F)SO.N[C@@H](CO)C(=O)[O-],19,0.5039370078740157,triethyloctylammonium,L-serinate,[ 968.97 1066.79],"663.58, 1190.57","[46.02, 10.4]"
+C72_A72,CN(CC(C)(N)F)c1cc[n+](CCCCF)c(F)c1.O=C([O-])[C@@H]1CCCN1,19,0.5210084033613446,1-ethyl-2-methylpyridinium,L-prolinate,[1015.25  987.14],"693.00, 1173.65","[46.5, 15.89]"
+C74_A74,CCCCCCC[NH+](C)CN.NCCCC[C@H](N)C(=O)[O-],11,0.6056338028169014,"N,N,N-triethyldodecan-1-aminium",L-lysinate,[953.44 964.07],"686.33, 1008.89","[38.92, 4.44]"
+C75_A75,CCCCCCCCCn1cc(N=C=O)[n+](C)c1.COS(=O)(=O)[O-],18,0.6380952380952379,1-butyl-3-methylimidazolium,methylsulfate,[1031.03 1042.86],"606.39, 1141.40","[70.03, 8.63]"
+C76_A76,CCCCc1cn(C)c[n+]1CCC(F)(F)F.N#C[N-]C#N,16,0.5814977973568282,1-butyl-3-methylimidazolium,dicyanamide,[1018.91 1034.22],"488.68, 1130.29","[108.5, 8.5]"
+C85_A85,CCCC(CCC)Cc1c(C)cc(C)c(N)[n+]1CC.O=S(=O)([N-]S(=O)(=O)C(F)(F)F)C(F)(F)F,19,0.5263157894736842,1-ethyl-2-methylpyridinium,bis(trifluoromethylsulfonyl)imide,[ 992.91 1009.53],"792.30, 1237.89","[25.32, 18.45]"
+C87_A87,C=CC(F)(n1c(N)c(CC)[n+](C)c1C)[SH](=O)=O.N#CN=C=[N-],17,0.5234375,1-butyl-3-methylimidazolium,dicyanoazanide,[1024.55 1070.31],"463.26, 1269.40","[121.16, 15.68]"
+C89_A89,CCCCP(CCC)CC(C[NH3+])PCCC.NCCCC[C@H](N)C(=O)[O-],16,0.5,triethylhexylammonium,L-lysinate,[1011.73 1006.32],"797.63, 986.74","[26.84, 1.98]"
+C92_A92,Nc1c[n+](CO)c(N[SH](=O)=O)n1CF.N#C[C-](C#N)C#N,14,0.522633744855967,1-butyl-3-methylimidazolium,tricyanomethane,[1035.32 1003.24],"407.75, 1500.38","[153.91, 33.13]"
+C96_A96,CCCC1CC1C(CO)C(F)(CC[NH3+])CCCF.O=C([O-])[C@@H]1CCCN1,18,0.5086206896551724,triethyloctylammonium,L-prolinate,[1019.35 1033.15],"790.71, 1061.42","[28.92, 2.66]"
+C98_A98,CCCCCCCC[N+]1(C)CCC(Cl)CC1.NCCCC[C@H](N)C(=O)[O-],16,0.7375,"N,N,N-triethyldodecan-1-aminium",L-lysinate,[ 991.65 1073.1 ],"830.33, 1042.34","[19.43, 2.95]"
