@@ -5,18 +5,18 @@ from sklearn.neighbors import KernelDensity
 import numpy as np
 from os.path import dirname, join
 import pandas as pd
-from rdkit import Chem
 from rdkit.Chem import AllChem as Chem
 import re
 import salty
-from rdkit.ML.Descriptors.MoleculeDescriptors import MolecularDescriptorCalculator as Calculator
+from rdkit.ML.Descriptors.MoleculeDescriptors import \
+    MolecularDescriptorCalculator as Calculator
 from sklearn.preprocessing import StandardScaler
 from math import log
 
 
-def build_model_from_md(df, property_to_model, temperature=[298.1, 299], pressure=[101, 102],
-                        output_ranges=[[200, 3000]], md_temperature=298.15,
-                        md_pressure=101.325):
+def build_model_from_md(df, property_to_model, temperature=[298.1, 299],
+                        pressure=[101, 102], output_ranges=[[200, 3000]],
+                        md_temperature=298.15, md_pressure=101.325):
     """
     creates new qspr models using md data
 
@@ -68,8 +68,6 @@ def build_model_from_md(df, property_to_model, temperature=[298.1, 299], pressur
         cation_smi.append(df['Salt Smiles'][i].split(".")[0])
         anion_smi.append(df['Salt Smiles'][i].split(".")[1])
 
-    ###based on coco's Deslist
-
     module_path = dirname(__file__)
     data = df
     n = data.shape[0]
@@ -79,7 +77,7 @@ def build_model_from_md(df, property_to_model, temperature=[298.1, 299], pressur
         Deslist.append(line.strip('\n\t'))
     calc = Calculator(Deslist)
     D = len(Deslist)
-    d = len(Deslist) * 2 + 8  # *2 for cat/an desc then T,P,prop1,prop2,name,smi
+    d = len(Deslist) * 2 + 8
     X = np.zeros((n, d))
     X[:, -8] = md_temperature
     X[:, -7] = md_pressure
@@ -93,20 +91,23 @@ def build_model_from_md(df, property_to_model, temperature=[298.1, 299], pressur
     cols_cat = [s + "-cation" for s in Deslist]
     cols_ani = [s + "-anion" for s in Deslist]
     cols = cols_cat + cols_ani + ["Temperature, K", "Pressure, kPa",
-                                  "Heat capacity at constant pressure, J/K/mol",
-                                  "Specific density, kg/m<SUP>3</SUP>", "name-anion",
-                                  "smiles-anion", "name-cation", "smiles-cation"]
+                                  "Heat capacity at constant pressure,"
+                                  "J/K/mol",
+                                  "Specific density, kg/m<SUP>3</SUP>",
+                                  "name-anion", "smiles-anion", "name-cation",
+                                  "smiles-cation"]
     X = pd.DataFrame(X, columns=cols)
     X.iloc[:, -4] = np.nan
     X.iloc[:, -2] = np.nan
     X.iloc[:, -3] = anion_smi
     X.iloc[:, -1] = cation_smi  # X is the df with the new simulation data
-    new_MD_data_index = X.shape[0]  # this will be used to plot the new data predictions after model re-training
+    new_MD_data_index = X.shape[0]  # plot new predictions after re-training
 
-    devmodel = salty.aggregate_data(property_to_model, T=temperature, P=pressure,
-                                    data_ranges=output_ranges, scale_center=False)
+    devmodel = salty.aggregate_data(property_to_model, T=temperature,
+                                    P=pressure, data_ranges=output_ranges,
+                                    scale_center=False)
     cols = devmodel.Data.columns
-    new_data = pd.concat([devmodel.Data, X])  # may have to sort in future version
+    new_data = pd.concat([devmodel.Data, X])  # have to sort in future version
 
     if property_to_model == ['density']:
         prop = "Specific density, kg/m<SUP>3</SUP>"
@@ -115,7 +116,8 @@ def build_model_from_md(df, property_to_model, temperature=[298.1, 299], pressur
         to_drop = "Specific density, kg/m<SUP>3</SUP>"
         prop = "Heat capacity at constant pressure, J/K/mol"
     elif property_to_model == ["cpt", "density"]:
-        prop = ["Heat capacity at constant pressure, J/K/mol", "Specific density, kg/m<SUP>3</SUP>"]
+        prop = ["Heat capacity at constant pressure, J/K/mol",
+                "Specific density, kg/m<SUP>3</SUP>"]
 
     if property_to_model != ["cpt", "density"]:
         new_data.drop(columns=[to_drop], inplace=True)
@@ -151,8 +153,10 @@ def build_model_from_md(df, property_to_model, temperature=[298.1, 299], pressur
         dataDf.iloc[:, -i] = dataDf.iloc[:, -i].apply(lambda x: log(float(x)))
 
     scaled_data = pd.DataFrame(instance.fit_transform(
-        dataDf.iloc[:, :-len(property_to_model)]), columns=cols[:-len(property_to_model)])
-    df = pd.concat([scaled_data, dataDf.iloc[:, -len(property_to_model):], metaDf],
+        dataDf.iloc[:, :-len(property_to_model)]),
+        columns=cols[:-len(property_to_model)])
+    df = pd.concat([scaled_data, dataDf.iloc[:, -len(property_to_model):],
+                    metaDf],
                    axis=1)  # may have to sort in future version
     mean_std_of_coeffs = pd.DataFrame([instance.mean_, instance.scale_],
                                       columns=cols[:-len(property_to_model)])

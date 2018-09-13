@@ -20,7 +20,7 @@ class GuessIonTests(unittest.TestCase):
         parent_candidates = np.array(["CCCO"])
         geneSet = genetic.generate_geneset()
         optimalFitness, prediction = get_fitness(target, target)
-        genetic.get_best(fnGetFitness, optimalFitness, geneSet,
+        genetic.get_best(get_fitness, optimalFitness, geneSet,
                          display, result_display, target,
                          parent_candidates, seed=123)
 

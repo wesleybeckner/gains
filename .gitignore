@@ -4,8 +4,11 @@
 *.ipynb
 .idea/
 .ipynb_checkpoints
-_build/
+build/
+dist/
 scripts/development/
 auto_examples/
 gen_api/
 examples/*.ipynb
+*.egg-info/
+.spyderworkspace

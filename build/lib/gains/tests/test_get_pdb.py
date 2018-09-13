@@ -35,7 +35,6 @@ class GuessIonTests(unittest.TestCase):
             return get_fitness(self.anion, genes, target)
 
         def fnDisplay(candidate, mutation, target):
-            startTime = datetime.datetime.now()
             display(candidate, mutation, startTime)
 
         def fnShowIon(genes, target, mutation_attempts, sim_score,

@@ -1,17 +1,18 @@
 import gains.adaptive as adl
 import pandas as pd
 import salty
-import gains as genetic
+from os.path import dirname, join
 import unittest
 
 
 class GuessIonTests(unittest.TestCase):
 
     def test_build_model_from_md(self):
-        logs = "keras_8.0.0_salt_log.csv"
-        salt_log = pd.read_csv("../../scripts/salt_logs/{}".format(logs))
-        adl.build_model_from_md(salt_log, "density")
-        adl.build_model_from_md(salt_log, "cpt")
+        module_path = dirname(__file__)
+        with open(join(module_path, 'salt_log.csv'), 'r') as log:
+            salt_log = pd.read_csv(log, encoding='latin1')
+        # adl.build_model_from_md(salt_log, ["density"])
+        adl.build_model_from_md(salt_log, ["cpt"])
 
     def test_calculate_minimum_distances(self):
 
@@ -37,11 +38,6 @@ class GuessIonTests(unittest.TestCase):
             cpt_data.Data["Heat capacity at constant pressure, J/K/mol"])
         adl.gaussian_pdf(
             dens_data.Data["Specific density, kg/m<SUP>3</SUP>"])
-
-    def test_benchmark(self):
-        genetic.Benchmark.run(self.test_build_model_from_md())
-        genetic.Benchmark.run(self.test_calculate_minimum_distances())
-        genetic.Benchmark.run(self.test_gaussian_pdf())
 
 
 if __name__ == '__main__':
